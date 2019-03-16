@@ -1,11 +1,11 @@
 package com.chengxuxiaoba.video.controller;
 
+import com.chengxuxiaoba.video.model.ValidationCodeRequestVo;
 import com.chengxuxiaoba.video.util.RegexUtil;
 import com.chengxuxiaoba.video.util.StringUtil;
 import com.chengxuxiaoba.video.model.Result;
 import com.chengxuxiaoba.video.model.ResultCode;
 import com.chengxuxiaoba.video.model.ResultMessage;
-import com.chengxuxiaoba.video.model.ValidationCode;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ValidationController {
 
     @PutMapping("/code")
-    public Result<Boolean> sendValidationCode(@RequestBody ValidationCode validationCode) {
+    public Result<Boolean> sendValidationCode(@RequestBody ValidationCodeRequestVo validationCode) {
         if (validationCode == null)
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.ParameterError);
 

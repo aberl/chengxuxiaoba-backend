@@ -17,7 +17,7 @@ public class ValidationService implements IValidationService {
         if (category == ValidationCodeCategory.login)
             return generateLoginValidationCode();
         return null;
-    }
+}
 
     @Override
     public String generateRegisterValidationCode() {

@@ -2,7 +2,7 @@ package com.chengxuxiaoba.video.model;
 
 import com.chengxuxiaoba.video.constant.ValidationCodeCategory;
 
-public class ValidationCode {
+public class ValidationCodeRequestVo {
     private String mobilePhoneNo;
     private ValidationCodeCategory category;
 

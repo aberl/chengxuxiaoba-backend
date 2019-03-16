@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chengxuxiaoba.video.mapper.ValidationCodeMapper">
+    <insert id="insert" parameterType="com.chengxuxiaoba.video.model.po.ValidationCode">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO validationCode(category, mobilePhoneNo, validationCode, expireTime, createTime)
+        VALUES(#{category}, #{mobilePhoneNo}, #{validationCode}, #{expireTime}, #{createTime})
+    </insert>
+
+    <select id="getValidationCode" resultType="string">
+        SELECT validationCode from validationcode where mobilePhoneNo='15001112627'
+    </select>
+</mapper>
