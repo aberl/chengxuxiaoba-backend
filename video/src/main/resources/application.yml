@@ -26,6 +26,9 @@ spring:
     useGlobalDataSourceStat: true
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
 
+validationcode:
+  expiretime: 60 #60 seconds
+
 mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
   configuration:

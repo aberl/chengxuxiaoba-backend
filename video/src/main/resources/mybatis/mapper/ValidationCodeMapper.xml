@@ -11,7 +11,10 @@
         VALUES(#{category}, #{mobilePhoneNo}, #{validationCode}, #{expireTime}, #{createTime})
     </insert>
 
-    <select id="getValidationCode" resultType="string">
-        SELECT validationCode from validationcode where mobilePhoneNo='15001112627'
+    <select id="getEffectiveCode" resultType="com.chengxuxiaoba.video.model.po.ValidationCode">
+        SELECT category, mobilePhoneNo, validationCode, expireTime, createTime from validationcode
+        where mobilePhoneNo=#{mobilePhoneNo} and category=#{codeCategory}
+        and  unix_timestamp(expiretime) > unix_timestamp(now()) and isActive=1
+        ORDER BY id DESC
     </select>
 </mapper>

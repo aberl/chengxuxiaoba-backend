@@ -1,14 +1,28 @@
 package com.chengxuxiaoba.video.service.imp;
 
 import com.chengxuxiaoba.video.constant.ValidationCodeCategory;
+import com.chengxuxiaoba.video.mapper.ValidationCodeMapper;
+import com.chengxuxiaoba.video.model.po.ValidationCode;
 import com.chengxuxiaoba.video.service.IValidationService;
+import com.chengxuxiaoba.video.util.DateUtil;
+import com.chengxuxiaoba.video.util.RegexUtil;
 import com.chengxuxiaoba.video.util.StringUtil;
+import jdk.nashorn.internal.runtime.regexp.joni.Regex;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Random;
 
 @Service
 public class ValidationService implements IValidationService {
+
+    @Value("${validationcode.expiretime}")
+    private Integer expireTime;
+
+    @Autowired
+    ValidationCodeMapper validationCodeMapper;
 
     @Override
     public String generateValidationCode(ValidationCodeCategory category) {
@@ -17,7 +31,7 @@ public class ValidationService implements IValidationService {
         if (category == ValidationCodeCategory.login)
             return generateLoginValidationCode();
         return null;
-}
+    }
 
     @Override
     public String generateRegisterValidationCode() {
@@ -29,5 +43,48 @@ public class ValidationService implements IValidationService {
     public String generateLoginValidationCode() {
         String code = StringUtil.randomGenerateNumberStr(4);
         return code;
+    }
+
+    @Override
+    public Boolean sendValidationCode(ValidationCodeCategory category, String mobilePhoneNo) {
+        if (!RegexUtil.isMatchMobilePhoneNo(mobilePhoneNo))
+            return false;
+
+        if(category == null)
+            return  false;
+
+        ValidationCode codeModel = validationCodeMapper.getEffectiveCode(mobilePhoneNo, category.toString());
+
+        if(codeModel != null)
+        {
+            //TODO send code to mobile phone
+            return  true;
+        }
+
+        String code = generateValidationCode(category);
+        codeModel = new ValidationCode();
+        codeModel.setCategory(ValidationCodeCategory.register.toString());
+        codeModel.setActive(Boolean.TRUE);
+        codeModel.setCreateTime(new Date());
+        codeModel.setExpireTime(DateUtil.addSECOND(codeModel.getCreateTime(), expireTime));
+        codeModel.setMobilePhoneNo(mobilePhoneNo);
+        codeModel.setValidationCode(code);
+        validationCodeMapper.insert(codeModel);
+
+        //TODO send code to mobile phone
+        return true;
+    }
+
+    @Override
+    public ValidationCode getValidationCode(ValidationCodeCategory category, String mobilePhoneNo) {
+        if (category == null)
+            return null;
+
+        if (StringUtil.isNullOrEmpty(mobilePhoneNo))
+            return null;
+
+        ValidationCode validationCode = validationCodeMapper.getEffectiveCode(mobilePhoneNo, category.toString());
+
+        return validationCode;
     }
 }

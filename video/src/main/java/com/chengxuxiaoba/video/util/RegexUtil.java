@@ -52,7 +52,7 @@ public class RegexUtil {
         return isMatch;
     }
 
-    public static Boolean matchMobilePhoneNo(String mobilePhoneNo) {
+    public static Boolean isMatchMobilePhoneNo(String mobilePhoneNo) {
         return isMatch(REGEX_MOBILE, mobilePhoneNo);
     }
 }
