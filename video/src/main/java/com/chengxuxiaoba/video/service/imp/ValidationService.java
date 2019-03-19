@@ -87,4 +87,19 @@ public class ValidationService implements IValidationService {
 
         return validationCode;
     }
+
+    @Override
+    public Boolean verifyCode(String mobilePhoneNo, ValidationCodeCategory category, String code) {
+        if(StringUtil.isNullOrEmpty(code))
+        return  false;
+
+        ValidationCode validationCode = validationCodeMapper.getEffectiveCode(mobilePhoneNo, category.toString());
+
+        if(validationCode == null)
+            return  false;
+
+        return validationCode.getValidationCode().toLowerCase().equals(code.toLowerCase());
+    }
+
+
 }
