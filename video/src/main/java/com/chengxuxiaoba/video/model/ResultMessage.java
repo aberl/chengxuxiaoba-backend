@@ -8,4 +8,5 @@ public class ResultMessage {
     public static String MobilePhoneNoIsUnIllegal = "手机号码格式错误";
     public static String ValidationCodeIsIlegal = "验证码错误";
     public static String UserPWDIsNotMatch = "用户不存在或密码错误";
+    public static String PasswordConfirmWrong = "2次密码输入不一致";
 }

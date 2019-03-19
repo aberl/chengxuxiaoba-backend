@@ -37,7 +37,7 @@ public class UserService implements IUserService {
         if(account == null)
             return  false;
 
-        if(!account.getMobilePhoneNo().equals(password))
+        if(!account.getPassword().equals(password))
             return  false;
 
         return  true;
