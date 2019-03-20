@@ -2,7 +2,10 @@ package com.chengxuxiaoba.video.service.imp;
 
 import com.chengxuxiaoba.video.constant.ValidationCodeCategory;
 import com.chengxuxiaoba.video.mapper.ValidationCodeMapper;
+import com.chengxuxiaoba.video.model.KeyValuePair;
+import com.chengxuxiaoba.video.model.ResultMessage;
 import com.chengxuxiaoba.video.model.po.ValidationCode;
+import com.chengxuxiaoba.video.service.IUserService;
 import com.chengxuxiaoba.video.service.IValidationService;
 import com.chengxuxiaoba.video.util.DateUtil;
 import com.chengxuxiaoba.video.util.RegexUtil;
@@ -17,6 +20,8 @@ import java.util.Random;
 
 @Service
 public class ValidationService implements IValidationService {
+    @Autowired
+    private IUserService userService;
 
     @Value("${validationcode.expiretime}")
     private Integer expireTime;
@@ -30,6 +35,8 @@ public class ValidationService implements IValidationService {
             return generateRegisterValidationCode();
         if (category == ValidationCodeCategory.login)
             return generateLoginValidationCode();
+        if (category == ValidationCodeCategory.forgetPassword)
+            return generateForgetPasswordValidationCode();
         return null;
     }
 
@@ -46,24 +53,38 @@ public class ValidationService implements IValidationService {
     }
 
     @Override
-    public Boolean sendValidationCode(ValidationCodeCategory category, String mobilePhoneNo) {
+    public String generateForgetPasswordValidationCode() {
+        String code = StringUtil.randomGenerateNumberStr(4);
+        return code;
+    }
+
+    @Override
+    public KeyValuePair<Boolean, String> isMatchSendCodeCondition(ValidationCodeCategory category, String mobilePhoneNo)
+    {
         if (!RegexUtil.isMatchMobilePhoneNo(mobilePhoneNo))
-            return false;
+            return new KeyValuePair<Boolean, String>(false, ResultMessage.MobilePhoneNoIsUnIllegal);
 
-        if(category == null)
-            return  false;
+        if(category == ValidationCodeCategory.register)
+        {
+           if(userService.isMobilePhoneExist(mobilePhoneNo))
+               return new KeyValuePair<Boolean, String>(false, ResultMessage.MobilePhoneNoIsExist);
+        }
 
+        return new KeyValuePair<Boolean, String>(true, ResultMessage.Success);
+    }
+
+    @Override
+    public Boolean sendValidationCode(ValidationCodeCategory category, String mobilePhoneNo) {
         ValidationCode codeModel = validationCodeMapper.getEffectiveCode(mobilePhoneNo, category.toString());
 
-        if(codeModel != null)
-        {
+        if (codeModel != null) {
             //TODO send code to mobile phone
-            return  true;
+            return true;
         }
 
         String code = generateValidationCode(category);
         codeModel = new ValidationCode();
-        codeModel.setCategory(ValidationCodeCategory.register.toString());
+        codeModel.setCategory(category.toString());
         codeModel.setActive(Boolean.TRUE);
         codeModel.setCreateTime(new Date());
         codeModel.setExpireTime(DateUtil.addSECOND(codeModel.getCreateTime(), expireTime));
@@ -90,16 +111,18 @@ public class ValidationService implements IValidationService {
 
     @Override
     public Boolean verifyCode(String mobilePhoneNo, ValidationCodeCategory category, String code) {
-        if(StringUtil.isNullOrEmpty(code))
-        return  false;
+        if (StringUtil.isNullOrEmpty(code))
+            return false;
 
         ValidationCode validationCode = validationCodeMapper.getEffectiveCode(mobilePhoneNo, category.toString());
 
-        if(validationCode == null)
-            return  false;
+        if (validationCode == null)
+            return false;
 
         return validationCode.getValidationCode().toLowerCase().equals(code.toLowerCase());
     }
 
-
+    public Boolean invalidateCode(String mobilePhoneNo, ValidationCodeCategory category, String code) {
+        return validationCodeMapper.invalidateCode(mobilePhoneNo, category.toString(), code) > 0;
+    }
 }

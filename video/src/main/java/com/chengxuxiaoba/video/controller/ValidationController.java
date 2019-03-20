@@ -1,12 +1,10 @@
 package com.chengxuxiaoba.video.controller;
 
-import com.chengxuxiaoba.video.model.ValidationCodeRequestVo;
+import com.chengxuxiaoba.video.model.*;
+import com.chengxuxiaoba.video.service.IUserService;
 import com.chengxuxiaoba.video.service.IValidationService;
 import com.chengxuxiaoba.video.util.RegexUtil;
 import com.chengxuxiaoba.video.util.StringUtil;
-import com.chengxuxiaoba.video.model.Result;
-import com.chengxuxiaoba.video.model.ResultCode;
-import com.chengxuxiaoba.video.model.ResultMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,11 +26,13 @@ public class ValidationController {
         if (StringUtil.isNullOrEmpty(mobilePhone) || StringUtil.isNullOrEmpty(codeCategory))
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.ParameterError);
 
-        if (!RegexUtil.isMatchMobilePhoneNo(mobilePhone))
-            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.MobilePhoneNoIsUnIllegal);
+        KeyValuePair<Boolean, String> sendCondition = validationService.isMatchSendCodeCondition(validationCode.getCategory(), validationCode.getMobilePhoneNo());
 
-        Boolean flage = validationService.sendValidationCode(validationCode.getCategory(), mobilePhone);
+        if (!sendCondition.getKey())
+            return new Result<Boolean>(ResultCode.Error, false, sendCondition.getValue());
 
-        return new Result<Boolean>(ResultCode.Success, flage, flage ? ResultMessage.Success : ResultMessage.Fail);
+        Boolean flag = validationService.sendValidationCode(validationCode.getCategory(), mobilePhone);
+
+        return new Result<Boolean>(ResultCode.Success, flag, flag ? ResultMessage.Success : ResultMessage.Fail);
     }
 }

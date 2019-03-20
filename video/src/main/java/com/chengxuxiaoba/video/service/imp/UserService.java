@@ -16,10 +16,10 @@ public class UserService implements IUserService {
     public Boolean regier(String mobilePhoneNo, String password) {
         Account account = accountMapper.getAccountByMobilePhone(mobilePhoneNo);
 
-        if(account != null)
-            return  false;
+        if (account != null)
+            return false;
 
-        account=new Account();
+        account = new Account();
         //随机生成6个字母当做用户名
         account.setName(StringUtil.randomGenerateLetterStr(6));
         account.setMobilePhoneNo(mobilePhoneNo);
@@ -27,19 +27,39 @@ public class UserService implements IUserService {
 
         accountMapper.insert(account);
 
-        return account.getId()>0;
+        return account.getId() > 0;
+    }
+
+    @Override
+    public Boolean isMobilePhoneExist(String mobilePhone) {
+        return accountMapper.getAccountByMobilePhone(mobilePhone) != null;
     }
 
     @Override
     public Boolean loginByAccount(String mobilePhoneNo, String password) {
         Account account = accountMapper.getAccountByMobilePhone(mobilePhoneNo);
 
-        if(account == null)
-            return  false;
+        if (account == null)
+            return false;
 
-        if(!account.getPassword().equals(password))
-            return  false;
+        if (!account.getPassword().equals(password))
+            return false;
 
-        return  true;
+        return true;
+    }
+
+    @Override
+    public Boolean modifyPassword(String mobilePhoneNo, String password) {
+        Account account = accountMapper.getAccountByMobilePhone(mobilePhoneNo);
+
+        if (account == null)
+            return false;
+
+        //TODO encrypt password
+        String encryptPWD = password;
+
+        Integer primaryKey = accountMapper.modifyPasswordByMobilePhone(mobilePhoneNo,encryptPWD);
+
+        return primaryKey > 0;
     }
 }

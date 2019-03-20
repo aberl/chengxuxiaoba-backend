@@ -17,4 +17,10 @@
         and  unix_timestamp(expiretime) > unix_timestamp(now()) and isActive=1
         ORDER BY id DESC
     </select>
+
+    <update id="invalidateCode" parameterType="string">
+        update validationcode
+        set isActive=0
+        where mobilePhoneNo=#{mobilePhoneNo} and category=#{codeCategory} and validationCode=#{code}
+    </update>
 </mapper>

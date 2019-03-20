@@ -15,4 +15,10 @@
         SELECT * from account
         where mobilePhoneNo=#{mobilePhoneNo} limit 1
     </select>
+
+    <update id="modifyPasswordByMobilePhone" parameterType="string">
+        UPDATE account
+        SET password = #{newPassword}
+        where mobilePhoneNo=#{mobilePhoneNo} limit 1
+    </update>
 </mapper>
