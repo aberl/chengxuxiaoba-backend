@@ -1,9 +1,8 @@
 package com.chengxuxiaoba.video.controller;
 
 import com.chengxuxiaoba.video.model.*;
-import com.chengxuxiaoba.video.service.IUserService;
+import com.chengxuxiaoba.video.model.Request.VO.ValidationCodeRequestVo;
 import com.chengxuxiaoba.video.service.IValidationService;
-import com.chengxuxiaoba.video.util.RegexUtil;
 import com.chengxuxiaoba.video.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

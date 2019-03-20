@@ -4,6 +4,7 @@ public class ResultMessage {
     public static String Success = "成功";
     public static String Fail = "失败";
     public static String ParameterError = "参数错误";
+    public static String UserIsNotExist = "用户不存在";
     public static String MobilePhoneNoIsExist = "该手机号已存在";
     public static String MobilePhoneNoIsNotExist = "该手机号不存在";
     public static String MobilePhoneNoIsUnIllegal = "手机号码格式错误";

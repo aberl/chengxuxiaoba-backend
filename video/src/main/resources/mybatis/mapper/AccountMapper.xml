@@ -16,6 +16,11 @@
         where mobilePhoneNo=#{mobilePhoneNo} limit 1
     </select>
 
+    <select id="getAccount" parameterType="string" resultType="com.chengxuxiaoba.video.model.po.Account">
+        SELECT * from account
+        where id=#{userId} limit 1
+    </select>
+
     <update id="modifyPasswordByMobilePhone" parameterType="string">
         UPDATE account
         SET password = #{newPassword}

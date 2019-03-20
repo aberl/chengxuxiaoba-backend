@@ -1,4 +1,4 @@
-package com.chengxuxiaoba.video.model;
+package com.chengxuxiaoba.video.model.Request.VO;
 
 import com.chengxuxiaoba.video.constant.ValidationCodeCategory;
 

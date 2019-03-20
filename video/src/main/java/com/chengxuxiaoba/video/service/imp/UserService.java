@@ -62,4 +62,20 @@ public class UserService implements IUserService {
 
         return primaryKey > 0;
     }
+
+    @Override
+    public Account getUser(String userId)
+    {
+        Account account =  accountMapper.getAccount(userId);
+
+        return account;
+    }
+
+    @Override
+    public Account getUserByMobilePhone(String mobilePhoneNo)
+    {
+        Account account =  accountMapper.getAccountByMobilePhone(mobilePhoneNo);
+
+        return account;
+    }
 }

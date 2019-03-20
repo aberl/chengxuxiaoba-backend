@@ -2,15 +2,16 @@ package com.chengxuxiaoba.video.controller;
 
 import com.chengxuxiaoba.video.constant.ValidationCodeCategory;
 import com.chengxuxiaoba.video.model.*;
+import com.chengxuxiaoba.video.model.Request.VO.LoginRequestVo;
+import com.chengxuxiaoba.video.model.Request.VO.RegisterRequestVo;
+import com.chengxuxiaoba.video.model.Response.VO.UserResponseVo;
+import com.chengxuxiaoba.video.model.po.Account;
 import com.chengxuxiaoba.video.service.IUserService;
 import com.chengxuxiaoba.video.service.IValidationService;
 import com.chengxuxiaoba.video.util.RegexUtil;
-import com.chengxuxiaoba.video.util.StringUtil;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Date;
 
 @RestController
 @RequestMapping(value = "/user")
@@ -42,7 +43,7 @@ public class UserController {
     }
 
     @PutMapping("/password")
-    public Result<Boolean> rebuildPassword(@RequestBody  RegisterRequestVo registerBody) {
+    public Result<Boolean> rebuildPassword(@RequestBody RegisterRequestVo registerBody) {
         if (!RegexUtil.isMatchMobilePhoneNo(registerBody.getMobilePhoneNo()))
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.MobilePhoneNoIsUnIllegal);
 
@@ -78,5 +79,23 @@ public class UserController {
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.UserPWDIsNotMatch);
 
         return new Result<Boolean>(ResultCode.Success, true, ResultMessage.Success);
+    }
+
+    @GetMapping("/{id}")
+    public Result<UserResponseVo> getUserInfo(@PathVariable("id") String userId)
+    {
+      Account account = userService.getUser(userId);
+
+      if(account == null)
+          return new Result<UserResponseVo>(ResultCode.Error, null, ResultMessage.UserIsNotExist);
+
+        UserResponseVo userResponseVo=new UserResponseVo();
+        userResponseVo.setMobilePhoneNo(account.getMobilePhoneNo());
+        userResponseVo.setName(account.getName());
+        userResponseVo.setStatus(account.getStatus());
+        userResponseVo.setWechatAccount(account.getWechatAccount());
+        userResponseVo.setWechatHeaderImg(account.getWechatHeaderImg());
+
+        return new Result<UserResponseVo>(ResultCode.Success, userResponseVo, ResultMessage.Success);
     }
 }
