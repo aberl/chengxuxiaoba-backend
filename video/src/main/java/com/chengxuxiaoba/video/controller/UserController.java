@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/user")
+@RequestMapping(value = "/users")
 public class UserController {
     @Autowired
     private IValidationService validationService;
@@ -22,7 +22,7 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
-    @PutMapping("/account")
+    @PostMapping("/account")
     public Result<Boolean> createAccount(@RequestBody RegisterRequestVo registerBody) {
         if (!registerBody.getPassword().equals(registerBody.getConfirmPassword()))
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.PasswordConfirmWrong);
@@ -71,7 +71,7 @@ public class UserController {
         return new Result<Boolean>(ResultCode.Error, true, ResultMessage.Success);
     }
 
-    @PostMapping("/account")
+    @PostMapping("/token")
     public Result<Boolean> login(@RequestBody LoginRequestVo loginBody) {
         Boolean flag = userService.loginByAccount(loginBody.getMobilePhoneNo(), loginBody.getPassword());
 

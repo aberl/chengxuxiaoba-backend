@@ -1,10 +1,13 @@
 package com.chengxuxiaoba.video.service.imp;
 
+import com.chengxuxiaoba.video.model.Request.VO.VideoRequestVo;
 import com.chengxuxiaoba.video.model.Response.VO.CourseModuleResponseVo;
 import com.chengxuxiaoba.video.model.Response.VO.CourseResponseVo;
 import com.chengxuxiaoba.video.model.po.Course;
 import com.chengxuxiaoba.video.model.po.CourseModule;
+import com.chengxuxiaoba.video.model.po.Video;
 import com.chengxuxiaoba.video.service.IVoService;
+import com.chengxuxiaoba.video.util.BeanUtils;
 import com.chengxuxiaoba.video.util.ListUtil;
 import org.springframework.stereotype.Service;
 
@@ -70,4 +73,18 @@ public class VoService implements IVoService {
         }
         return responseVoList;
     }
+
+    @Override
+    public Video convertToVideo(VideoRequestVo videoVo) {
+        if(videoVo ==null)
+        return null;
+
+        Video video=new Video();
+
+        BeanUtils.copyProperties(videoVo, video);
+
+        return video;
+    }
+
+
 }
