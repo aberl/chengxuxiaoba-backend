@@ -3,6 +3,7 @@ package com.chengxuxiaoba.video.service.imp;
 import com.chengxuxiaoba.video.model.Request.VO.VideoRequestVo;
 import com.chengxuxiaoba.video.model.Response.VO.CourseModuleResponseVo;
 import com.chengxuxiaoba.video.model.Response.VO.CourseResponseVo;
+import com.chengxuxiaoba.video.model.Response.VO.VideoResponseVo;
 import com.chengxuxiaoba.video.model.po.Course;
 import com.chengxuxiaoba.video.model.po.CourseModule;
 import com.chengxuxiaoba.video.model.po.Video;
@@ -59,6 +60,7 @@ public class VoService implements IVoService {
         courseModuleResponseVo.setStatus(courseModule.getStatus());
         return courseModuleResponseVo;
     }
+
     @Override
     public List<CourseModuleResponseVo> convertToCourseModuleResponseVo(List<CourseModule> courseModuleList) {
         if (ListUtil.isNullOrEmpty(courseModuleList))
@@ -76,15 +78,40 @@ public class VoService implements IVoService {
 
     @Override
     public Video convertToVideo(VideoRequestVo videoVo) {
-        if(videoVo ==null)
-        return null;
+        if (videoVo == null)
+            return null;
 
-        Video video=new Video();
+        Video video = new Video();
 
         BeanUtils.copyProperties(videoVo, video);
 
         return video;
     }
 
+    @Override
+    public VideoResponseVo convertToVideoResponseVo(Video video) {
+        if (video == null)
+            return null;
+
+        VideoResponseVo videoResponseVo = new VideoResponseVo();
+
+        BeanUtils.copyProperties(video, videoResponseVo);
+
+        return videoResponseVo;
+    }
+
+    @Override
+    public List<VideoResponseVo> convertToVideoResponseVo(List<Video> videoList) {
+        if (ListUtil.isNullOrEmpty(videoList))
+            return null;
+        List<VideoResponseVo> retList = new ArrayList<>();
+        VideoResponseVo videoResponseVo;
+        for (Video video : videoList) {
+            videoResponseVo = convertToVideoResponseVo(video);
+            if (videoResponseVo != null)
+                retList.add(videoResponseVo);
+        }
+        return retList;
+    }
 
 }

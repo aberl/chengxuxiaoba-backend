@@ -29,7 +29,14 @@ spring:
 validationcode:
   expiretime: 1800 #60 seconds
 
+pageinfo.pageSize : 5
+
 mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+pagehelper:
+  helper-dialect: mysql
+  offset-as-page-num: true
+  row-bounds-with-count: true
+  reasonable: false

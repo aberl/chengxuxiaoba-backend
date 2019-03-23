@@ -14,6 +14,8 @@ public interface ICourseService {
 
     Course getCourse(Integer courseId);
 
+    CourseModule getCourseModule(Integer courseModuleId);
+
     List<CourseModule> getAllCourseModuleList(Integer courseId);
 
     List<CourseModule> getAllEffectiveCourseModuleList(Integer courseId);

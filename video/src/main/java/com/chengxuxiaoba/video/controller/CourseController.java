@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/course")
+@RequestMapping(value = "/courses")
 public class CourseController {
 
     @Autowired
@@ -46,6 +46,18 @@ public class CourseController {
         List<CourseResponseVo> resultlist = voService.convertToCourseResponseVo(courselist);
 
         return new Result<List<CourseResponseVo>>(ResultCode.Success, resultlist, ResultMessage.Success);
+    }
+
+    @GetMapping("/coursemodule/{coursemoduleid}")
+    public Result<CourseModuleResponseVo> getAllCourseModuleList(@PathVariable("coursemoduleid") Integer coursemoduleid) {
+        if(coursemoduleid == null || coursemoduleid==0)
+            return new Result<CourseModuleResponseVo>(ResultCode.Error, null, ResultMessage.ParameterError);
+
+        CourseModule courseModule = courseService.getCourseModule(coursemoduleid);
+
+        CourseModuleResponseVo result = voService.convertToCourseModuleResponseVo(courseModule);
+
+        return new Result<CourseModuleResponseVo>(ResultCode.Success, result, ResultMessage.Success);
     }
 
     @GetMapping("/coursemodule/all/{courseid}")

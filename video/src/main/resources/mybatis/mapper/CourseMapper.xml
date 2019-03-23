@@ -28,4 +28,8 @@
     <select id="getAllCourseModuleList" resultType="com.chengxuxiaoba.video.model.po.CourseModule">
         SELECT * from CourseModule where courseId=#{courseId}
     </select>
+
+    <select id="getCourseModule" parameterType="int" resultType="com.chengxuxiaoba.video.model.po.CourseModule">
+        SELECT * from CourseModule where id=#{courseModuleId} limit 1
+    </select>
 </mapper>

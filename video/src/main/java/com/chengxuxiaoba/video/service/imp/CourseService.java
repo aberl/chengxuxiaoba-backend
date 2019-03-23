@@ -49,6 +49,11 @@ public class CourseService implements ICourseService {
     }
 
     @Override
+    public CourseModule getCourseModule(Integer courseModuleId) {
+        return courseMapper.getCourseModule(courseModuleId);
+    }
+
+    @Override
     public List<CourseModule> getAllCourseModuleList(Integer courseId) {
         return courseMapper.getAllCourseModuleList(courseId);
     }
