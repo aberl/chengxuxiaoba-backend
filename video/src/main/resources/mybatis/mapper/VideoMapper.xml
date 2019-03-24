@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.chengxuxiaoba.video.mapper.VideoMapper">
-    <insert id="insert" parameterType="com.chengxuxiaoba.video.model.po.Video">
-        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        INSERT INTO Video(courseModuleId, path, name, duration, description, images, viewCount, praiseCount)
-        VALUES(#{courseModuleId},#{path},#{name}, #{duration}, #{description}, #{images}, #{viewCount}, #{praiseCount})
-    </insert>
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="com.chengxuxiaoba.video.mapper.VideoMapper">
+        <insert id="insert" parameterType="com.chengxuxiaoba.video.model.po.Video">
+            <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+                SELECT LAST_INSERT_ID()
+            </selectKey>
+            INSERT INTO Video(courseModuleId, path, name, duration, description, images, viewCount, praiseCount)
+            VALUES(#{courseModuleId},#{path},#{name}, #{duration}, #{description}, #{images}, #{viewCount}, #{praiseCount})
+        </insert>
 
     <select id="getVideoByCourseModuleId" parameterType="int" resultType="com.chengxuxiaoba.video.model.po.Video">
         SELECT * from Video

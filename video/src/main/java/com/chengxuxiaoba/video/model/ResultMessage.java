@@ -11,4 +11,6 @@ public class ResultMessage {
     public static String ValidationCodeIsIlegal = "验证码错误";
     public static String UserPWDIsNotMatch = "用户不存在或密码错误";
     public static String PasswordConfirmWrong = "2次密码输入不一致";
+    public static String FileIsNull = "文件为空";
+    public static String SuffexNameIsIllegal = "上传文件后缀名不合法";
 }

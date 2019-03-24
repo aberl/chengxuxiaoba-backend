@@ -8,14 +8,20 @@ import com.chengxuxiaoba.video.model.Response.VO.VideoResponseVo;
 import com.chengxuxiaoba.video.model.po.Video;
 import com.chengxuxiaoba.video.service.IVideoService;
 import com.chengxuxiaoba.video.service.IVoService;
+import com.chengxuxiaoba.video.util.FileUtil;
 import com.chengxuxiaoba.video.util.StringUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import jdk.nashorn.internal.runtime.regexp.joni.Regex;
+import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -29,8 +35,15 @@ public class VideoController {
     private IVoService voService;
 
     @PostMapping("/")
-    public Result<Boolean> createVideo(VideoRequestVo requestBody) {
+    public Result<Boolean> createVideo(VideoRequestVo requestBody) throws IOException {
         Video video = voService.convertToVideo(requestBody);
+
+        KeyValuePair<Boolean, String> uploadResult = videoService.uploadVideo(requestBody.getFileUpload());
+
+        if(!uploadResult.getKey())
+            return new Result<Boolean>(ResultCode.Success, false, uploadResult.getValue());
+
+        video.setPath(uploadResult.getValue());
 
         Boolean flag = videoService.createNewVideo(video);
 
