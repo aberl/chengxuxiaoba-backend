@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chengxuxiaoba.video.mapper.AccountMapper">
+    <insert id="insert" parameterType="com.chengxuxiaoba.video.model.po.Evaluate">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO evaluate(videoId, content, starts, accountId, praiseCount,status)
+        VALUES(#{videoId},#{content}, #{starts}, #{accountId}, #{praiseCount}, #{status})
+    </insert>
+
+    <select id="getEvaluateList" parameterType="com.chengxuxiaoba.video.model.query.EvaluateQuery" resultType="com.chengxuxiaoba.video.model.po.Evaluate">
+        SELECT * from evaluate
+        <where>
+            <if test="id != null ">id=#{id}</if>
+            <if test="accountId != null ">accountId=#{accountId}</if>
+            <if test="videoId != null ">videoId=#{videoId}</if>
+        </where>
+    </select>
+
+    <select id="getSingle" parameterType="int" resultType="com.chengxuxiaoba.video.model.po.Evaluate">
+        SELECT * from evaluate
+        where id=#{userId} limit 1
+    </select>
+
+    <update id="updateEvaluate" parameterType="com.chengxuxiaoba.video.model.po.Evaluate">
+        UPDATE evaluate
+        <trim prefix="set" suffixOverrides=",">
+            <if test="videoId != null">videoId=#{videoId},</if>
+            <if test="content != null">content=#{content},</if>
+            <if test="starts != null">starts=#{starts},</if>
+            <if test="accountId != null">accountId=#{accountId},</if>
+            <if test="praiseCount != null">praiseCount=#{praiseCount},</if>
+            <if test="status != null">status=#{status},</if>
+        </trim>
+        WHERE id=#{id}
+    </update>
+</mapper>

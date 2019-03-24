@@ -48,5 +48,5 @@ pagehelper:
 
 video:
   savepath: D:/peoject/chengxuxiaoba/video/
-  suffexnamelimitation: mp4,rav
+  suffexnamelimitation: mp4,rmvb,AVI
 
