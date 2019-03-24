@@ -29,6 +29,11 @@ public class VideoService implements IVideoService {
     }
 
     @Override
+    public Video getSingle(Integer id) {
+        return videoMapper.getVideo(id);
+    }
+
+    @Override
     public List<Video> getVideoByCourseModuleId(Integer courseModuleId) {
        if(courseModuleId == null)
            return  null;

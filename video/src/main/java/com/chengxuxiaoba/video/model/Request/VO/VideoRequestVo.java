@@ -1,5 +1,7 @@
 package com.chengxuxiaoba.video.model.Request.VO;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class VideoRequestVo {
     private Integer courseModuleId;
     private String path;
@@ -9,6 +11,8 @@ public class VideoRequestVo {
     private String images;
     private Integer viewCount;
     private Integer praiseCount;
+
+    private MultipartFile fileUpload;
 
     public Integer getCourseModuleId() {
         return courseModuleId;
@@ -72,5 +76,13 @@ public class VideoRequestVo {
 
     public void setPraiseCount(Integer praiseCount) {
         this.praiseCount = praiseCount;
+    }
+
+    public MultipartFile getFileUpload() {
+        return fileUpload;
+    }
+
+    public void setFileUpload(MultipartFile fileUpload) {
+        this.fileUpload = fileUpload;
     }
 }

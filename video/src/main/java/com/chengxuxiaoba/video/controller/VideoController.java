@@ -29,7 +29,7 @@ public class VideoController {
     private IVoService voService;
 
     @PostMapping("/")
-    public Result<Boolean> createVideo(@RequestBody VideoRequestVo requestBody) {
+    public Result<Boolean> createVideo(VideoRequestVo requestBody) {
         Video video = voService.convertToVideo(requestBody);
 
         Boolean flag = videoService.createNewVideo(video);
@@ -40,15 +40,23 @@ public class VideoController {
         return new Result<Boolean>(ResultCode.Success, flag, ResultMessage.Success);
     }
 
+    @GetMapping("/video/{id}")
+    public Result<VideoResponseVo> getVideo(@PathVariable("id") Integer id) {
+        Video video = videoService.getSingle(id);
+        VideoResponseVo videoResponseVo = voService.convertToVideoResponseVo(video);
+
+        return new Result<VideoResponseVo>(ResultCode.Success, videoResponseVo, ResultMessage.Success);
+    }
+
     @GetMapping("/{courseModuleId}")
     public Result<PageResult<VideoResponseVo>> getVideoByCourseModuleId(@PathVariable("courseModuleId") Integer courseModuleId,
                                                                         @RequestParam("pagenum") Integer pageNum,
-                                                                        @RequestParam(name="pagesize", required = false) Integer pageSize,
-                                                                        @RequestParam(name="sort", required = false) String sort) {
+                                                                        @RequestParam(name = "pagesize", required = false) Integer pageSize,
+                                                                        @RequestParam(name = "sort", required = false) String sort) {
         if (courseModuleId == null || courseModuleId == 0)
             return new Result<PageResult<VideoResponseVo>>(ResultCode.Error, null, ResultMessage.ParameterError);
 
-        PageInfo pageInfo=new PageInfo();
+        PageInfo pageInfo = new PageInfo();
         pageInfo.build(pageNum, pageSize, Handler.handleRestAPISort(sort), null);
         PageResult<Video> pageData = videoService.getVideoByCourseModuleIdWithPage(courseModuleId, pageInfo);
 

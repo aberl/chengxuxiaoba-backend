@@ -8,7 +8,7 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
         INSERT INTO Video(courseModuleId, path, name, duration, description, images, viewCount, praiseCount)
-        VALUES(#{courseModuleId},#{path},#{name}, #{duration}, #{description}, #{images}, #{viewCount}, praiseCount)
+        VALUES(#{courseModuleId},#{path},#{name}, #{duration}, #{description}, #{images}, #{viewCount}, #{praiseCount})
     </insert>
 
     <select id="getVideoByCourseModuleId" parameterType="int" resultType="com.chengxuxiaoba.video.model.po.Video">
