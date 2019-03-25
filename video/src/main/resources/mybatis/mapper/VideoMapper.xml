@@ -7,8 +7,8 @@
             <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
                 SELECT LAST_INSERT_ID()
             </selectKey>
-            INSERT INTO Video(courseModuleId, path, name, duration, description, images, viewCount, praiseCount)
-            VALUES(#{courseModuleId},#{path},#{name}, #{duration}, #{description}, #{images}, #{viewCount}, #{praiseCount})
+            INSERT INTO Video(courseModuleId, path, name, duration, description, images)
+            VALUES(#{courseModuleId},#{path},#{name}, #{duration}, #{description}, #{images})
         </insert>
 
     <select id="getVideoByCourseModuleId" parameterType="int" resultType="com.chengxuxiaoba.video.model.po.Video">
@@ -25,6 +25,12 @@
         SELECT * from Video
         where id=#{id} limit 1
     </select>
+
+    <select id="getVideoByVideoName" resultType="com.chengxuxiaoba.video.model.po.Video">
+        SELECT * from Video
+        where courseModuleId = #{courseModuleId} and name=#{name} limit 1
+    </select>
+
 
     <update id="updateVideo">
         UPDATE Video

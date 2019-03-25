@@ -65,9 +65,14 @@ public class ValidationService implements IValidationService {
             return new KeyValuePair<Boolean, String>(false, ResultMessage.MobilePhoneNoIsUnIllegal);
 
         if(category == ValidationCodeCategory.register)
+    {
+        if(userService.isMobilePhoneExist(mobilePhoneNo))
+            return new KeyValuePair<Boolean, String>(false, ResultMessage.MobilePhoneNoIsExist);
+    }
+        if(category == ValidationCodeCategory.forgetPassword)
         {
-           if(userService.isMobilePhoneExist(mobilePhoneNo))
-               return new KeyValuePair<Boolean, String>(false, ResultMessage.MobilePhoneNoIsExist);
+            if(!userService.isMobilePhoneExist(mobilePhoneNo))
+                return new KeyValuePair<Boolean, String>(false, ResultMessage.MobilePhoneNoIsNotExist);
         }
 
         return new KeyValuePair<Boolean, String>(true, ResultMessage.Success);

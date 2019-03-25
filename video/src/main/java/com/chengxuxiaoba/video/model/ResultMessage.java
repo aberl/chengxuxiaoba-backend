@@ -13,4 +13,7 @@ public class ResultMessage {
     public static String PasswordConfirmWrong = "2次密码输入不一致";
     public static String FileIsNull = "文件为空";
     public static String SuffexNameIsIllegal = "上传文件后缀名不合法";
+    public static String VideoIsNotExist = "视频不存在";
+    public static String SameVideoNameInCurrentCourseModule = "该课程模块下拥有同样的类型的课程名的课程";
+    public static String CannotEvluateOneVideoMoreTime = "同一视频不能重复评论";
 }

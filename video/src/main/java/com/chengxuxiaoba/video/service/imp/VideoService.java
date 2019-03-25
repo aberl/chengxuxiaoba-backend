@@ -1,6 +1,5 @@
 package com.chengxuxiaoba.video.service.imp;
 
-import com.chengxuxiaoba.video.Handler;
 import com.chengxuxiaoba.video.mapper.VideoMapper;
 import com.chengxuxiaoba.video.model.KeyValuePair;
 import com.chengxuxiaoba.video.model.PageInfo;
@@ -17,10 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
 
@@ -48,6 +44,14 @@ public class VideoService implements IVideoService {
     @Override
     public Video getSingle(Integer id) {
         return videoMapper.getVideo(id);
+    }
+
+    @Override
+    public Video getSingle(Integer courseModuleId, String name) {
+        if(courseModuleId == null || StringUtil.isNullOrEmpty(name))
+            return null;
+
+        return videoMapper.getVideoByVideoName(courseModuleId, name);
     }
 
     @Override

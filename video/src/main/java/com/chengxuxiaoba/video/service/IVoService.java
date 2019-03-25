@@ -1,11 +1,14 @@
 package com.chengxuxiaoba.video.service;
 
+import com.chengxuxiaoba.video.model.Request.VO.EvaluateRequestVo;
 import com.chengxuxiaoba.video.model.Request.VO.VideoRequestVo;
 import com.chengxuxiaoba.video.model.Response.VO.CourseModuleResponseVo;
 import com.chengxuxiaoba.video.model.Response.VO.CourseResponseVo;
+import com.chengxuxiaoba.video.model.Response.VO.EvaluateResponseVo;
 import com.chengxuxiaoba.video.model.Response.VO.VideoResponseVo;
 import com.chengxuxiaoba.video.model.po.Course;
 import com.chengxuxiaoba.video.model.po.CourseModule;
+import com.chengxuxiaoba.video.model.po.Evaluate;
 import com.chengxuxiaoba.video.model.po.Video;
 
 import java.util.List;
@@ -24,4 +27,10 @@ public interface IVoService {
     VideoResponseVo convertToVideoResponseVo(Video video);
 
     List<VideoResponseVo> convertToVideoResponseVo(List<Video> videoList);
+
+    Evaluate convertToEvalueate(EvaluateRequestVo evaluateRequestVo);
+
+    EvaluateResponseVo convertToEvaluateResponseVo(Evaluate evaluate);
+
+    List<EvaluateResponseVo> convertToEvaluateResponseVo(List<Evaluate> evaluateList);
 }

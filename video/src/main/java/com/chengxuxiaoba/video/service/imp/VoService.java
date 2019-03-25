@@ -1,11 +1,10 @@
 package com.chengxuxiaoba.video.service.imp;
 
-import com.chengxuxiaoba.video.model.Request.VO.VideoRequestVo;
-import com.chengxuxiaoba.video.model.Response.VO.CourseModuleResponseVo;
-import com.chengxuxiaoba.video.model.Response.VO.CourseResponseVo;
-import com.chengxuxiaoba.video.model.Response.VO.VideoResponseVo;
+import com.chengxuxiaoba.video.model.Request.VO.*;
+import com.chengxuxiaoba.video.model.Response.VO.*;
 import com.chengxuxiaoba.video.model.po.Course;
 import com.chengxuxiaoba.video.model.po.CourseModule;
+import com.chengxuxiaoba.video.model.po.Evaluate;
 import com.chengxuxiaoba.video.model.po.Video;
 import com.chengxuxiaoba.video.service.IVoService;
 import com.chengxuxiaoba.video.util.BeanUtils;
@@ -110,6 +109,47 @@ public class VoService implements IVoService {
             videoResponseVo = convertToVideoResponseVo(video);
             if (videoResponseVo != null)
                 retList.add(videoResponseVo);
+        }
+        return retList;
+    }
+
+    @Override
+    public Evaluate convertToEvalueate(EvaluateRequestVo evaluateRequestVo)
+    {
+        if(evaluateRequestVo == null)
+            return null;
+
+        Evaluate evaluate=new Evaluate();
+
+        BeanUtils.copyProperties(evaluateRequestVo, evaluate);
+
+        return evaluate;
+    }
+
+    @Override
+    public EvaluateResponseVo convertToEvaluateResponseVo(Evaluate evaluate)
+    {
+        if(evaluate == null)
+            return null;
+
+        EvaluateResponseVo evaluateResponseVo=new EvaluateResponseVo();
+
+        BeanUtils.copyProperties(evaluate, evaluateResponseVo);
+
+        return evaluateResponseVo;
+    }
+
+    @Override
+    public List<EvaluateResponseVo> convertToEvaluateResponseVo(List<Evaluate> evaluateList) {
+        if (ListUtil.isNullOrEmpty(evaluateList))
+            return null;
+
+        List<EvaluateResponseVo> retList = new ArrayList<>();
+        EvaluateResponseVo evaluateResponseVo;
+        for (Evaluate evaluate : evaluateList) {
+            evaluateResponseVo = convertToEvaluateResponseVo(evaluate);
+            if (evaluateResponseVo != null)
+                retList.add(evaluateResponseVo);
         }
         return retList;
     }

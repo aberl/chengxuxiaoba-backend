@@ -82,7 +82,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public Result<UserResponseVo> getUserInfo(@PathVariable("id") String userId)
+    public Result<UserResponseVo> getUserInfo(@PathVariable("id") Integer userId)
     {
       Account account = userService.getUser(userId);
 

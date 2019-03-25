@@ -64,7 +64,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Account getUser(String userId)
+    public Account getUser(Integer userId)
     {
         Account account =  accountMapper.getAccount(userId);
 

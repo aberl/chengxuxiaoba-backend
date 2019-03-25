@@ -1,4 +1,4 @@
-package com.chengxuxiaoba.video;
+package com.chengxuxiaoba.video.handler;
 
 import com.chengxuxiaoba.video.util.StringUtil;
 

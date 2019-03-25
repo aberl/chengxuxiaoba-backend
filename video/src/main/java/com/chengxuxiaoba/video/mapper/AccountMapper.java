@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Param;
 public interface AccountMapper {
     public Integer insert(Account account);
 
-    public Account getAccount(@Param("userId") String userId);
+    public Account getAccount(@Param("userId") Integer userId);
 
     public Account getAccountByMobilePhone(String mobilePhone);
 

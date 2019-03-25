@@ -29,7 +29,7 @@ public class CourseController {
     @Autowired
     private ICourseService courseService;
 
-    @GetMapping("/all")
+    @GetMapping("/")
     public Result<List<CourseResponseVo>> getAllCourse() {
         List<Course> courselist = courseService.getAllCourse();
 
@@ -60,7 +60,7 @@ public class CourseController {
         return new Result<CourseModuleResponseVo>(ResultCode.Success, result, ResultMessage.Success);
     }
 
-    @GetMapping("/coursemodule/all/{courseid}")
+    @GetMapping("/{courseid}/coursemodule/all")
     public Result<List<CourseModuleResponseVo>> getAllCourseModuleList(@PathVariable("courseid") String courseid) {
         List<CourseModule> courseModulelist = courseService.getAllCourseModuleList(Integer.valueOf(courseid));
 
@@ -69,7 +69,7 @@ public class CourseController {
         return new Result<List<CourseModuleResponseVo>>(ResultCode.Success, resultlist, ResultMessage.Success);
     }
 
-    @GetMapping("/coursemodule/effective/{courseid}")
+    @GetMapping("/{courseid}/coursemodule/effective")
     public Result<List<CourseModuleResponseVo>> getEffectiveCourseModuleList(@PathVariable("courseid") String courseid) {
         List<CourseModule> courseModulelist = courseService.getAllEffectiveCourseModuleList(Integer.valueOf(courseid));
 

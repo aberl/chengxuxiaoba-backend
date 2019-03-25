@@ -9,6 +9,23 @@ public class EvaluateQuery {
 
     private PageInfo pageInfo;
 
+    public EvaluateQuery() {
+    }
+
+    public EvaluateQuery(Integer id, Integer accountId, Integer videoId) {
+        this.id = id;
+        this.accountId = accountId;
+        this.videoId = videoId;
+    }
+
+    public void build(Integer id, Integer accountId, Integer videoId, PageInfo pageInfo)
+    {
+        this.id = id;
+        this.accountId = accountId;
+        this.videoId = videoId;
+        this.pageInfo=pageInfo;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -4,7 +4,6 @@ import com.chengxuxiaoba.video.mapper.EvaluateMapper;
 import com.chengxuxiaoba.video.model.PageInfo;
 import com.chengxuxiaoba.video.model.PageResult;
 import com.chengxuxiaoba.video.model.po.Evaluate;
-import com.chengxuxiaoba.video.model.po.Video;
 import com.chengxuxiaoba.video.model.query.EvaluateQuery;
 import com.chengxuxiaoba.video.service.IEvaluateService;
 import com.github.pagehelper.Page;
@@ -18,8 +17,10 @@ public class EvaluateService implements IEvaluateService {
     private EvaluateMapper evaluateMapper;
 
     @Override
-    public Integer createNewEvaluate(Evaluate evaluate) {
-        return evaluateMapper.insert(evaluate);
+    public Boolean createNewEvaluate(Evaluate evaluate) {
+        Integer primaryKey = evaluateMapper.insert(evaluate);
+
+        return primaryKey>0;
     }
 
     @Override
@@ -28,8 +29,7 @@ public class EvaluateService implements IEvaluateService {
             return null;
 
         EvaluateQuery query = new EvaluateQuery();
-        query.setVideoId(videoId);
-        query.setPageInfo(pageInfo);
+        query.build(null,null,videoId,pageInfo);
         PageResult<Evaluate> pageResult = getEvaluateListByQuery(query);
 
         return pageResult;
@@ -41,8 +41,8 @@ public class EvaluateService implements IEvaluateService {
             return null;
 
         EvaluateQuery query = new EvaluateQuery();
-        query.setVideoId(accountId);
-        query.setPageInfo(pageInfo);
+        query.build(null,accountId,null,pageInfo);
+
         PageResult<Evaluate> pageResult = getEvaluateListByQuery(query);
 
         return pageResult;
@@ -63,6 +63,23 @@ public class EvaluateService implements IEvaluateService {
         return primaryKey > 0;
     }
 
+    @Override
+    public Boolean isExist(EvaluateQuery query) {
+        if(query == null)
+            return false;
+
+        PageInfo pageInfo=new PageInfo();
+        pageInfo.build(1,1,null,null);
+        query.setPageInfo(pageInfo);
+
+        PageResult<Evaluate> pageResult = getEvaluateListByQuery(query);
+
+        if(pageResult == null)
+            return false;
+
+        return pageResult.getTotalCount()>0;
+    }
+    
     private PageResult<Evaluate> getEvaluateListByQuery(EvaluateQuery query) {
         if (query == null)
             return null;

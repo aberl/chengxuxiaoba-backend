@@ -1,32 +1,20 @@
 package com.chengxuxiaoba.video.controller;
 
-import com.chengxuxiaoba.video.Handler;
+import com.chengxuxiaoba.video.handler.Handler;
 import com.chengxuxiaoba.video.model.*;
 import com.chengxuxiaoba.video.model.Request.VO.VideoRequestVo;
-import com.chengxuxiaoba.video.model.Response.VO.CourseModuleResponseVo;
 import com.chengxuxiaoba.video.model.Response.VO.VideoResponseVo;
 import com.chengxuxiaoba.video.model.po.Video;
 import com.chengxuxiaoba.video.service.IVideoService;
 import com.chengxuxiaoba.video.service.IVoService;
-import com.chengxuxiaoba.video.util.FileUtil;
-import com.chengxuxiaoba.video.util.StringUtil;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
-import jdk.nashorn.internal.runtime.regexp.joni.Regex;
-import org.apache.commons.fileupload.disk.DiskFileItem;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/videos")
-public class VideoController {
+public class VideoController extends BaseController {
 
     @Autowired
     private IVideoService videoService;
@@ -34,13 +22,19 @@ public class VideoController {
     @Autowired
     private IVoService voService;
 
-    @PostMapping("/")
+    @PostMapping("/videos")
     public Result<Boolean> createVideo(VideoRequestVo requestBody) throws IOException {
+
+        if (videoService.getSingle(requestBody.getCourseModuleId(), requestBody.getName()) != null)
+            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.SameVideoNameInCurrentCourseModule);
+
+
         Video video = voService.convertToVideo(requestBody);
+
 
         KeyValuePair<Boolean, String> uploadResult = videoService.uploadVideo(requestBody.getFileUpload());
 
-        if(!uploadResult.getKey())
+        if (!uploadResult.getKey())
             return new Result<Boolean>(ResultCode.Success, false, uploadResult.getValue());
 
         video.setPath(uploadResult.getValue());
@@ -53,7 +47,7 @@ public class VideoController {
         return new Result<Boolean>(ResultCode.Success, flag, ResultMessage.Success);
     }
 
-    @GetMapping("/video/{id}")
+    @GetMapping("/videos/{id}")
     public Result<VideoResponseVo> getVideo(@PathVariable("id") Integer id) {
         Video video = videoService.getSingle(id);
         VideoResponseVo videoResponseVo = voService.convertToVideoResponseVo(video);
@@ -61,7 +55,7 @@ public class VideoController {
         return new Result<VideoResponseVo>(ResultCode.Success, videoResponseVo, ResultMessage.Success);
     }
 
-    @GetMapping("/{courseModuleId}")
+    @GetMapping("/courses/{courseModuleId}/videos")
     public Result<PageResult<VideoResponseVo>> getVideoByCourseModuleId(@PathVariable("courseModuleId") Integer courseModuleId,
                                                                         @RequestParam("pagenum") Integer pageNum,
                                                                         @RequestParam(name = "pagesize", required = false) Integer pageSize,
@@ -69,8 +63,8 @@ public class VideoController {
         if (courseModuleId == null || courseModuleId == 0)
             return new Result<PageResult<VideoResponseVo>>(ResultCode.Error, null, ResultMessage.ParameterError);
 
-        PageInfo pageInfo = new PageInfo();
-        pageInfo.build(pageNum, pageSize, Handler.handleRestAPISort(sort), null);
+        PageInfo pageInfo = super.generatePageInfo(pageNum, pageSize, sort);
+
         PageResult<Video> pageData = videoService.getVideoByCourseModuleIdWithPage(courseModuleId, pageInfo);
 
         List<VideoResponseVo> resultList = voService.convertToVideoResponseVo(pageData.getData());

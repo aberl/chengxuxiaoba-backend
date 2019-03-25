@@ -11,7 +11,7 @@ public interface IUserService {
 
     Boolean modifyPassword(String mobilePhoneNo, String password);
 
-    Account getUser(String userId);
+    Account getUser(Integer userId);
 
     Account getUserByMobilePhone(String mobilePhoneNo);
 }

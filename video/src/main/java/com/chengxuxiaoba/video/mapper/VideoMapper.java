@@ -14,5 +14,7 @@ public interface VideoMapper {
 
     Video getVideo(Integer id);
 
+    Video getVideoByVideoName(Integer courseModuleId, String name);
+
     Integer updateVideo(Video video);
 }

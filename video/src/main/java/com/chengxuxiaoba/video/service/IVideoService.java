@@ -16,6 +16,8 @@ public interface IVideoService {
 
     Video getSingle(Integer id);
 
+    Video getSingle(Integer courseModuleId, String name);
+
     List<Video> getVideoByCourseModuleId(Integer courseModuleId);
 
     PageResult<Video> getVideoByCourseModuleIdWithPage(Integer courseModuleId, PageInfo pageInfo);
