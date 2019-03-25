@@ -79,7 +79,7 @@ public class EvaluateService implements IEvaluateService {
 
         return pageResult.getTotalCount()>0;
     }
-    
+
     private PageResult<Evaluate> getEvaluateListByQuery(EvaluateQuery query) {
         if (query == null)
             return null;
