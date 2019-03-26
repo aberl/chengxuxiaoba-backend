@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chengxuxiaoba.video.mapper.IssueMapper">
+    <insert id="insertIssue" parameterType="com.chengxuxiaoba.video.model.po.Issue">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO Issue(videoId, name, content, questionerId)
+        VALUES(#{videoId},#{name}, #{content}, #{questionerId})
+    </insert>
+    <insert id="insertAnswer" parameterType="com.chengxuxiaoba.video.model.po.Answer">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO Answer(issueId, content, answererId)
+        VALUES(#{issueId},#{content}, #{answererId})
+    </insert>
+
+    <select id="getIssueList" parameterType="com.chengxuxiaoba.video.model.query.IssueQuery" resultType="com.chengxuxiaoba.video.model.po.Issue">
+        SELECT * from Issue
+        <where>
+            <if test="videoId != null">and videoId = #{videoId}</if>
+            <if test="accountId != null">and accountId = #{accountId}</if>
+        </where>
+    </select>
+
+    <select id="getAnswerList" parameterType="int" resultType="com.chengxuxiaoba.video.model.po.Answer">
+        SELECT * from Answer
+        WHERE issueId = #{issueId}
+    </select>
+</mapper>
