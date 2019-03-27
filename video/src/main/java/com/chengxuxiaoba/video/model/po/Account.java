@@ -5,6 +5,7 @@ import java.util.Date;
 public class Account {
     private Integer id;
     private String name;
+    private String headerImg;
     private String mobilePhoneNo;
     private String password;
     private String wechatAccount;
@@ -27,6 +28,14 @@ public class Account {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getHeaderImg() {
+        return headerImg;
+    }
+
+    public void setHeaderImg(String headerImg) {
+        this.headerImg = headerImg;
     }
 
     public String getMobilePhoneNo() {

@@ -2,10 +2,7 @@ package com.chengxuxiaoba.video.service.imp;
 
 import com.chengxuxiaoba.video.model.Request.VO.*;
 import com.chengxuxiaoba.video.model.Response.VO.*;
-import com.chengxuxiaoba.video.model.po.Course;
-import com.chengxuxiaoba.video.model.po.CourseModule;
-import com.chengxuxiaoba.video.model.po.Evaluate;
-import com.chengxuxiaoba.video.model.po.Video;
+import com.chengxuxiaoba.video.model.po.*;
 import com.chengxuxiaoba.video.service.IVoService;
 import com.chengxuxiaoba.video.util.BeanUtils;
 import com.chengxuxiaoba.video.util.ListUtil;
@@ -114,12 +111,11 @@ public class VoService implements IVoService {
     }
 
     @Override
-    public Evaluate convertToEvalueate(EvaluateRequestVo evaluateRequestVo)
-    {
-        if(evaluateRequestVo == null)
+    public Evaluate convertToEvalueate(EvaluateRequestVo evaluateRequestVo) {
+        if (evaluateRequestVo == null)
             return null;
 
-        Evaluate evaluate=new Evaluate();
+        Evaluate evaluate = new Evaluate();
 
         BeanUtils.copyProperties(evaluateRequestVo, evaluate);
 
@@ -127,12 +123,11 @@ public class VoService implements IVoService {
     }
 
     @Override
-    public EvaluateResponseVo convertToEvaluateResponseVo(Evaluate evaluate)
-    {
-        if(evaluate == null)
+    public EvaluateResponseVo convertToEvaluateResponseVo(Evaluate evaluate) {
+        if (evaluate == null)
             return null;
 
-        EvaluateResponseVo evaluateResponseVo=new EvaluateResponseVo();
+        EvaluateResponseVo evaluateResponseVo = new EvaluateResponseVo();
 
         BeanUtils.copyProperties(evaluate, evaluateResponseVo);
 
@@ -154,4 +149,50 @@ public class VoService implements IVoService {
         return retList;
     }
 
+    @Override
+    public Issue convertToIssue(IssueRequestVo issueRequestVo) {
+        if (issueRequestVo == null)
+            return null;
+
+        Issue issue = new Issue();
+
+        BeanUtils.copyProperties(issueRequestVo, issue);
+
+        return issue;
+    }
+
+    public List<IssueResponseVo> convertIssueResponseVo(List<Issue> issueList)
+    {
+        if(ListUtil.isNullOrEmpty(issueList))
+            return null;
+
+        List<IssueResponseVo> issueResponseVoList=new ArrayList<>();
+        List<Integer> accountIdList=new ArrayList<>();
+        List<Integer> answerIdList=new ArrayList<>();
+
+        
+
+        return issueResponseVoList;
+    }
+
+    @Override
+    public IssueResponseVo convertIssueResponseVo(Issue issue, Account account, List<Answer> answerList) {
+        if (issue == null)
+            return null;
+
+        IssueResponseVo issueResponseVo = new IssueResponseVo();
+        issueResponseVo.setAnswerCount(0);
+
+        BeanUtils.copyProperties(issue, issueResponseVo);
+
+        if (account != null) {
+            UserResponseVo userResponseVo = new UserResponseVo();
+            issueResponseVo.setUserResponseVo(userResponseVo);
+        }
+
+        if (!ListUtil.isNullOrEmpty(answerList)) {
+            issueResponseVo.setAnswerCount(answerList.size());
+        }
+        return issueResponseVo;
+    }
 }

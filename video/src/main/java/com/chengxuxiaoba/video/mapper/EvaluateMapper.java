@@ -6,10 +6,8 @@ import com.github.pagehelper.Page;
 
 import java.util.List;
 
-public interface EvaluateMapper {
+public interface EvaluateMapper extends BaseMapper<Evaluate> {
     Integer insert(Evaluate evaluate);
-
-    Page<Evaluate> getEvaluateListWithPage(EvaluateQuery evaluateQuery);
 
     Evaluate getSingle(Integer id);
 

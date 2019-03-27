@@ -1,8 +1,16 @@
 package com.chengxuxiaoba.video.model.query;
 
-public class IssueQuery {
+import com.chengxuxiaoba.video.model.PageInfo;
+
+public class IssueQuery extends BaseQuery{
     private Integer videoId;
     private Integer accountId;
+
+    public void build(Integer videoId, Integer accountId, PageInfo pageInfo){
+        this.videoId=videoId;
+        this.accountId=accountId;
+        super.setPageInfo(pageInfo);
+    }
 
     public Integer getVideoId() {
         return videoId;

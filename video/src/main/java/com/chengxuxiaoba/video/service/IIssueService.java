@@ -1,14 +1,16 @@
 package com.chengxuxiaoba.video.service;
 
+import com.chengxuxiaoba.video.model.KeyValuePair;
 import com.chengxuxiaoba.video.model.PageInfo;
 import com.chengxuxiaoba.video.model.PageResult;
 import com.chengxuxiaoba.video.model.po.Answer;
-import com.chengxuxiaoba.video.model.po.Evaluate;
 import com.chengxuxiaoba.video.model.po.Issue;
+
+import java.util.List;
 
 
 public interface IIssueService {
-    Boolean createNewIssue(Issue issue);
+    KeyValuePair<Boolean, String> createNewIssue(Issue issue);
 
     PageResult<Issue> getIssueListByVideoId(Integer videoId, PageInfo pageInfo);
 
@@ -16,7 +18,7 @@ public interface IIssueService {
 
     Issue getSingle(Integer issueId);
 
-    Boolean answerIssue(Answer answer);
+    KeyValuePair<Boolean, String> answerIssue(Answer answer);
 
-    PageResult<Answer> getAnswerListByVideoId(Integer issueId, PageInfo pageInfo);
+    List<Answer> getAnswerListByVideoId(Integer issueId);
 }

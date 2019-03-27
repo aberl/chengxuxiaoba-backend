@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class UserResponseVo {
     private String name;
+    private String headerImg;
     private String mobilePhoneNo;
     private String wechatAccount;
     private String wechatHeaderImg;
@@ -15,6 +16,14 @@ public class UserResponseVo {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getHeaderImg() {
+        return headerImg;
+    }
+
+    public void setHeaderImg(String headerImg) {
+        this.headerImg = headerImg;
     }
 
     public String getMobilePhoneNo() {

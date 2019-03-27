@@ -11,7 +11,7 @@
         VALUES(#{videoId},#{content}, #{starts}, #{accountId})
     </insert>
 
-    <select id="getEvaluateListWithPage" parameterType="com.chengxuxiaoba.video.model.query.EvaluateQuery" resultType="com.chengxuxiaoba.video.model.po.Evaluate">
+    <select id="getListWithPage" parameterType="com.chengxuxiaoba.video.model.query.EvaluateQuery" resultType="com.chengxuxiaoba.video.model.po.Evaluate">
         SELECT * from evaluate
         <where>
             <if test="id != null ">id=#{id}</if>

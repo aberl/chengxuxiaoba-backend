@@ -11,12 +11,7 @@
             VALUES(#{courseModuleId},#{path},#{name}, #{duration}, #{description}, #{images})
         </insert>
 
-    <select id="getVideoByCourseModuleId" parameterType="int" resultType="com.chengxuxiaoba.video.model.po.Video">
-        SELECT * from Video
-        where courseModuleId=#{courseModuleId}
-    </select>
-
-    <select id="getVideoByCourseModuleIdWithPage" parameterType="int" resultType="com.chengxuxiaoba.video.model.po.Video">
+    <select id="getListWithPage" parameterType="com.chengxuxiaoba.video.model.query.VideoQuery" resultType="com.chengxuxiaoba.video.model.po.Video">
         SELECT * from Video
         where courseModuleId=#{courseModuleId}
     </select>

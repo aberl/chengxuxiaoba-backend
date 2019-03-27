@@ -5,12 +5,10 @@ import com.github.pagehelper.Page;
 
 import java.util.List;
 
-public interface VideoMapper {
+public interface VideoMapper extends  BaseMapper<Video>{
     Integer insert(Video video);
 
     List<Video> getVideoByCourseModuleId(Integer courseModuleId);
-
-    Page<Video> getVideoByCourseModuleIdWithPage(Integer courseModuleId);
 
     Video getVideo(Integer id);
 

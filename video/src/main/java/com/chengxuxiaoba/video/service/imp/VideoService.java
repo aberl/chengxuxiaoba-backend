@@ -6,6 +6,8 @@ import com.chengxuxiaoba.video.model.PageInfo;
 import com.chengxuxiaoba.video.model.PageResult;
 import com.chengxuxiaoba.video.model.ResultMessage;
 import com.chengxuxiaoba.video.model.po.Video;
+import com.chengxuxiaoba.video.model.query.VideoQuery;
+import com.chengxuxiaoba.video.service.IBaseService;
 import com.chengxuxiaoba.video.service.IVideoService;
 import com.chengxuxiaoba.video.util.FileUtil;
 import com.chengxuxiaoba.video.util.StringUtil;
@@ -21,7 +23,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class VideoService implements IVideoService {
+public class VideoService  extends IBaseService<Video> implements IVideoService {
 
     @Value("${video.savepath}")
     private String videoUploadPath;
@@ -69,13 +71,11 @@ public class VideoService implements IVideoService {
         if (courseModuleId == null || pageInfo == null)
             return null;
 
-        PageHelper.startPage(pageInfo.getCurrentPageNum() - 1, pageInfo.getPageSize());
+        VideoQuery query = new VideoQuery();
+        query.setCourseModuleId(courseModuleId);
+        query.setPageInfo(pageInfo);
 
-        PageHelper.orderBy(pageInfo.getSort());
-
-        Page<Video> retList = videoMapper.getVideoByCourseModuleIdWithPage(courseModuleId);
-
-        PageResult<Video> pageResult = new PageResult<Video>(retList.getPageNum(), retList.getTotal(), retList.getResult());
+        PageResult<Video> pageResult =  super.getListByQuery(videoMapper, query);
 
         return pageResult;
     }

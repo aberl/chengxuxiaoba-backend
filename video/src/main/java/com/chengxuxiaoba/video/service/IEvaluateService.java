@@ -5,7 +5,7 @@ import com.chengxuxiaoba.video.model.PageResult;
 import com.chengxuxiaoba.video.model.po.Evaluate;
 import com.chengxuxiaoba.video.model.query.EvaluateQuery;
 
-public interface IEvaluateService {
+public interface IEvaluateService{
     Boolean createNewEvaluate(Evaluate evaluate);
 
     PageResult<Evaluate> getEvaluateListByVideoId(Integer videoId, PageInfo pageInfo);

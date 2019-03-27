@@ -5,6 +5,7 @@ import com.chengxuxiaoba.video.model.PageInfo;
 import com.chengxuxiaoba.video.model.PageResult;
 import com.chengxuxiaoba.video.model.po.Evaluate;
 import com.chengxuxiaoba.video.model.query.EvaluateQuery;
+import com.chengxuxiaoba.video.service.IBaseService;
 import com.chengxuxiaoba.video.service.IEvaluateService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -12,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EvaluateService implements IEvaluateService {
+public class EvaluateService extends IBaseService<Evaluate> implements IEvaluateService {
     @Autowired
     private EvaluateMapper evaluateMapper;
 
@@ -30,7 +31,7 @@ public class EvaluateService implements IEvaluateService {
 
         EvaluateQuery query = new EvaluateQuery();
         query.build(null,null,videoId,pageInfo);
-        PageResult<Evaluate> pageResult = getEvaluateListByQuery(query);
+        PageResult<Evaluate> pageResult =  super.getListByQuery(evaluateMapper, query);
 
         return pageResult;
     }
@@ -43,7 +44,7 @@ public class EvaluateService implements IEvaluateService {
         EvaluateQuery query = new EvaluateQuery();
         query.build(null,accountId,null,pageInfo);
 
-        PageResult<Evaluate> pageResult = getEvaluateListByQuery(query);
+        PageResult<Evaluate> pageResult =  super.getListByQuery(evaluateMapper, query);
 
         return pageResult;
     }
@@ -72,26 +73,11 @@ public class EvaluateService implements IEvaluateService {
         pageInfo.build(1,1,null,null);
         query.setPageInfo(pageInfo);
 
-        PageResult<Evaluate> pageResult = getEvaluateListByQuery(query);
+        PageResult<Evaluate> pageResult = super.getListByQuery(evaluateMapper, query);
 
         if(pageResult == null)
             return false;
 
         return pageResult.getTotalCount()>0;
-    }
-
-    private PageResult<Evaluate> getEvaluateListByQuery(EvaluateQuery query) {
-        if (query == null)
-            return null;
-
-        PageHelper.startPage(query.getPageInfo().getCurrentPageNum() - 1, query.getPageInfo().getPageSize());
-
-        PageHelper.orderBy(query.getPageInfo().getSort());
-
-        Page<Evaluate> retList = evaluateMapper.getEvaluateListWithPage(query);
-
-        PageResult<Evaluate> pageResult = new PageResult<Evaluate>(retList.getPageNum(), retList.getTotal(), retList.getResult());
-
-        return pageResult;
     }
 }

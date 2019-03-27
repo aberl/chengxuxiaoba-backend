@@ -6,12 +6,12 @@ import com.chengxuxiaoba.video.model.query.IssueQuery;
 
 import java.util.List;
 
-public interface IssueMapper {
+public interface IssueMapper extends  BaseMapper<Issue>{
     Integer insertIssue(Issue issue);
 
     Integer insertAnswer(Answer answer);
 
-    List<Issue> getIssueList(IssueQuery issueQuery);
+    Issue getIssue(Integer id);
 
     List<Answer> getAnswerList(Integer issueId);
 }

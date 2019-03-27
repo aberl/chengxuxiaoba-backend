@@ -2,12 +2,10 @@ package com.chengxuxiaoba.video.model.query;
 
 import com.chengxuxiaoba.video.model.PageInfo;
 
-public class EvaluateQuery {
+public class EvaluateQuery extends BaseQuery{
     private Integer id;
     private Integer accountId;
     private Integer videoId;
-
-    private PageInfo pageInfo;
 
     public EvaluateQuery() {
     }
@@ -23,7 +21,7 @@ public class EvaluateQuery {
         this.id = id;
         this.accountId = accountId;
         this.videoId = videoId;
-        this.pageInfo=pageInfo;
+        super.setPageInfo(pageInfo);
     }
 
     public Integer getId() {
@@ -50,11 +48,4 @@ public class EvaluateQuery {
         this.videoId = videoId;
     }
 
-    public PageInfo getPageInfo() {
-        return pageInfo;
-    }
-
-    public void setPageInfo(PageInfo pageInfo) {
-        this.pageInfo = pageInfo;
-    }
 }

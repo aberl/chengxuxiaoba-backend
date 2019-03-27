@@ -18,13 +18,18 @@
         VALUES(#{issueId},#{content}, #{answererId})
     </insert>
 
-    <select id="getIssueList" parameterType="com.chengxuxiaoba.video.model.query.IssueQuery" resultType="com.chengxuxiaoba.video.model.po.Issue">
+    <select id="getListWithPage" parameterType="com.chengxuxiaoba.video.model.query.IssueQuery" resultType="com.chengxuxiaoba.video.model.po.Issue">
         SELECT * from Issue
         <where>
             <if test="videoId != null">and videoId = #{videoId}</if>
             <if test="accountId != null">and accountId = #{accountId}</if>
         </where>
     </select>
+
+    <update id="getIssue" parameterType="int">
+       SELECT * from Issue
+        where id=#{id}
+    </update>
 
     <select id="getAnswerList" parameterType="int" resultType="com.chengxuxiaoba.video.model.po.Answer">
         SELECT * from Answer
