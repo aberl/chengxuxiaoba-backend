@@ -14,4 +14,6 @@ public interface IssueMapper extends  BaseMapper<Issue>{
     Issue getIssue(Integer id);
 
     List<Answer> getAnswerList(Integer issueId);
+
+    Integer updateIssue(Issue issue);
 }

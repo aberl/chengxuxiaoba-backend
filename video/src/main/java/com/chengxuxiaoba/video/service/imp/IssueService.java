@@ -64,7 +64,7 @@ public class IssueService extends IBaseService<Issue> implements IIssueService {
 
         PageResult<Issue> pageResult = super.getListByQuery(issueMapper, query);
 
-        return null;
+        return pageResult;
     }
 
     @Override
@@ -77,7 +77,7 @@ public class IssueService extends IBaseService<Issue> implements IIssueService {
 
         PageResult<Issue> pageResult = super.getListByQuery(issueMapper, query);
 
-        return null;
+        return pageResult;
     }
 
     @Override
@@ -104,7 +104,11 @@ public class IssueService extends IBaseService<Issue> implements IIssueService {
         if (issue.getStatus() != IssueStatus.ACTIVE.getValue())
             return new KeyValuePair<Boolean, String>(false, ResultMessage.IssueIsClosed);
 
+        Integer totalAnswerCount=issue.getAnswerCount();
+        issue.setAnswerCount(totalAnswerCount+1);
+
         Integer primaryKey = issueMapper.insertAnswer(answer);
+        issueMapper.updateIssue(issue);
 
         Boolean flag = primaryKey > 0;
 
@@ -115,7 +119,7 @@ public class IssueService extends IBaseService<Issue> implements IIssueService {
     }
 
     @Override
-    public List<Answer> getAnswerListByVideoId(Integer issueId) {
+    public List<Answer> getAnswerListByIssueId(Integer issueId) {
         if (issueId == null)
             return null;
 

@@ -24,13 +24,10 @@ public class VideoController extends BaseController {
 
     @PostMapping("/videos")
     public Result<Boolean> createVideo(VideoRequestVo requestBody) throws IOException {
-
         if (videoService.getSingle(requestBody.getCourseModuleId(), requestBody.getName()) != null)
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.SameVideoNameInCurrentCourseModule);
 
-
         Video video = voService.convertToVideo(requestBody);
-
 
         KeyValuePair<Boolean, String> uploadResult = videoService.uploadVideo(requestBody.getFileUpload());
 
@@ -56,7 +53,7 @@ public class VideoController extends BaseController {
     }
 
     @GetMapping("/courses/{courseModuleId}/videos")
-    public Result<PageResult<VideoResponseVo>> getVideoByCourseModuleId(@PathVariable("courseModuleId") Integer courseModuleId,
+    public Result<PageResult<VideoResponseVo>> getVideoListByCourseModuleId(@PathVariable("courseModuleId") Integer courseModuleId,
                                                                         @RequestParam("pagenum") Integer pageNum,
                                                                         @RequestParam(name = "pagesize", required = false) Integer pageSize,
                                                                         @RequestParam(name = "sort", required = false) String sort) {

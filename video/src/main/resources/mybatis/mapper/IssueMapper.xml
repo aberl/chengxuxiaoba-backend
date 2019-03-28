@@ -22,17 +22,30 @@
         SELECT * from Issue
         <where>
             <if test="videoId != null">and videoId = #{videoId}</if>
-            <if test="accountId != null">and accountId = #{accountId}</if>
+            <if test="accountId != null">and questionerId = #{accountId}</if>
         </where>
     </select>
 
-    <update id="getIssue" parameterType="int">
+    <select id="getIssue" parameterType="int" resultType="com.chengxuxiaoba.video.model.po.Issue">
        SELECT * from Issue
         where id=#{id}
-    </update>
+    </select>
 
     <select id="getAnswerList" parameterType="int" resultType="com.chengxuxiaoba.video.model.po.Answer">
         SELECT * from Answer
         WHERE issueId = #{issueId}
     </select>
+
+    <update id="updateIssue">
+        UPDATE Issue
+        <trim prefix="set" suffixOverrides=",">
+            <if test="videoId != null">videoId=#{videoId},</if>
+            <if test="name != null">name=#{name},</if>
+            <if test="content != null">content=#{content},</if>
+            <if test="questionerId != null">questionerId=#{questionerId},</if>
+            <if test="answerCount != null">answerCount=#{answerCount},</if>
+            <if test="status != null">status=#{status},</if>
+        </trim>
+        WHERE id=#{id}
+    </update>
 </mapper>

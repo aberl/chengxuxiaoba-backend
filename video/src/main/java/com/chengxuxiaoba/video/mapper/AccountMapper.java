@@ -3,14 +3,18 @@ package com.chengxuxiaoba.video.mapper;
 import com.chengxuxiaoba.video.model.po.Account;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface AccountMapper {
-    public Integer insert(Account account);
+    Integer insert(Account account);
 
-    public Account getAccount(@Param("userId") Integer userId);
+    Account getAccount(@Param("userId") Integer userId);
 
-    public Account getAccountByMobilePhone(String mobilePhone);
+    List<Account> getAccountList(@Param("userIdList") List<Integer> userIdList);
 
-    public Integer modifyPasswordByMobilePhone(String mobilePhoneNo,String newPassword);
+    Account getAccountByMobilePhone(String mobilePhone);
 
-   // public Integer updateAccount(Account account);
+    Integer modifyPasswordByMobilePhone(String mobilePhoneNo, String newPassword);
+
+    //  Integer updateAccount(Account account);
 }

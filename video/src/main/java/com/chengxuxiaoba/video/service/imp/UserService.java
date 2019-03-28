@@ -6,6 +6,7 @@ import com.chengxuxiaoba.video.service.IUserService;
 import com.chengxuxiaoba.video.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 public class UserService implements IUserService {
@@ -69,6 +70,14 @@ public class UserService implements IUserService {
         Account account =  accountMapper.getAccount(userId);
 
         return account;
+    }
+
+    @Override
+    public List<Account> getUserList(List<Integer> userIdList)
+    {
+        List<Account> accountList =  accountMapper.getAccountList(userIdList);
+
+        return accountList;
     }
 
     @Override

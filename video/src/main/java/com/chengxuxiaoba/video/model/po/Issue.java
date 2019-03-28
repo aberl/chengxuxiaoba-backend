@@ -8,6 +8,7 @@ public class Issue {
     private String name;
     private String content;
     private Integer questionerId;
+    private Integer answerCount;
     private Integer status;
     private Date createDateTime;
 
@@ -49,6 +50,14 @@ public class Issue {
 
     public void setQuestionerId(Integer questionerId) {
         this.questionerId = questionerId;
+    }
+
+    public Integer getAnswerCount() {
+        return answerCount;
+    }
+
+    public void setAnswerCount(Integer answerCount) {
+        this.answerCount = answerCount;
     }
 
     public Integer getStatus() {

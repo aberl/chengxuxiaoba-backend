@@ -6,13 +6,32 @@ import com.chengxuxiaoba.video.model.po.*;
 import com.chengxuxiaoba.video.service.IVoService;
 import com.chengxuxiaoba.video.util.BeanUtils;
 import com.chengxuxiaoba.video.util.ListUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class VoService implements IVoService {
+
+    @Autowired
+    private UserService userService;
+
+    @Override
+    public UserResponseVo convertToUserResponseVo(Account account) {
+        if (account == null)
+            return null;
+
+        UserResponseVo userResponseVo = new UserResponseVo();
+
+        BeanUtils.copyProperties(account, userResponseVo);
+
+        return userResponseVo;
+    }
+
     @Override
     public CourseResponseVo convertToCourseResponseVo(Course course) {
         if (course == null)
@@ -168,31 +187,103 @@ public class VoService implements IVoService {
 
         List<IssueResponseVo> issueResponseVoList=new ArrayList<>();
         List<Integer> accountIdList=new ArrayList<>();
-        List<Integer> answerIdList=new ArrayList<>();
 
-        
+        for (Issue issue : issueList)
+        {
+            accountIdList.add(issue.getQuestionerId());
+        }
 
+        List<Account> accountList = userService.getUserList(accountIdList);
+
+        Map<Integer, Account> accountMap=new HashMap<>();
+        for (Account account:accountList)
+            accountMap.put(account.getId(),account);
+
+        IssueResponseVo issueResponseVo=null;
+        for (Issue issue : issueList)
+        {
+            issueResponseVo=convertIssueResponseVo(issue, accountMap.get(issue.getQuestionerId()));
+
+            issueResponseVoList.add(issueResponseVo);
+        }
         return issueResponseVoList;
     }
 
     @Override
-    public IssueResponseVo convertIssueResponseVo(Issue issue, Account account, List<Answer> answerList) {
+    public IssueResponseVo convertIssueResponseVo(Issue issue, Account account) {
         if (issue == null)
             return null;
 
         IssueResponseVo issueResponseVo = new IssueResponseVo();
-        issueResponseVo.setAnswerCount(0);
 
         BeanUtils.copyProperties(issue, issueResponseVo);
 
         if (account != null) {
-            UserResponseVo userResponseVo = new UserResponseVo();
+            UserResponseVo userResponseVo = convertToUserResponseVo(account);
             issueResponseVo.setUserResponseVo(userResponseVo);
         }
 
-        if (!ListUtil.isNullOrEmpty(answerList)) {
-            issueResponseVo.setAnswerCount(answerList.size());
-        }
         return issueResponseVo;
+    }
+
+    @Override
+    public Answer convertToAnswer(AnswerRequestVo answerRequestVo)
+    {
+        if (answerRequestVo == null)
+            return null;
+
+        Answer answer = new Answer();
+
+        BeanUtils.copyProperties(answerRequestVo, answer);
+
+        return answer;
+    }
+
+    @Override
+    public AnswerResponseVo convertAnswerResponseVo(Answer answer, Account account)
+    {
+        if (answer == null)
+            return null;
+
+        AnswerResponseVo answerResponseVo = new AnswerResponseVo();
+
+        BeanUtils.copyProperties(answer, answerResponseVo);
+
+        if (account != null) {
+            UserResponseVo userResponseVo = convertToUserResponseVo(account);
+            answerResponseVo.setUserResponseVo(userResponseVo);
+        }
+
+        return answerResponseVo;
+    }
+
+    @Override
+    public List<AnswerResponseVo> convertAnswerResponseVo(List<Answer> answerList)
+    {
+        if(ListUtil.isNullOrEmpty(answerList))
+            return null;
+
+        List<AnswerResponseVo> answerResponseVoList=new ArrayList<>();
+        List<Integer> accountIdList=new ArrayList<>();
+
+        for (Answer answer : answerList)
+        {
+            accountIdList.add(answer.getAnswererId());
+        }
+
+        List<Account> accountList = userService.getUserList(accountIdList);
+
+        Map<Integer, Account> accountMap=new HashMap<>();
+        for (Account account:accountList)
+            accountMap.put(account.getId(),account);
+
+        AnswerResponseVo answerResponseVo=null;
+        for (Answer answer : answerList)
+        {
+            answerResponseVo=convertAnswerResponseVo(answer, accountMap.get(answer.getAnswererId()));
+
+            answerResponseVoList.add(answerResponseVo);
+        }
+        return answerResponseVoList;
     }
 }

@@ -16,10 +16,24 @@
         where mobilePhoneNo=#{mobilePhoneNo} limit 1
     </select>
 
+    <select id="getAccountList" parameterType="java.util.List" resultType="com.chengxuxiaoba.video.model.po.Account">
+        SELECT * from account
+        <where>
+            <if test="userIdList !=null and userIdList.size() != 0">
+                id IN
+                <foreach collection="userIdList" index="index" item="userId" open="("
+                         separator="," close=")">
+                    #{userId}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
     <select id="getAccount" parameterType="int" resultType="com.chengxuxiaoba.video.model.po.Account">
         SELECT * from account
         where id=#{userId} limit 1
     </select>
+
 
     <update id="modifyPasswordByMobilePhone" parameterType="string">
         UPDATE account

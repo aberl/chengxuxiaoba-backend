@@ -20,5 +20,5 @@ public interface IIssueService {
 
     KeyValuePair<Boolean, String> answerIssue(Answer answer);
 
-    List<Answer> getAnswerListByVideoId(Integer issueId);
+    List<Answer> getAnswerListByIssueId(Integer issueId);
 }

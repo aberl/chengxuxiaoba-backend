@@ -2,18 +2,15 @@ package com.chengxuxiaoba.video.model.Response.VO;
 
 import java.util.Date;
 
-public class IssueResponseVo {
+public class AnswerResponseVo {
     private Integer id;
-    private Integer videoId;
-    private String name;
+    private Integer issueId;
     private String content;
-    private Integer questionerId;
+    private Integer answererId;
     private Integer status;
-    private Integer answerCount;
     private Date createDateTime;
 
     private UserResponseVo userResponseVo;
-
 
     public Integer getId() {
         return id;
@@ -23,20 +20,12 @@ public class IssueResponseVo {
         this.id = id;
     }
 
-    public Integer getVideoId() {
-        return videoId;
+    public Integer getIssueId() {
+        return issueId;
     }
 
-    public void setVideoId(Integer videoId) {
-        this.videoId = videoId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setIssueId(Integer issueId) {
+        this.issueId = issueId;
     }
 
     public String getContent() {
@@ -47,12 +36,12 @@ public class IssueResponseVo {
         this.content = content;
     }
 
-    public Integer getQuestionerId() {
-        return questionerId;
+    public Integer getAnswererId() {
+        return answererId;
     }
 
-    public void setQuestionerId(Integer questionerId) {
-        this.questionerId = questionerId;
+    public void setAnswererId(Integer answererId) {
+        this.answererId = answererId;
     }
 
     public Integer getStatus() {
@@ -77,13 +66,5 @@ public class IssueResponseVo {
 
     public void setUserResponseVo(UserResponseVo userResponseVo) {
         this.userResponseVo = userResponseVo;
-    }
-
-    public Integer getAnswerCount() {
-        return answerCount;
-    }
-
-    public void setAnswerCount(Integer answerCount) {
-        this.answerCount = answerCount;
     }
 }

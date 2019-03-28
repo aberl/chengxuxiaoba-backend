@@ -1,5 +1,6 @@
 package com.chengxuxiaoba.video.service;
 
+import com.chengxuxiaoba.video.model.Request.VO.AnswerRequestVo;
 import com.chengxuxiaoba.video.model.Request.VO.EvaluateRequestVo;
 import com.chengxuxiaoba.video.model.Request.VO.IssueRequestVo;
 import com.chengxuxiaoba.video.model.Request.VO.VideoRequestVo;
@@ -9,6 +10,8 @@ import com.chengxuxiaoba.video.model.po.*;
 import java.util.List;
 
 public interface IVoService {
+    UserResponseVo convertToUserResponseVo(Account account);
+
     CourseResponseVo convertToCourseResponseVo(Course course);
 
     List<CourseResponseVo> convertToCourseResponseVo(List<Course> course);
@@ -31,5 +34,13 @@ public interface IVoService {
 
     Issue convertToIssue(IssueRequestVo issueRequestVo);
 
-    IssueResponseVo convertIssueResponseVo(Issue issue, Account account, List<Answer> answers);
+    IssueResponseVo convertIssueResponseVo(Issue issue, Account account);
+
+    List<IssueResponseVo> convertIssueResponseVo(List<Issue> issueList);
+
+    Answer convertToAnswer(AnswerRequestVo answerRequestVo);
+
+    AnswerResponseVo convertAnswerResponseVo(Answer answer, Account account);
+
+    List<AnswerResponseVo> convertAnswerResponseVo(List<Answer> answerList);
 }
