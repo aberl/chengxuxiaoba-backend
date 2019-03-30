@@ -81,6 +81,14 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public List<Account> getAllUserList()
+    {
+        List<Account> accountList =  accountMapper.getAccountList(null);
+
+        return accountList;
+    }
+
+    @Override
     public Account getUserByMobilePhone(String mobilePhoneNo)
     {
         Account account =  accountMapper.getAccountByMobilePhone(mobilePhoneNo);

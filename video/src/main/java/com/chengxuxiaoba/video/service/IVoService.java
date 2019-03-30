@@ -1,9 +1,6 @@
 package com.chengxuxiaoba.video.service;
 
-import com.chengxuxiaoba.video.model.Request.VO.AnswerRequestVo;
-import com.chengxuxiaoba.video.model.Request.VO.EvaluateRequestVo;
-import com.chengxuxiaoba.video.model.Request.VO.IssueRequestVo;
-import com.chengxuxiaoba.video.model.Request.VO.VideoRequestVo;
+import com.chengxuxiaoba.video.model.Request.VO.*;
 import com.chengxuxiaoba.video.model.Response.VO.*;
 import com.chengxuxiaoba.video.model.po.*;
 
@@ -43,4 +40,10 @@ public interface IVoService {
     AnswerResponseVo convertAnswerResponseVo(Answer answer, Account account);
 
     List<AnswerResponseVo> convertAnswerResponseVo(List<Answer> answerList);
+
+    Message convertToMessage(MessageRequestVo messageRequestVo);
+
+    MessageResponseVo convertToMessageResponseVo(Message message);
+
+    List<MessageResponseVo> convertToMessageResponseVo(List<Message> messageList);
 }

@@ -19,4 +19,7 @@ public class ResultMessage {
     public static String CannotEvluateOneVideoMoreTime = "同一视频不能重复评论";
     public static String IssueIsNotExist = "问题不存在";
     public static String IssueIsClosed = "问题已关闭不能回答";
+    public static String MessageIsNotExist = "消息不存在";
+    public static String MessageCreateFail = "消息创建失败";
+    public static String MessageBroadCastFail = "消息广播失败";
 }

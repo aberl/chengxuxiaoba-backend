@@ -286,4 +286,43 @@ public class VoService implements IVoService {
         }
         return answerResponseVoList;
     }
+
+    @Override
+    public Message convertToMessage(MessageRequestVo messageRequestVo){
+        if (messageRequestVo == null)
+            return null;
+
+        Message message = new Message();
+
+        BeanUtils.copyProperties(messageRequestVo, message);
+
+        return message;
+    }
+
+    @Override
+    public MessageResponseVo convertToMessageResponseVo(Message message){
+        if (message == null)
+            return null;
+
+        MessageResponseVo messageResponseVo = new MessageResponseVo();
+
+        BeanUtils.copyProperties(message, messageResponseVo);
+
+        return messageResponseVo;
+    }
+
+    @Override
+    public List<MessageResponseVo> convertToMessageResponseVo(List<Message> messageList) {
+        if (ListUtil.isNullOrEmpty(messageList))
+            return null;
+
+        List<MessageResponseVo> retList = new ArrayList<>();
+        MessageResponseVo messageResponseVo;
+        for (Message message : messageList) {
+            messageResponseVo = convertToMessageResponseVo(message);
+            if (messageResponseVo != null)
+                retList.add(messageResponseVo);
+        }
+        return retList;
+    }
 }

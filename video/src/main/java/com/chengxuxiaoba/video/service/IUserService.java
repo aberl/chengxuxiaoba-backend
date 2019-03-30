@@ -17,5 +17,7 @@ public interface IUserService {
 
     List<Account> getUserList(List<Integer> userIdList);
 
+    List<Account> getAllUserList();
+
     Account getUserByMobilePhone(String mobilePhoneNo);
 }

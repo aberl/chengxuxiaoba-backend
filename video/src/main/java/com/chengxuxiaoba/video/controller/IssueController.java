@@ -34,7 +34,7 @@ public class IssueController extends BaseController{
         return new Result<Boolean>(ResultCode.Success, result.getKey(), result.getValue());
     }
 
-    @GetMapping("/video/{videoId}/issues")
+    @GetMapping("/videos/{videoId}/issues")
     public Result<PageResult<IssueResponseVo>> getIssueListByVideoId(@PathVariable("videoId") Integer videoId,
                                                                      @RequestParam("pagenum") Integer pageNum,
                                                                      @RequestParam(name = "pagesize", required = false) Integer pageSize,
@@ -55,7 +55,7 @@ public class IssueController extends BaseController{
         return new Result<PageResult<IssueResponseVo>>(ResultCode.Success, result, ResultMessage.Success);
     }
 
-    @GetMapping("/user/{userId}/issues")
+    @GetMapping("/users/{userId}/issues")
     public Result<PageResult<IssueResponseVo>> getIssueListByUserId(@PathVariable("userId") Integer userId,
                                                                      @RequestParam("pagenum") Integer pageNum,
                                                                      @RequestParam(name = "pagesize", required = false) Integer pageSize,

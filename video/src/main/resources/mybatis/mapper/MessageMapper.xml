@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chengxuxiaoba.video.mapper.MessageMapper">
+    <resultMap id="accountMessageRelationShip" type="com.chengxuxiaoba.video.model.po.AccountMessageRelationShip">
+        <id column="id" property="id"/>
+        <result column="accountId" property="accountId"/>
+        <result column="messageId" property="messageId"/>
+        <result column="messageCategory" property="messageCategory"/>
+        <result column="isRead" property="isRead"/>
+        <result column="readDateTime" property="readDateTime"/>
+        <result column="createDateTime" property="createDateTime"/>
+
+        <association property="message" javaType="com.chengxuxiaoba.video.model.po.Message">
+            <id column="messageId" property="id"/>
+            <result column="name" property="name"/>
+            <result column="content" property="content"/>
+            <result column="status" property="status"/>
+            <result column="category" property="category"/>
+            <result column="messageCreateDateTime" property="createDateTime"/>
+        </association>
+    </resultMap>
+    <insert id="insertMessage" parameterType="com.chengxuxiaoba.video.model.po.Message">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO Message(name, content, category)
+        VALUES(#{name},#{content},#{category})
+    </insert>
+
+    <insert id="insertAccountMessageRelationShip" parameterType="com.chengxuxiaoba.video.model.po.AccountMessageRelationShip">
+        INSERT INTO accountmessage_relationship(accountId, messageId, messageCategory)
+        VALUES
+        <foreach collection="accountMessageRelationShipList" item="relation" index="index" separator=",">
+            (#{relation.accountId},#{relation.messageId},#{relation.messageCategory})
+        </foreach>
+    </insert>
+
+    <select id="getListWithPage" parameterType="com.chengxuxiaoba.video.model.query.MessageQuery"
+            resultType="com.chengxuxiaoba.video.model.po.Message">
+        SELECT * from Message
+        <where>
+            <if test="status != null">
+                status=#{status}
+            </if>
+        </where>
+    </select>
+
+    <select id="getMessage" parameterType="int" resultType="com.chengxuxiaoba.video.model.po.Message">
+        SELECT * from Message
+        where id=#{id} limit 1
+    </select>
+
+    <update id="setRead">
+        update accountmessage_relationship
+        set isRead=1, readDateTime = now()
+        where accountId=#{accountId} and messageId=#{messageId}
+    </update>
+
+    <select id="getAccountMessageRelationShipList" parameterType="com.chengxuxiaoba.video.model.query.MessageQuery"
+            resultMap="accountMessageRelationShip">
+        select relation.*, message.`name`, message.content,message.`status`,message.category,message.createDateTime
+        messageCreateDateTime from accountmessage_relationship relation
+        inner JOIN message on relation.messageId=message.id
+        <where>
+            <if test="messageId != null">
+                relation.messageId=#{messageId}
+            </if>
+            <if test="accountId != null">
+                relation.accountId=#{accountId}
+            </if>
+            <if test="isRead != null">
+                relation.isRead=#{isRead}
+            </if>
+            <if test="status != null">
+                message.status=#{status}
+            </if>
+            <if test="category != null">
+                message.category=#{category}
+            </if>
+        </where>
+    </select>
+
+    <select id="getUnReadCount" parameterType="int" resultType="int">
+        SELECT count(1) from accountmessage_relationship
+        where accountId=#{accountId} and isRead=0 limit 1
+    </select>
+
+
+    <update id="updateMessage">
+        UPDATE Message
+        <trim prefix="set" suffixOverrides=",">
+            <if test="name != null">name=#{name},</if>
+            <if test="content != null">content=#{content},</if>
+            <if test="status != null">name=#{status},</if>
+            <if test="category != null">category=#{category},</if>
+        </trim>
+        WHERE id=#{id}
+    </update>
+</mapper>

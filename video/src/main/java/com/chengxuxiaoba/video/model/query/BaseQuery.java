@@ -3,7 +3,6 @@ package com.chengxuxiaoba.video.model.query;
 import com.chengxuxiaoba.video.model.PageInfo;
 
 public class BaseQuery {
-
     private PageInfo pageInfo;
 
     public PageInfo getPageInfo() {
