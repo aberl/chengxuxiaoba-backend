@@ -50,9 +50,6 @@ public class UserController {
         if (!RegexUtil.isMatchMobilePhoneNo(registerBody.getMobilePhoneNo()))
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.MobilePhoneNoIsUnIllegal);
 
-        if (!registerBody.getPassword().equals(registerBody.getConfirmPassword()))
-            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.PasswordConfirmWrong);
-
         Boolean isValid = validationService.verifyCode(registerBody.getMobilePhoneNo(), ValidationCodeCategory.forgetPassword, registerBody.getValidationCode());
 
         if (!isValid)
@@ -71,7 +68,7 @@ public class UserController {
 
         validationService.invalidateCode(registerBody.getMobilePhoneNo(), ValidationCodeCategory.forgetPassword, registerBody.getValidationCode());
 
-        return new Result<Boolean>(ResultCode.Error, true, ResultMessage.Success);
+        return new Result<Boolean>(ResultCode.Success, true, ResultMessage.Success);
     }
 
     @PostMapping("/token")
