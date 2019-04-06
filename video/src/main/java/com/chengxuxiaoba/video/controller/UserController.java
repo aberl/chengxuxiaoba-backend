@@ -27,8 +27,8 @@ public class UserController {
 
     @PostMapping("/account")
     public Result<Boolean> createAccount(@RequestBody RegisterRequestVo registerBody) {
-        if (!registerBody.getPassword().equals(registerBody.getConfirmPassword()))
-            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.PasswordConfirmWrong);
+//        if (!registerBody.getPassword().equals(registerBody.getConfirmPassword()))
+//            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.PasswordConfirmWrong);
 
         Boolean isValid = validationService.verifyCode(registerBody.getMobilePhoneNo(), ValidationCodeCategory.register, registerBody.getValidationCode());
 
