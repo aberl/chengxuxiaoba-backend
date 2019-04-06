@@ -9,7 +9,7 @@ public interface IUserService {
 
     Boolean isMobilePhoneExist(String mobilePhone);
 
-    Boolean loginByAccount(String mobilePhoneNo,String password);
+    Account loginByAccount(String mobilePhoneNo, String password);
 
     Boolean modifyPassword(String mobilePhoneNo, String password);
 

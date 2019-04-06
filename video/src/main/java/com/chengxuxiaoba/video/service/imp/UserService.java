@@ -37,16 +37,16 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Boolean loginByAccount(String mobilePhoneNo, String password) {
+    public Account loginByAccount(String mobilePhoneNo, String password) {
         Account account = accountMapper.getAccountByMobilePhone(mobilePhoneNo);
 
         if (account == null)
-            return false;
+            return null;
 
         if (!account.getPassword().equals(password))
-            return false;
+            return null;
 
-        return true;
+        return account;
     }
 
     @Override

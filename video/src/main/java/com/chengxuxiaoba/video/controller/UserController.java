@@ -75,13 +75,15 @@ public class UserController {
     }
 
     @PostMapping("/token")
-    public Result<Boolean> login(@RequestBody LoginRequestVo loginBody) {
-        Boolean flag = userService.loginByAccount(loginBody.getMobilePhoneNo(), loginBody.getPassword());
+    public Result<UserResponseVo> login(@RequestBody LoginRequestVo loginBody) {
+        Account account = userService.loginByAccount(loginBody.getMobilePhoneNo(), loginBody.getPassword());
 
-        if (!flag)
-            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.UserPWDIsNotMatch);
+        if (account == null)
+            return new Result<UserResponseVo>(ResultCode.Error, null, ResultMessage.UserPWDIsNotMatch);
 
-        return new Result<Boolean>(ResultCode.Success, true, ResultMessage.Success);
+        UserResponseVo userResponseVo=voService.convertToUserResponseVo(account);
+
+        return new Result<UserResponseVo>(ResultCode.Success, userResponseVo, ResultMessage.Success);
     }
 
     @GetMapping("/{id}")
@@ -91,6 +93,19 @@ public class UserController {
 
       if(account == null)
           return new Result<UserResponseVo>(ResultCode.Error, null, ResultMessage.UserIsNotExist);
+
+        UserResponseVo userResponseVo=voService.convertToUserResponseVo(account);
+
+        return new Result<UserResponseVo>(ResultCode.Success, userResponseVo, ResultMessage.Success);
+    }
+
+    @GetMapping("/mobilephoneno/{mobilephoneno}")
+    public Result<UserResponseVo> getUserInfoByMobilePhoneNo(@PathVariable("mobilephoneno") String mobilephoneno)
+    {
+        Account account = userService.getUserByMobilePhone(mobilephoneno);
+
+        if(account == null)
+            return new Result<UserResponseVo>(ResultCode.Error, null, ResultMessage.UserIsNotExist);
 
         UserResponseVo userResponseVo=voService.convertToUserResponseVo(account);
 
