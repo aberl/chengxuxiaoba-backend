@@ -49,6 +49,14 @@ public class CourseService implements ICourseService {
     }
 
     @Override
+    public Integer createNewCourseModule(CourseModule courseModule) {
+        if(courseModule == null)
+            return  -1;
+
+        return courseMapper.insertModule(courseModule);
+    }
+
+    @Override
     public CourseModule getCourseModule(Integer courseModuleId) {
         return courseMapper.getCourseModule(courseModuleId);
     }

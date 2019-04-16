@@ -11,6 +11,14 @@
         VALUES(#{name},#{description},#{images},#{status})
     </insert>
 
+    <insert id="insertModule" parameterType="com.chengxuxiaoba.video.model.po.CourseModule">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO coursemodule(courseId, name, description, images, status)
+        VALUES(#{courseId},#{name},#{description},#{images},#{status})
+    </insert>
+
     <select id="getAllCourseList" resultType="com.chengxuxiaoba.video.model.po.Course">
         SELECT * from Course
     </select>

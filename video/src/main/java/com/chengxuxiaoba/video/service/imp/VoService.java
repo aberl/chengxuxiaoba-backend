@@ -31,6 +31,31 @@ public class VoService implements IVoService {
 
         return userResponseVo;
     }
+    @Override
+    public Course convertToCourse(CourseRequestVo courseVo)
+    {
+        if (courseVo == null)
+            return null;
+
+        Course course = new Course();
+
+        BeanUtils.copyProperties(courseVo, course);
+
+        return course;
+    }
+    @Override
+    public  CourseModule convertToCourseModule(CourseModuleRequestVo courseModuleVo)
+    {
+        if (courseModuleVo == null)
+            return null;
+
+        CourseModule courseModule = new CourseModule();
+
+        BeanUtils.copyProperties(courseModuleVo, courseModule);
+
+        return courseModule;
+
+    }
 
     @Override
     public CourseResponseVo convertToCourseResponseVo(Course course) {

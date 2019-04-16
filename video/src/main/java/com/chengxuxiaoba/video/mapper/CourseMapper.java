@@ -15,6 +15,8 @@ public interface CourseMapper {
 
     Course getCourse(@Param("courseId") Integer courseId);
 
+    Integer insertModule(CourseModule courseModule);
+
     List<CourseModule> getAllCourseModuleList(@Param("courseId") Integer courseId);
 
     CourseModule getCourseModule(@Param("courseModuleId") Integer courseModuleId);

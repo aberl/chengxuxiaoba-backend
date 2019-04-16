@@ -9,6 +9,10 @@ import java.util.List;
 public interface IVoService {
     UserResponseVo convertToUserResponseVo(Account account);
 
+    Course convertToCourse(CourseRequestVo course);
+
+    CourseModule convertToCourseModule(CourseModuleRequestVo course);
+
     CourseResponseVo convertToCourseResponseVo(Course course);
 
     List<CourseResponseVo> convertToCourseResponseVo(List<Course> course);

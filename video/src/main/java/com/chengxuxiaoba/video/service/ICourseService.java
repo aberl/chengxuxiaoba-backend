@@ -14,6 +14,8 @@ public interface ICourseService {
 
     Course getCourse(Integer courseId);
 
+    Integer createNewCourseModule(CourseModule courseModule);
+
     CourseModule getCourseModule(Integer courseModuleId);
 
     List<CourseModule> getAllCourseModuleList(Integer courseId);
