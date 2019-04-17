@@ -22,4 +22,6 @@ public class ResultMessage {
     public static String MessageIsNotExist = "消息不存在";
     public static String MessageCreateFail = "消息创建失败";
     public static String MessageBroadCastFail = "消息广播失败";
+    public static String CourseAndModuleRelationShipIsNotExist = "课程模块没有关联有效课程";
+    public static String uploadFileHasNoPurpose = "上传的文件没有知名用途";
 }

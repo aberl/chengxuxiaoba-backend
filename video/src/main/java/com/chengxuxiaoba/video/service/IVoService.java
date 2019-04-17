@@ -50,4 +50,8 @@ public interface IVoService {
     MessageResponseVo convertToMessageResponseVo(Message message);
 
     List<MessageResponseVo> convertToMessageResponseVo(List<Message> messageList);
+
+    UploadFile convertToUploadFile(UploadFileRequestVo uploadFileRequestVo);
+
+    UploadFileResponseVo convertToUploadFileResponseVo(UploadFile uploadFile);
 }

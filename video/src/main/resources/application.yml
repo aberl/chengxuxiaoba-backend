@@ -49,6 +49,12 @@ pagehelper:
   reasonable: false
 
 video:
-  savepath: D:/peoject/chengxuxiaoba/video/
+  savepath: D:/peoject/chengxuxiaoba/videos/
   suffexnamelimitation: mp4,rmvb,AVI
+  size: 10M
+
+image:
+  savepath: D:/peoject/chengxuxiaoba/images/
+  suffexnamelimitation: jpg,png
+  size: 10M
 

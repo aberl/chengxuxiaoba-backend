@@ -24,14 +24,14 @@
     </select>
 
     <select id="getEffectiveCourseList" resultType="com.chengxuxiaoba.video.model.po.Course">
-        SELECT * from account
+        SELECT * from Course
         where status=1
     </select>
 
-    <update id="getCourse" parameterType="int">
-       SELECT * from account
+    <select id="getCourse" parameterType="int" resultType="com.chengxuxiaoba.video.model.po.Course">
+       SELECT * from Course
         where id=#{courseId}
-    </update>
+    </select>
 
     <select id="getAllCourseModuleList" resultType="com.chengxuxiaoba.video.model.po.CourseModule">
         SELECT * from CourseModule where courseId=#{courseId}

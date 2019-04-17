@@ -31,9 +31,9 @@ public class VoService implements IVoService {
 
         return userResponseVo;
     }
+
     @Override
-    public Course convertToCourse(CourseRequestVo courseVo)
-    {
+    public Course convertToCourse(CourseRequestVo courseVo) {
         if (courseVo == null)
             return null;
 
@@ -43,9 +43,9 @@ public class VoService implements IVoService {
 
         return course;
     }
+
     @Override
-    public  CourseModule convertToCourseModule(CourseModuleRequestVo courseModuleVo)
-    {
+    public CourseModule convertToCourseModule(CourseModuleRequestVo courseModuleVo) {
         if (courseModuleVo == null)
             return null;
 
@@ -205,29 +205,26 @@ public class VoService implements IVoService {
         return issue;
     }
 
-    public List<IssueResponseVo> convertIssueResponseVo(List<Issue> issueList)
-    {
-        if(ListUtil.isNullOrEmpty(issueList))
+    public List<IssueResponseVo> convertIssueResponseVo(List<Issue> issueList) {
+        if (ListUtil.isNullOrEmpty(issueList))
             return null;
 
-        List<IssueResponseVo> issueResponseVoList=new ArrayList<>();
-        List<Integer> accountIdList=new ArrayList<>();
+        List<IssueResponseVo> issueResponseVoList = new ArrayList<>();
+        List<Integer> accountIdList = new ArrayList<>();
 
-        for (Issue issue : issueList)
-        {
+        for (Issue issue : issueList) {
             accountIdList.add(issue.getQuestionerId());
         }
 
         List<Account> accountList = userService.getUserList(accountIdList);
 
-        Map<Integer, Account> accountMap=new HashMap<>();
-        for (Account account:accountList)
-            accountMap.put(account.getId(),account);
+        Map<Integer, Account> accountMap = new HashMap<>();
+        for (Account account : accountList)
+            accountMap.put(account.getId(), account);
 
-        IssueResponseVo issueResponseVo=null;
-        for (Issue issue : issueList)
-        {
-            issueResponseVo=convertIssueResponseVo(issue, accountMap.get(issue.getQuestionerId()));
+        IssueResponseVo issueResponseVo = null;
+        for (Issue issue : issueList) {
+            issueResponseVo = convertIssueResponseVo(issue, accountMap.get(issue.getQuestionerId()));
 
             issueResponseVoList.add(issueResponseVo);
         }
@@ -252,8 +249,7 @@ public class VoService implements IVoService {
     }
 
     @Override
-    public Answer convertToAnswer(AnswerRequestVo answerRequestVo)
-    {
+    public Answer convertToAnswer(AnswerRequestVo answerRequestVo) {
         if (answerRequestVo == null)
             return null;
 
@@ -265,8 +261,7 @@ public class VoService implements IVoService {
     }
 
     @Override
-    public AnswerResponseVo convertAnswerResponseVo(Answer answer, Account account)
-    {
+    public AnswerResponseVo convertAnswerResponseVo(Answer answer, Account account) {
         if (answer == null)
             return null;
 
@@ -283,29 +278,26 @@ public class VoService implements IVoService {
     }
 
     @Override
-    public List<AnswerResponseVo> convertAnswerResponseVo(List<Answer> answerList)
-    {
-        if(ListUtil.isNullOrEmpty(answerList))
+    public List<AnswerResponseVo> convertAnswerResponseVo(List<Answer> answerList) {
+        if (ListUtil.isNullOrEmpty(answerList))
             return null;
 
-        List<AnswerResponseVo> answerResponseVoList=new ArrayList<>();
-        List<Integer> accountIdList=new ArrayList<>();
+        List<AnswerResponseVo> answerResponseVoList = new ArrayList<>();
+        List<Integer> accountIdList = new ArrayList<>();
 
-        for (Answer answer : answerList)
-        {
+        for (Answer answer : answerList) {
             accountIdList.add(answer.getAnswererId());
         }
 
         List<Account> accountList = userService.getUserList(accountIdList);
 
-        Map<Integer, Account> accountMap=new HashMap<>();
-        for (Account account:accountList)
-            accountMap.put(account.getId(),account);
+        Map<Integer, Account> accountMap = new HashMap<>();
+        for (Account account : accountList)
+            accountMap.put(account.getId(), account);
 
-        AnswerResponseVo answerResponseVo=null;
-        for (Answer answer : answerList)
-        {
-            answerResponseVo=convertAnswerResponseVo(answer, accountMap.get(answer.getAnswererId()));
+        AnswerResponseVo answerResponseVo = null;
+        for (Answer answer : answerList) {
+            answerResponseVo = convertAnswerResponseVo(answer, accountMap.get(answer.getAnswererId()));
 
             answerResponseVoList.add(answerResponseVo);
         }
@@ -313,7 +305,7 @@ public class VoService implements IVoService {
     }
 
     @Override
-    public Message convertToMessage(MessageRequestVo messageRequestVo){
+    public Message convertToMessage(MessageRequestVo messageRequestVo) {
         if (messageRequestVo == null)
             return null;
 
@@ -325,7 +317,7 @@ public class VoService implements IVoService {
     }
 
     @Override
-    public MessageResponseVo convertToMessageResponseVo(Message message){
+    public MessageResponseVo convertToMessageResponseVo(Message message) {
         if (message == null)
             return null;
 
@@ -349,5 +341,29 @@ public class VoService implements IVoService {
                 retList.add(messageResponseVo);
         }
         return retList;
+    }
+
+    @Override
+    public UploadFile convertToUploadFile(UploadFileRequestVo uploadFileRequestVo) {
+        if (uploadFileRequestVo == null)
+            return null;
+
+        UploadFile uploadFile = new UploadFile();
+
+        BeanUtils.copyProperties(uploadFileRequestVo, uploadFile);
+
+        return uploadFile;
+    }
+
+    @Override
+    public UploadFileResponseVo convertToUploadFileResponseVo(UploadFile uploadFile) {
+        if (uploadFile == null)
+            return null;
+
+        UploadFileResponseVo uploadFileResponseVo = new UploadFileResponseVo();
+
+        BeanUtils.copyProperties(uploadFile, uploadFileResponseVo);
+
+        return uploadFileResponseVo;
     }
 }

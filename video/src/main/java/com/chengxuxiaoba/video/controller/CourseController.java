@@ -1,5 +1,7 @@
 package com.chengxuxiaoba.video.controller;
 
+import com.chengxuxiaoba.video.model.Request.VO.CourseModuleRequestVo;
+import com.chengxuxiaoba.video.model.Request.VO.CourseRequestVo;
 import com.chengxuxiaoba.video.model.Response.VO.CourseModuleResponseVo;
 import com.chengxuxiaoba.video.model.Response.VO.CourseResponseVo;
 import com.chengxuxiaoba.video.model.Result;
@@ -17,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/courses")
 public class CourseController {
 
     @Autowired
@@ -26,12 +27,43 @@ public class CourseController {
     @Autowired
     private ICourseService courseService;
 
-    public Result<Boolean> createCourse(RequestBody CourseRequestVo)
-    {
 
+    @PostMapping("/courses")
+    public Result<Boolean> createCourse(@RequestBody CourseRequestVo courseRequestVo) {
+        Course course = voService.convertToCourse(courseRequestVo);
+
+        if (course == null)
+            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.ParameterError);
+
+        Integer primyKey = courseService.createNewCourse(course);
+        if(primyKey <= 0)
+            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.Fail);
+        return new Result<Boolean>(ResultCode.Success, true, ResultMessage.Success);
     }
 
-    @GetMapping("/")
+    @PostMapping("/courses/module")
+    public Result<Boolean> createCourseModule(@RequestBody CourseModuleRequestVo courseModuleRequestVo) {
+        CourseModule courseModule = voService.convertToCourseModule(courseModuleRequestVo);
+
+        if (courseModule == null)
+            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.ParameterError);
+
+        Integer courseId = courseModule.getCourseId();
+        if (courseId == null)
+            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.CourseAndModuleRelationShipIsNotExist);
+
+        Course course = courseService.getCourse(courseId);
+        if (course == null)
+            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.CourseAndModuleRelationShipIsNotExist);
+
+        Integer primyKey = courseService.createNewCourseModule(courseModule);
+        if(primyKey <= 0)
+        return new Result<Boolean>(ResultCode.Error, false, ResultMessage.Fail);
+
+        return new Result<Boolean>(ResultCode.Success, true, ResultMessage.Success);
+    }
+
+    @GetMapping("/courses")
     public Result<List<CourseResponseVo>> getAllCourse() {
         List<Course> courselist = courseService.getAllCourse();
 
@@ -41,7 +73,7 @@ public class CourseController {
     }
 
 
-    @GetMapping("/effective")
+    @GetMapping("/courses/effective")
     public Result<List<CourseResponseVo>> getEffectiveCourseList() {
         List<Course> courselist = courseService.getEffectiveCourse();
 
@@ -50,9 +82,9 @@ public class CourseController {
         return new Result<List<CourseResponseVo>>(ResultCode.Success, resultlist, ResultMessage.Success);
     }
 
-    @GetMapping("/coursemodule/{coursemoduleid}")
+    @GetMapping("/courses/coursemodule/{coursemoduleid}")
     public Result<CourseModuleResponseVo> getAllCourseModuleList(@PathVariable("coursemoduleid") Integer coursemoduleid) {
-        if(coursemoduleid == null || coursemoduleid==0)
+        if (coursemoduleid == null || coursemoduleid == 0)
             return new Result<CourseModuleResponseVo>(ResultCode.Error, null, ResultMessage.ParameterError);
 
         CourseModule courseModule = courseService.getCourseModule(coursemoduleid);
@@ -62,7 +94,7 @@ public class CourseController {
         return new Result<CourseModuleResponseVo>(ResultCode.Success, result, ResultMessage.Success);
     }
 
-    @GetMapping("/{courseid}/coursemodule/all")
+    @GetMapping("/courses/{courseid}/coursemodule/all")
     public Result<List<CourseModuleResponseVo>> getAllCourseModuleList(@PathVariable("courseid") String courseid) {
         List<CourseModule> courseModulelist = courseService.getAllCourseModuleList(Integer.valueOf(courseid));
 
@@ -71,7 +103,7 @@ public class CourseController {
         return new Result<List<CourseModuleResponseVo>>(ResultCode.Success, resultlist, ResultMessage.Success);
     }
 
-    @GetMapping("/{courseid}/coursemodule/effective")
+    @GetMapping("/courses/{courseid}/coursemodule/effective")
     public Result<List<CourseModuleResponseVo>> getEffectiveCourseModuleList(@PathVariable("courseid") String courseid) {
         List<CourseModule> courseModulelist = courseService.getAllEffectiveCourseModuleList(Integer.valueOf(courseid));
 

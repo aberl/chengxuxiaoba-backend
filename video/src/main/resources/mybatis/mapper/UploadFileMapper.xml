@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chengxuxiaoba.video.mapper.UploadFileMapper">
+    <insert id="insertUploadFile" parameterType="com.chengxuxiaoba.video.model.po.UploadFile">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO UploadFile(name, size, purpose, path, status)
+        VALUES(#{name},#{size},#{purpose}, #{path}, #{status})
+    </insert>
+
+    <select id="getFileByName" parameterType="string" resultType="com.chengxuxiaoba.video.model.po.UploadFile">
+        SELECT * from UploadFile
+        where name=#{name} limit 1
+    </select>
+
+    <update id="updateMessage">
+        UPDATE UploadFile
+        <trim prefix="set" suffixOverrides=",">
+            <if test="size != null">size=#{size},</if>
+            <if test="purpose != null">name=#{purpose},</if>
+            <if test="path != null">path=#{path},</if>
+            <if test="status != null">status=#{status},</if>
+            <if test="updateDateTime != null">updateDateTime=#{updateDateTime},</if>
+        </trim>
+        WHERE name=#{name}
+    </update>
+</mapper>
