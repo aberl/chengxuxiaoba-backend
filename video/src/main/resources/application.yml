@@ -58,3 +58,6 @@ image:
   suffexnamelimitation: jpg,png
   size: 10M
 
+uploadfile:
+  savepath: D:/peoject/chengxuxiaoba/files/
+  size: 10M

@@ -6,7 +6,7 @@ import java.util.Date;
 public class UploadFile {
     private Integer id;
     private String name;
-    private BigInteger size;
+    private Long size;
     private String purpose;
     private String path;
     private Integer status;
@@ -29,11 +29,11 @@ public class UploadFile {
         this.name = name;
     }
 
-    public BigInteger getSize() {
+    public Long getSize() {
         return size;
     }
 
-    public void setSize(BigInteger size) {
+    public void setSize(Long size) {
         this.size = size;
     }
 

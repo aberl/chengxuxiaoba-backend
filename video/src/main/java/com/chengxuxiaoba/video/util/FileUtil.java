@@ -84,4 +84,14 @@ public class FileUtil {
 
         return file;
     }
+
+    public static Boolean deleteFile(String fileName)
+    {
+        File file = new File(fileName);
+        if(!file.exists())
+            return false;
+
+        file.delete();
+        return true;
+    }
 }

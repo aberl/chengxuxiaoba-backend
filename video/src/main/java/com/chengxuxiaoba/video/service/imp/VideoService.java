@@ -1,5 +1,6 @@
 package com.chengxuxiaoba.video.service.imp;
 
+import com.chengxuxiaoba.video.handler.FileHandler;
 import com.chengxuxiaoba.video.mapper.VideoMapper;
 import com.chengxuxiaoba.video.model.KeyValuePair;
 import com.chengxuxiaoba.video.model.PageInfo;
@@ -82,24 +83,7 @@ public class VideoService  extends IBaseService<Video> implements IVideoService 
 
     @Override
     public KeyValuePair<Boolean, String> uploadVideo(MultipartFile multipartFile) throws IOException {
-        if (multipartFile == null)
-            return new KeyValuePair(false, ResultMessage.FileIsNull);
-
-        String suffixName=FileUtil.getSuffixName(multipartFile.getResource().getFilename());
-
-        if(!videoSuffexNameLimitation.contains(suffixName))
-            return new KeyValuePair(false, ResultMessage.SuffexNameIsIllegal);
-
-        String videoName = String.format("%s.%s", UUID.randomUUID().toString(), suffixName);
-
-        String videoFileName = String.format("%s/%s", videoUploadPath, videoName);
-
-        Boolean flag = FileUtil.uploadFile(multipartFile.getInputStream(), videoUploadPath, videoName);
-
-        if (!flag)
-            return new KeyValuePair(false, ResultMessage.Fail);
-
-        return new KeyValuePair(true, videoFileName);
+        return FileHandler.uploadFile(multipartFile,videoSuffexNameLimitation,videoUploadPath);
     }
 
 }

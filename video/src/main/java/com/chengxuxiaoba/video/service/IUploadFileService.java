@@ -1,14 +1,22 @@
 package com.chengxuxiaoba.video.service;
 
 import com.chengxuxiaoba.video.model.po.UploadFile;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 public interface IUploadFileService {
+    UploadFile uploadFile(MultipartFile file, String purpose) throws IOException;
 
-    UploadFile uploadFile(UploadFile uploadFile);
+    Boolean uploadFile(UploadFile uploadFile);
 
     UploadFile getUploadFileByName(String name);
 
-    Boolean deleteUploadFile(String name);
+    Boolean deleteUploadFile(String fileName);
 
     UploadFile updateUploadFile(UploadFile uploadFile);
+
+    String generateFileName(String suffixName);
+
+    String generateFilePath(String purpose);
 }
