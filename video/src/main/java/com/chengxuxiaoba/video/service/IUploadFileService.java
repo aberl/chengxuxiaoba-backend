@@ -14,7 +14,7 @@ public interface IUploadFileService {
 
     Boolean deleteUploadFile(String fileName);
 
-    UploadFile updateUploadFile(UploadFile uploadFile);
+    Integer updateUploadFile(UploadFile uploadFile);
 
     String generateFileName(String suffixName);
 

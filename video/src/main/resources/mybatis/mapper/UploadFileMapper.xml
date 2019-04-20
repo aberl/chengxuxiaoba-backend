@@ -16,11 +16,11 @@
         where name=#{name} limit 1
     </select>
 
-    <update id="updateMessage">
+    <update id="updateUploadFile" parameterType="com.chengxuxiaoba.video.model.po.UploadFile">
         UPDATE UploadFile
         <trim prefix="set" suffixOverrides=",">
             <if test="size != null">size=#{size},</if>
-            <if test="purpose != null">name=#{purpose},</if>
+            <if test="purpose != null">purpose=#{purpose},</if>
             <if test="path != null">path=#{path},</if>
             <if test="status != null">status=#{status},</if>
             <if test="updateDateTime != null">updateDateTime=#{updateDateTime},</if>

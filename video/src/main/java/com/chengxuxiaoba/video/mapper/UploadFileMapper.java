@@ -7,5 +7,5 @@ public interface UploadFileMapper {
 
     UploadFile getFileByName(String name);
 
-    UploadFile updateMessage(UploadFile uploadFile);
+    Integer updateUploadFile(UploadFile uploadFile);
 }

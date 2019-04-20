@@ -4,10 +4,6 @@ import com.chengxuxiaoba.video.constant.CommonStatus;
 import com.chengxuxiaoba.video.handler.FileHandler;
 import com.chengxuxiaoba.video.mapper.UploadFileMapper;
 import com.chengxuxiaoba.video.model.KeyValuePair;
-import com.chengxuxiaoba.video.model.Response.VO.UploadFileResponseVo;
-import com.chengxuxiaoba.video.model.Result;
-import com.chengxuxiaoba.video.model.ResultCode;
-import com.chengxuxiaoba.video.model.ResultMessage;
 import com.chengxuxiaoba.video.model.po.UploadFile;
 import com.chengxuxiaoba.video.service.IUploadFileService;
 import com.chengxuxiaoba.video.util.FileUtil;
@@ -64,14 +60,14 @@ public class UploadFileService implements IUploadFileService {
     public Boolean uploadFile(UploadFile uploadFile) {
         if (uploadFile == null)
             return false;
-
+        uploadFile.setStatus(uploadFile.getStatus() == null?CommonStatus.ACTIVE.getValue():uploadFile.getStatus());
         Integer primaryKey = uploadFileMapper.insertUploadFile(uploadFile);
         return primaryKey > 0;
     }
 
     @Override
     public UploadFile getUploadFileByName(String name) {
-        return null;
+        return uploadFileMapper.getFileByName(name);
     }
 
     @Override
@@ -89,18 +85,18 @@ public class UploadFileService implements IUploadFileService {
         uploadFile.setUpdateDateTime(new Date());
         updateUploadFile(uploadFile);
 
-        FileUtil.deleteFile(fileName);
+        FileUtil.deleteFile(uploadFile.getPath());
 
         return true;
     }
 
     @Override
-    public UploadFile updateUploadFile(UploadFile uploadFile) {
+    public Integer updateUploadFile(UploadFile uploadFile) {
         if(uploadFile == null)
         return null;
 
-        uploadFileMapper.updateMessage(uploadFile);
-        return uploadFile;
+        Integer primaryKey = uploadFileMapper.updateUploadFile(uploadFile);
+        return primaryKey;
     }
 
     @Override

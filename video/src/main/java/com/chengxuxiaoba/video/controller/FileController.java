@@ -37,26 +37,34 @@ public class FileController {
     private IUploadFileService uploadFileService;
 
     @PostMapping("/file")
-    public Result<Boolean> createNewUploadFile(UploadFileRequestVo uploadFileRequestVo)  throws IOException {
+    public Result<UploadFileResponseVo> createNewUploadFile(UploadFileRequestVo uploadFileRequestVo) throws IOException {
         if (!FilePurpose.getAllPurposeList().contains(uploadFileRequestVo.getPurpose()))
-            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.uploadFileHasNoPurpose);
+            return new Result<UploadFileResponseVo>(ResultCode.Error, null, ResultMessage.uploadFileHasNoPurpose);
 
         if (uploadFileRequestVo.getUploadFile() == null)
-            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.FileIsNull);
+            return new Result<UploadFileResponseVo>(ResultCode.Error, null, ResultMessage.FileIsNull);
 
-        UploadFile uploadFile =uploadFileService.uploadFile(uploadFileRequestVo.getUploadFile(),uploadFileRequestVo.getPurpose());
+        UploadFile uploadFile = uploadFileService.uploadFile(uploadFileRequestVo.getUploadFile(), uploadFileRequestVo.getPurpose());
 
         Boolean flag = uploadFileService.uploadFile(uploadFile);
 
-        return new Result<Boolean>(ResultCode.Success, true, ResultMessage.Success);
+        if (!flag)
+            return new Result<UploadFileResponseVo>(ResultCode.Error, null, ResultMessage.Fail);
+
+        UploadFileResponseVo uploadFileResponseVo = voService.convertToUploadFileResponseVo(uploadFile);
+
+        return new Result<UploadFileResponseVo>(ResultCode.Success, uploadFileResponseVo, ResultMessage.Success);
     }
 
     @DeleteMapping("/{name}")
-    public Result<Boolean> createNewUploadFile(@PathVariable("name")String name)  throws IOException {
+    public Result<Boolean> deleteUploadFile(@PathVariable("name") String name) throws IOException {
         if (StringUtil.isNullOrEmpty(name))
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.NameCannotBeNull);
 
-        uploadFileService.deleteUploadFile(name);
+        Boolean flag = uploadFileService.deleteUploadFile(name);
+
+        if (!flag)
+            return new Result<Boolean>(ResultCode.Error, flag, ResultMessage.Fail);
 
         return new Result<Boolean>(ResultCode.Success, true, ResultMessage.Success);
     }

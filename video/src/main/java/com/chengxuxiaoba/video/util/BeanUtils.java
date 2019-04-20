@@ -14,8 +14,8 @@ public abstract class BeanUtils extends org.springframework.beans.BeanUtils {
 	 *
 	 * @param source
 	 * @param target
-	 * @throws BeansException
-	 */
+//	 * @throws BeansException
+//	 */
 	public static void copyProperties(Object source, Object target) throws BeansException
     {
         copyPropertiesCanIgnoreProperty(source, target, null);

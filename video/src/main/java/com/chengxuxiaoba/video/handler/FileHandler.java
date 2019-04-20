@@ -36,13 +36,15 @@ public class FileHandler {
 
         name = StringUtil.isNullOrEmpty(name) ? String.format("%s.%s", UUID.randomUUID().toString(), suffixName) : name;
 
-        String videoFileName = String.format("%s/%s", savePath, name);
+        String fileName = String.format("%s/%s", savePath, name);
+
+        FileUtil.checkDirExist(savePath, true);
 
         Boolean flag = FileUtil.uploadFile(multipartFile.getInputStream(), savePath, name);
 
         if (!flag)
             return new KeyValuePair(false, ResultMessage.Fail);
 
-        return new KeyValuePair(true, videoFileName);
+        return new KeyValuePair(true, fileName);
     }
 }
