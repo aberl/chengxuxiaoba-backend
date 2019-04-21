@@ -1,5 +1,7 @@
 package com.chengxuxiaoba.video.model.Response.VO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class CourseResponseVo {
@@ -8,6 +10,9 @@ public class CourseResponseVo {
     private String description;
     private String images;
     private Integer status;
+
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
+    private Date createDateTime;
 
     public Integer getId() {
         return id;
@@ -47,5 +52,13 @@ public class CourseResponseVo {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Date getCreateDateTime() {
+        return createDateTime;
+    }
+
+    public void setCreateDateTime(Date createDateTime) {
+        this.createDateTime = createDateTime;
     }
 }

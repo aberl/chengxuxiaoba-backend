@@ -6,16 +6,24 @@ import com.chengxuxiaoba.video.model.po.*;
 import com.chengxuxiaoba.video.service.IVoService;
 import com.chengxuxiaoba.video.util.BeanUtils;
 import com.chengxuxiaoba.video.util.ListUtil;
+import com.chengxuxiaoba.video.util.StringUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class VoService implements IVoService {
+    @Autowired
+    private UploadFileService uploadFileService;
 
     @Autowired
     private UserService userService;
@@ -61,13 +69,41 @@ public class VoService implements IVoService {
     public CourseResponseVo convertToCourseResponseVo(Course course) {
         if (course == null)
             return null;
-
         CourseResponseVo courseResponseVo = new CourseResponseVo();
-        courseResponseVo.setId(course.getId());
-        courseResponseVo.setName(course.getName());
-        courseResponseVo.setDescription(course.getDescription());
-        courseResponseVo.setImages(course.getImages());
-        courseResponseVo.setStatus(course.getStatus());
+        BeanUtils.copyProperties(course, courseResponseVo);
+
+        String imageNames = course.getImages();
+
+        if (StringUtil.isNullOrEmpty(imageNames))
+            return courseResponseVo;
+        ObjectMapper mapper = new ObjectMapper();
+
+        List<String> imageNameList = new ArrayList<>();
+        try {
+            JsonNode nameNode = mapper.readTree(imageNames);
+            for (JsonNode _node : nameNode) {
+                imageNameList.add(_node.textValue());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (ListUtil.isNullOrEmpty(imageNameList))
+            return courseResponseVo;
+
+        List<UploadFile> uploadFileList = uploadFileService.getUploadFileByNameList(imageNameList);
+
+        if (ListUtil.isNullOrEmpty(uploadFileList))
+            return courseResponseVo;
+
+        List<String> imagesFilePath = uploadFileList.stream().map(file -> file.getPath()).collect(Collectors.toList());
+
+        try {
+            String _images = mapper.writeValueAsString(imagesFilePath);
+            courseResponseVo.setImages(_images);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         return courseResponseVo;
     }
 

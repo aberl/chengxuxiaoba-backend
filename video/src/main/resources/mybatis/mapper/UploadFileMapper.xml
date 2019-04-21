@@ -11,9 +11,17 @@
         VALUES(#{name},#{size},#{purpose}, #{path}, #{status})
     </insert>
 
-    <select id="getFileByName" parameterType="string" resultType="com.chengxuxiaoba.video.model.po.UploadFile">
+    <select id="getFileByName" parameterType="java.util.List" resultType="com.chengxuxiaoba.video.model.po.UploadFile">
         SELECT * from UploadFile
-        where name=#{name} limit 1
+        <where>
+            <if test="nameList !=null and nameList.size() != 0">
+                name IN
+                <foreach collection="nameList" index="index" item="name" open="("
+                         separator="," close=")">
+                    #{name}
+                </foreach>
+            </if>
+        </where>
     </select>
 
     <update id="updateUploadFile" parameterType="com.chengxuxiaoba.video.model.po.UploadFile">

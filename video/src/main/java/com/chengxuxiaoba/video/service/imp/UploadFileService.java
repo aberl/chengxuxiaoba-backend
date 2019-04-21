@@ -7,6 +7,7 @@ import com.chengxuxiaoba.video.model.KeyValuePair;
 import com.chengxuxiaoba.video.model.po.UploadFile;
 import com.chengxuxiaoba.video.service.IUploadFileService;
 import com.chengxuxiaoba.video.util.FileUtil;
+import com.chengxuxiaoba.video.util.ListUtil;
 import com.chengxuxiaoba.video.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,8 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UploadFileService implements IUploadFileService {
@@ -67,7 +67,17 @@ public class UploadFileService implements IUploadFileService {
 
     @Override
     public UploadFile getUploadFileByName(String name) {
-        return uploadFileMapper.getFileByName(name);
+        if(StringUtil.isNullOrEmpty(name))
+            return null;
+
+        List<UploadFile> resultList= uploadFileMapper.getFileByName(new ArrayList<String>(Arrays.asList(name)));
+
+        return ListUtil.isNullOrEmpty(resultList)?null:resultList.get(0);
+    }
+
+    @Override
+    public List<UploadFile> getUploadFileByNameList(List<String> nameList) {
+        return uploadFileMapper.getFileByName(nameList);
     }
 
     @Override
