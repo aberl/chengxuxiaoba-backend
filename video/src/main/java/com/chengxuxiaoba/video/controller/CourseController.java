@@ -27,7 +27,6 @@ public class CourseController {
     @Autowired
     private ICourseService courseService;
 
-
     @PostMapping("/courses")
     public Result<Boolean> createCourse(@RequestBody CourseRequestVo courseRequestVo) {
         Course course = voService.convertToCourse(courseRequestVo);
@@ -36,8 +35,23 @@ public class CourseController {
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.ParameterError);
 
         Integer primyKey = courseService.createNewCourse(course);
-        if(primyKey <= 0)
+        if (primyKey <= 0)
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.Fail);
+        return new Result<Boolean>(ResultCode.Success, true, ResultMessage.Success);
+    }
+
+    @PutMapping("/courses")
+    public Result<Boolean> updateCourse(@RequestBody CourseRequestVo courseRequestVo) {
+        Course course = voService.convertToCourse(courseRequestVo);
+
+        if (course == null)
+            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.ParameterError);
+
+        Boolean flag = courseService.updateCourse(course);
+
+        if (!flag)
+            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.Fail);
+
         return new Result<Boolean>(ResultCode.Success, true, ResultMessage.Success);
     }
 
@@ -57,10 +71,20 @@ public class CourseController {
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.CourseAndModuleRelationShipIsNotExist);
 
         Integer primyKey = courseService.createNewCourseModule(courseModule);
-        if(primyKey <= 0)
-        return new Result<Boolean>(ResultCode.Error, false, ResultMessage.Fail);
+        if (primyKey <= 0)
+            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.Fail);
 
         return new Result<Boolean>(ResultCode.Success, true, ResultMessage.Success);
+    }
+
+    @GetMapping("/courses/{courseid}")
+    public Result<CourseResponseVo> getCourseByCourseId(@PathVariable("courseid") Integer courseid)
+    {
+        Course course = courseService.getCourse(courseid);
+
+        CourseResponseVo result = voService.convertToCourseResponseVo(course);
+
+        return new Result<CourseResponseVo>(ResultCode.Success, result, ResultMessage.Success);
     }
 
     @GetMapping("/courses")

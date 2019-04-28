@@ -9,6 +9,8 @@ import java.util.List;
 public interface CourseMapper {
     Integer insert(Course course);
 
+    Integer updateCourse(Course course);
+
     List<Course> getAllCourseList();
 
     List<Course> getEffectiveCourseList();

@@ -44,6 +44,13 @@ public class CourseService implements ICourseService {
     }
 
     @Override
+    public Boolean updateCourse(Course course) {
+        Integer primaryKey= courseMapper.updateCourse(course);
+
+        return primaryKey>0;
+    }
+
+    @Override
     public Course getCourse(Integer courseId) {
         return courseMapper.getCourse(courseId);
     }

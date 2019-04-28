@@ -12,6 +12,8 @@ public interface ICourseService {
 
     Integer createNewCourse(Course course);
 
+    Boolean updateCourse(Course course);
+
     Course getCourse(Integer courseId);
 
     Integer createNewCourseModule(CourseModule courseModule);
