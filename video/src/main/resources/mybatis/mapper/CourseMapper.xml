@@ -10,7 +10,7 @@
         INSERT INTO Course(name, description, images,status)
         VALUES(#{name},#{description},#{images},#{status})
     </insert>
-
+    updateCourse
     <update id="updateCourse">
         UPDATE Course
         <trim prefix="set" suffixOverrides=",">
