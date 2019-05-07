@@ -1,5 +1,6 @@
 package com.chengxuxiaoba.video.service.imp;
 
+import com.chengxuxiaoba.video.constant.CommonStatus;
 import com.chengxuxiaoba.video.model.Request.VO.*;
 import com.chengxuxiaoba.video.model.Response.VO.*;
 import com.chengxuxiaoba.video.model.po.*;
@@ -128,12 +129,10 @@ public class VoService implements IVoService {
             return null;
 
         CourseModuleResponseVo courseModuleResponseVo = new CourseModuleResponseVo();
-        courseModuleResponseVo.setId(courseModule.getId());
-        courseModuleResponseVo.setCourseId(courseModule.getCourseId());
-        courseModuleResponseVo.setName(courseModule.getName());
-        courseModuleResponseVo.setDescription(courseModule.getDescription());
-        courseModuleResponseVo.setImages(courseModule.getImages());
-        courseModuleResponseVo.setStatus(courseModule.getStatus());
+        BeanUtils.copyProperties(courseModule, courseModuleResponseVo);
+
+        courseModuleResponseVo.setStatusDesc(CommonStatus.getEnum(courseModuleResponseVo.getStatus()).toString());
+
         return courseModuleResponseVo;
     }
 

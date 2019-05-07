@@ -1,12 +1,20 @@
 package com.chengxuxiaoba.video.model.Response.VO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.util.Date;
+
 public class CourseModuleResponseVo {
     private Integer id;
     private Integer courseId;
     private String name;
+    private String courseName;
     private String description;
     private String images;
     private Integer status;
+    private String statusDesc;
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
+    private Date createDateTime;
 
     public Integer getId() {
         return id;
@@ -54,5 +62,29 @@ public class CourseModuleResponseVo {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getStatusDesc() {
+        return statusDesc;
+    }
+
+    public void setStatusDesc(String statusDesc) {
+        this.statusDesc = statusDesc;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public Date getCreateDateTime() {
+        return createDateTime;
+    }
+
+    public void setCreateDateTime(Date createDateTime) {
+        this.createDateTime = createDateTime;
     }
 }

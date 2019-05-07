@@ -10,7 +10,7 @@
         INSERT INTO Course(name, description, images,status)
         VALUES(#{name},#{description},#{images},#{status})
     </insert>
-    updateCourse
+
     <update id="updateCourse">
         UPDATE Course
         <trim prefix="set" suffixOverrides=",">
@@ -26,8 +26,8 @@
         <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
             SELECT LAST_INSERT_ID()
         </selectKey>
-        INSERT INTO coursemodule(courseId, name, description, images, status)
-        VALUES(#{courseId},#{name},#{description},#{images},#{status})
+        INSERT INTO coursemodule(courseId, name,courseName, description, images, status)
+        VALUES(#{courseId},#{name},#{courseName},#{description},#{images},#{status})
     </insert>
 
     <select id="getAllCourseList" resultType="com.chengxuxiaoba.video.model.po.Course">
@@ -45,7 +45,11 @@
     </select>
 
     <select id="getAllCourseModuleList" resultType="com.chengxuxiaoba.video.model.po.CourseModule">
-        SELECT * from CourseModule where courseId=#{courseId}
+        SELECT * from CourseModule
+        <where>
+            <if test="courseId != -1">id=#{courseId}</if>
+        </where>
+        order by courseId desc
     </select>
 
     <select id="getCourseModule" parameterType="int" resultType="com.chengxuxiaoba.video.model.po.CourseModule">

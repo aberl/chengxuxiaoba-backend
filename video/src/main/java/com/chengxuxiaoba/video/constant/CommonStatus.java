@@ -14,4 +14,12 @@ public enum  CommonStatus {
     {
         return value;
     }
+
+    public static CommonStatus getEnum(Integer value){
+        if(value == 1)
+            return CommonStatus.ACTIVE;
+        if(value == -1)
+            return CommonStatus.INACTIVE;
+        return null;
+    }
 }

@@ -3,6 +3,7 @@ package com.chengxuxiaoba.video.model.Request.VO;
 public class CourseModuleRequestVo {
     private Integer courseId;
     private String name;
+    private String courseName;
     private String description;
     private String images;
     private Integer status;
@@ -22,7 +23,13 @@ public class CourseModuleRequestVo {
     public void setName(String name) {
         this.name = name;
     }
+    public String getCourseName() {
+        return courseName;
+    }
 
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
     public String getDescription() {
         return description;
     }

@@ -5,11 +5,12 @@ import java.util.Date;
 public class CourseModule {
     private Integer id;
     private Integer courseId;
+    private String courseName;
     private String name;
     private String description;
     private String images;
     private Integer status;
-
+    private Date createDateTime;
     public Integer getId() {
         return id;
     }
@@ -56,5 +57,21 @@ public class CourseModule {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public Date getCreateDateTime() {
+        return createDateTime;
+    }
+
+    public void setCreateDateTime(Date createDateTime) {
+        this.createDateTime = createDateTime;
     }
 }

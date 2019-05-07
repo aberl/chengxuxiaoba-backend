@@ -1,7 +1,6 @@
 package com.chengxuxiaoba.video.service.imp;
 
-import com.chengxuxiaoba.video.constant.CourseStatus;
-import com.chengxuxiaoba.video.constant.CourseModuleStatus;
+import com.chengxuxiaoba.video.constant.CommonStatus;
 import com.chengxuxiaoba.video.mapper.CourseMapper;
 import com.chengxuxiaoba.video.model.po.Course;
 import com.chengxuxiaoba.video.model.po.CourseModule;
@@ -25,7 +24,7 @@ public class CourseService implements ICourseService {
         if(ListUtil.isNullOrEmpty(allCourse))
             return null;
 
-        List<Course> effectiveCourseList= allCourse.stream().filter(course -> {return course.getStatus() == CourseStatus.ACTIVE.getValue();}).collect(Collectors.toList());
+        List<Course> effectiveCourseList= allCourse.stream().filter(course -> {return course.getStatus() == CommonStatus.ACTIVE.getValue();}).collect(Collectors.toList());
 
         return effectiveCourseList;
     }
@@ -80,7 +79,7 @@ public class CourseService implements ICourseService {
         if(ListUtil.isNullOrEmpty(courseModuleList))
             return null;
 
-        List<CourseModule> resultList= courseModuleList.stream().filter(courseModule -> {return courseModule.getStatus() != CourseModuleStatus.INACTIVE.getValue();}).collect(Collectors.toList());
+        List<CourseModule> resultList= courseModuleList.stream().filter(courseModule -> {return courseModule.getStatus() != CommonStatus.INACTIVE.getValue();}).collect(Collectors.toList());
 
         return resultList;
     }
