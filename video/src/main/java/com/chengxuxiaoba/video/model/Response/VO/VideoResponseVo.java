@@ -1,12 +1,15 @@
 package com.chengxuxiaoba.video.model.Response.VO;
 
 import java.util.Date;
+import java.util.Map;
+import java.util.List;
 
 public class VideoResponseVo {
     private Integer id;
     private Integer courseModuleId;
     private String path;
     private String name;
+    private Map<String,List<String>> attachments;
     private String duration;
     private String description;
     private String images;
@@ -45,6 +48,14 @@ public class VideoResponseVo {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Map<String, List<String>> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(Map<String, List<String>> attachments) {
+        this.attachments = attachments;
     }
 
     public String getDuration() {

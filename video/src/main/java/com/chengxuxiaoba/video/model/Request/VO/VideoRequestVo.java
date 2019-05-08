@@ -6,6 +6,7 @@ public class VideoRequestVo {
     private Integer courseModuleId;
     private String path;
     private String name;
+    private String attachments;
     private String duration;
     private String description;
     private String images;
@@ -36,6 +37,14 @@ public class VideoRequestVo {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(String attachments) {
+        this.attachments = attachments;
     }
 
     public String getDuration() {

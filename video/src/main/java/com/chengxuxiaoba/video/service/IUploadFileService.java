@@ -22,4 +22,6 @@ public interface IUploadFileService {
     String generateFileName(String suffixName);
 
     String generateFilePath(String purpose);
+
+    List<UploadFile> getUploadFileByNames(String names);
 }

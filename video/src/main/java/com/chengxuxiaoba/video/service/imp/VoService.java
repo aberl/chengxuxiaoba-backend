@@ -16,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,21 +69,10 @@ public class VoService implements IVoService {
         if (course == null)
             return null;
         CourseResponseVo courseResponseVo = new CourseResponseVo();
+
         BeanUtils.copyProperties(course, courseResponseVo);
 
-        String imageNames = course.getImages();
-
-        if (StringUtil.isNullOrEmpty(imageNames))
-            return courseResponseVo;
-        ObjectMapper mapper = new ObjectMapper();
-
-
-        List<String> imageNameList = JSONUtil.convertToList(imageNames);
-
-        if (ListUtil.isNullOrEmpty(imageNameList))
-            return courseResponseVo;
-
-        List<UploadFile> uploadFileList = uploadFileService.getUploadFileByNameList(imageNameList);
+        List<UploadFile> uploadFileList = uploadFileService.getUploadFileByNames(course.getImages());
 
         if (ListUtil.isNullOrEmpty(uploadFileList))
             return courseResponseVo;
@@ -94,6 +80,7 @@ public class VoService implements IVoService {
         List<String> imagesFilePath = uploadFileList.stream().map(file -> file.getPath()).collect(Collectors.toList());
 
         try {
+            ObjectMapper mapper = new ObjectMapper();
             String _images = mapper.writeValueAsString(imagesFilePath);
             courseResponseVo.setImages(_images);
         } catch (JsonProcessingException e) {
@@ -128,18 +115,7 @@ public class VoService implements IVoService {
         CourseModuleResponseVo courseModuleResponseVo = new CourseModuleResponseVo();
         BeanUtils.copyProperties(courseModule, courseModuleResponseVo);
 
-        String imageNames = courseModule.getImages();
-
-        if (StringUtil.isNullOrEmpty(imageNames))
-            return courseModuleResponseVo;
-        ObjectMapper mapper = new ObjectMapper();
-
-        List<String> imageNameList = JSONUtil.convertToList(imageNames);
-
-        if (ListUtil.isNullOrEmpty(imageNameList))
-            return courseModuleResponseVo;
-
-        List<UploadFile> uploadFileList = uploadFileService.getUploadFileByNameList(imageNameList);
+        List<UploadFile> uploadFileList = uploadFileService.getUploadFileByNames(courseModule.getImages());
 
         if (ListUtil.isNullOrEmpty(uploadFileList))
             return courseModuleResponseVo;
@@ -147,6 +123,7 @@ public class VoService implements IVoService {
         List<String> imagesFilePath = uploadFileList.stream().map(file -> file.getPath()).collect(Collectors.toList());
 
         try {
+            ObjectMapper mapper = new ObjectMapper();
             String _images = mapper.writeValueAsString(imagesFilePath);
             courseModuleResponseVo.setImages(_images);
         } catch (JsonProcessingException e) {
@@ -194,6 +171,19 @@ public class VoService implements IVoService {
         VideoResponseVo videoResponseVo = new VideoResponseVo();
 
         BeanUtils.copyProperties(video, videoResponseVo);
+
+        List<UploadFile> uploadFileList = uploadFileService.getUploadFileByNames(video.getAttachments());
+
+        if (ListUtil.isNullOrEmpty(uploadFileList))
+            return videoResponseVo;
+
+        videoResponseVo.setAttachments(new HashMap<String, List<String>>());
+        for (UploadFile file : uploadFileList) {
+            if (videoResponseVo.getAttachments().containsKey(file.getPurpose()))
+                videoResponseVo.getAttachments().get(file.getPurpose()).add(file.getPath());
+            else
+                videoResponseVo.getAttachments().put(file.getPurpose(), new ArrayList<String>(Arrays.asList(file.getPath())));
+        }
 
         return videoResponseVo;
     }

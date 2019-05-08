@@ -7,6 +7,7 @@ import com.chengxuxiaoba.video.model.KeyValuePair;
 import com.chengxuxiaoba.video.model.po.UploadFile;
 import com.chengxuxiaoba.video.service.IUploadFileService;
 import com.chengxuxiaoba.video.util.FileUtil;
+import com.chengxuxiaoba.video.util.JSONUtil;
 import com.chengxuxiaoba.video.util.ListUtil;
 import com.chengxuxiaoba.video.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,5 +121,19 @@ public class UploadFileService implements IUploadFileService {
         String filePath = String.format("%s/%s", uploadFilePath, purpose);
 
         return filePath;
+    }
+
+    @Override
+    public List<UploadFile> getUploadFileByNames(String names)
+    {
+        if (StringUtil.isNullOrEmpty(names))
+            return null;
+
+        List<String> attachmentList = JSONUtil.convertToList(names);
+        if (ListUtil.isNullOrEmpty(attachmentList))
+            return new ArrayList<UploadFile>();
+        List<UploadFile> uploadFileList = getUploadFileByNameList(attachmentList);
+
+        return uploadFileList;
     }
 }
