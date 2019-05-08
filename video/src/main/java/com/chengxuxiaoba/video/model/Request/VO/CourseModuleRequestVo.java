@@ -1,12 +1,21 @@
 package com.chengxuxiaoba.video.model.Request.VO;
 
 public class CourseModuleRequestVo {
+    private Integer id;
     private Integer courseId;
     private String name;
     private String courseName;
     private String description;
     private String images;
     private Integer status;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getCourseId() {
         return courseId;

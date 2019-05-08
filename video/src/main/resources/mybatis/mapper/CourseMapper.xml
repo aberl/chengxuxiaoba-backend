@@ -22,6 +22,20 @@
         WHERE id=#{id}
     </update>
 
+    <update id="updateCourseModule">
+        UPDATE CourseModule
+        <trim prefix="set" suffixOverrides=",">
+            <if test="courseId != null">courseId=#{courseId},</if>
+            <if test="courseName != null">courseName=#{courseName},</if>
+            <if test="name != null">name=#{name},</if>
+            <if test="description != null">description=#{description},</if>
+            <if test="images != null">images=#{images},</if>
+            <if test="status != null">status=#{status},</if>
+        </trim>
+        WHERE id=#{id}
+    </update>
+
+
     <insert id="insertModule" parameterType="com.chengxuxiaoba.video.model.po.CourseModule">
         <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
             SELECT LAST_INSERT_ID()

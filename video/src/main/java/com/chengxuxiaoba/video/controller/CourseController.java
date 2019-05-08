@@ -77,6 +77,22 @@ public class CourseController {
         return new Result<Boolean>(ResultCode.Success, true, ResultMessage.Success);
     }
 
+
+    @PutMapping("/courses/module")
+    public Result<Boolean> updateCourseModule(@RequestBody CourseModuleRequestVo courseModuleRequestVo) {
+        CourseModule courseModule = voService.convertToCourseModule(courseModuleRequestVo);
+
+        if (courseModule == null)
+            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.ParameterError);
+
+        Boolean flag = courseService.updateCourseModule(courseModule);
+
+        if (!flag)
+            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.Fail);
+
+        return new Result<Boolean>(ResultCode.Success, true, ResultMessage.Success);
+    }
+
     @GetMapping("/courses/{courseid}")
     public Result<CourseResponseVo> getCourseByCourseId(@PathVariable("courseid") Integer courseid)
     {

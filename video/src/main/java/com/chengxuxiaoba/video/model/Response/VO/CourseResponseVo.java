@@ -10,6 +10,7 @@ public class CourseResponseVo {
     private String description;
     private String images;
     private Integer status;
+    private String statusDesc;
 
     @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
     private Date createDateTime;
@@ -60,5 +61,13 @@ public class CourseResponseVo {
 
     public void setCreateDateTime(Date createDateTime) {
         this.createDateTime = createDateTime;
+    }
+
+    public String getStatusDesc() {
+        return statusDesc;
+    }
+
+    public void setStatusDesc(String statusDesc) {
+        this.statusDesc = statusDesc;
     }
 }

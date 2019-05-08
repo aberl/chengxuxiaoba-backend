@@ -18,6 +18,8 @@ public interface ICourseService {
 
     Integer createNewCourseModule(CourseModule courseModule);
 
+    Boolean updateCourseModule(CourseModule courseModule);
+
     CourseModule getCourseModule(Integer courseModuleId);
 
     List<CourseModule> getAllCourseModuleList(Integer courseId);
