@@ -61,7 +61,7 @@
     <select id="getAllCourseModuleList" resultType="com.chengxuxiaoba.video.model.po.CourseModule">
         SELECT * from CourseModule
         <where>
-            <if test="courseId != -1">id=#{courseId}</if>
+            <if test="courseId != -1">courseId=#{courseId}</if>
         </where>
         order by courseId desc
     </select>

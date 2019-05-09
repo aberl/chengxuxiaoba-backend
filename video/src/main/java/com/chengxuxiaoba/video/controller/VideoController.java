@@ -23,18 +23,11 @@ public class VideoController extends BaseController {
     private IVoService voService;
 
     @PostMapping("/videos")
-    public Result<Boolean> createVideo(VideoRequestVo requestBody) throws IOException {
+    public Result<Boolean> createVideo(@RequestBody VideoRequestVo requestBody) throws IOException {
         if (videoService.getSingle(requestBody.getCourseModuleId(), requestBody.getName()) != null)
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.SameVideoNameInCurrentCourseModule);
 
         Video video = voService.convertToVideo(requestBody);
-
-        KeyValuePair<Boolean, String> uploadResult = videoService.uploadVideo(requestBody.getFileUpload());
-
-        if (!uploadResult.getKey())
-            return new Result<Boolean>(ResultCode.Success, false, uploadResult.getValue());
-
-        video.setPath(uploadResult.getValue());
 
         Boolean flag = videoService.createNewVideo(video);
 
