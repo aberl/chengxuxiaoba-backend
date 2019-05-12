@@ -5,7 +5,7 @@ import java.util.Date;
 public class Video {
     private Integer id;
     private Integer courseModuleId;
-    private String path;
+    private String file;
     private String name;
     private String attachments;
     private String duration;
@@ -32,12 +32,12 @@ public class Video {
         this.courseModuleId = courseModuleId;
     }
 
-    public String getPath() {
-        return path;
+    public String getFile() {
+        return file;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setFile(String file) {
+        this.file = file;
     }
 
     public String getName() {

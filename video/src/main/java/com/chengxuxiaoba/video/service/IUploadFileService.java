@@ -24,4 +24,6 @@ public interface IUploadFileService {
     String generateFilePath(String purpose);
 
     List<UploadFile> getUploadFileByNames(String names);
+
+    void setFileNameAsOriginName(UploadFile uploadFile);
 }

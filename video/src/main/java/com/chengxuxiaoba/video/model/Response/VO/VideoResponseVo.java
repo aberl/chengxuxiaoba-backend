@@ -1,5 +1,7 @@
 package com.chengxuxiaoba.video.model.Response.VO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 import java.util.Map;
 import java.util.List;
@@ -7,16 +9,18 @@ import java.util.List;
 public class VideoResponseVo {
     private Integer id;
     private Integer courseModuleId;
-    private String path;
+    private String file;
     private String name;
-    private Map<String,List<String>> attachments;
+    private Map<String,List<String>> attachmentMap;
     private String duration;
     private String description;
     private String images;
     private Integer viewCount;
     private Integer praiseCount;
     private Integer status;
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
     private Date createDateTime;
+    private String statusDesc;
 
     public Integer getId() {
         return id;
@@ -34,12 +38,12 @@ public class VideoResponseVo {
         this.courseModuleId = courseModuleId;
     }
 
-    public String getPath() {
-        return path;
+    public String getFile() {
+        return file;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setFile(String file) {
+        this.file = file;
     }
 
     public String getName() {
@@ -48,14 +52,6 @@ public class VideoResponseVo {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Map<String, List<String>> getAttachments() {
-        return attachments;
-    }
-
-    public void setAttachments(Map<String, List<String>> attachments) {
-        this.attachments = attachments;
     }
 
     public String getDuration() {
@@ -112,5 +108,21 @@ public class VideoResponseVo {
 
     public void setCreateDateTime(Date createDateTime) {
         this.createDateTime = createDateTime;
+    }
+
+    public Map<String, List<String>> getAttachmentMap() {
+        return attachmentMap;
+    }
+
+    public void setAttachmentMap(Map<String, List<String>> attachmentMap) {
+        this.attachmentMap = attachmentMap;
+    }
+
+    public String getStatusDesc() {
+        return statusDesc;
+    }
+
+    public void setStatusDesc(String statusDesc) {
+        this.statusDesc = statusDesc;
     }
 }

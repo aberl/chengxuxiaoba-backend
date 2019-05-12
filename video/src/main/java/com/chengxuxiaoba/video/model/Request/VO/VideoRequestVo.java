@@ -4,7 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class VideoRequestVo {
     private Integer courseModuleId;
-    private String path;
+    private String file;
     private String name;
     private String attachments;
     private String duration;
@@ -12,6 +12,7 @@ public class VideoRequestVo {
     private String images;
     private Integer viewCount;
     private Integer praiseCount;
+    private Integer status;
 
     public Integer getCourseModuleId() {
         return courseModuleId;
@@ -21,12 +22,12 @@ public class VideoRequestVo {
         this.courseModuleId = courseModuleId;
     }
 
-    public String getPath() {
-        return path;
+    public String getFile() {
+        return file;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setFile(String file) {
+        this.file = file;
     }
 
     public String getName() {
@@ -83,5 +84,13 @@ public class VideoRequestVo {
 
     public void setPraiseCount(Integer praiseCount) {
         this.praiseCount = praiseCount;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

@@ -7,6 +7,7 @@ import java.util.Date;
 
 public class UploadFileRequestVo {
     private String name;
+    private String originName;
     private String purpose;
     private MultipartFile uploadFile;
 
@@ -16,6 +17,14 @@ public class UploadFileRequestVo {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getOriginName() {
+        return originName;
+    }
+
+    public void setOriginName(String originName) {
+        this.originName = originName;
     }
 
     public String getPurpose() {

@@ -27,15 +27,14 @@ public class FileUtil {
         return false;
     }
 
-    public static String getSuffixName(String fileName)
-    {
+    public static String getSuffixName(String fileName) {
         String suffixName = fileName.substring(fileName.lastIndexOf(".") + 1);
 
         return suffixName;
     }
 
-    public static String getSuffixName(File file){
-        if(file == null)
+    public static String getSuffixName(File file) {
+        if (file == null)
             return null;
 
         String fileName = file.getName();
@@ -85,13 +84,36 @@ public class FileUtil {
         return file;
     }
 
-    public static Boolean deleteFile(String fileName)
-    {
+    public static Boolean deleteFile(String fileName) {
         File file = new File(fileName);
-        if(!file.exists())
+        if (!file.exists())
             return false;
 
         file.delete();
         return true;
+    }
+
+    /**
+     * get directory path from file name
+     * @param fileName
+     * @return
+     */
+    public static String getDirectoryPath(String fileName) {
+        try {
+            Integer _index = fileName.lastIndexOf("/");
+
+            if (_index < 0)
+                _index = fileName.lastIndexOf("\\");
+
+            if (_index < 0)
+                return null;
+
+            String path = fileName.substring(0, _index);
+            return path;
+
+        } catch (Exception ex) {
+
+        }
+        return null;
     }
 }

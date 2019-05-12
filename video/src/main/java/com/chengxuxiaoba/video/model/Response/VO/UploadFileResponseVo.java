@@ -4,6 +4,7 @@ import java.math.BigInteger;
 
 public class UploadFileResponseVo {
     private String name;
+    private String originName;
     private Long size;
     private String purpose;
     private String path;
@@ -14,6 +15,14 @@ public class UploadFileResponseVo {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getOriginName() {
+        return originName;
+    }
+
+    public void setOriginName(String originName) {
+        this.originName = originName;
     }
 
     public Long getSize() {

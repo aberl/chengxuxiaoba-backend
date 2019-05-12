@@ -49,6 +49,7 @@ public class UploadFileService implements IUploadFileService {
         String saveFilePath = kvp.getValue();
         UploadFile uploadFile = new UploadFile();
 
+        uploadFile.setOriginName(multipartFile.getOriginalFilename());
         uploadFile.setName(name);
         uploadFile.setPurpose(purpose);
         uploadFile.setSize(size);
@@ -61,19 +62,19 @@ public class UploadFileService implements IUploadFileService {
     public Boolean uploadFile(UploadFile uploadFile) {
         if (uploadFile == null)
             return false;
-        uploadFile.setStatus(uploadFile.getStatus() == null?CommonStatus.ACTIVE.getValue():uploadFile.getStatus());
+        uploadFile.setStatus(uploadFile.getStatus() == null ? CommonStatus.ACTIVE.getValue() : uploadFile.getStatus());
         Integer primaryKey = uploadFileMapper.insertUploadFile(uploadFile);
         return primaryKey > 0;
     }
 
     @Override
     public UploadFile getUploadFileByName(String name) {
-        if(StringUtil.isNullOrEmpty(name))
+        if (StringUtil.isNullOrEmpty(name))
             return null;
 
-        List<UploadFile> resultList= uploadFileMapper.getFileByName(new ArrayList<String>(Arrays.asList(name)));
+        List<UploadFile> resultList = uploadFileMapper.getFileByName(new ArrayList<String>(Arrays.asList(name)));
 
-        return ListUtil.isNullOrEmpty(resultList)?null:resultList.get(0);
+        return ListUtil.isNullOrEmpty(resultList) ? null : resultList.get(0);
     }
 
     @Override
@@ -84,14 +85,13 @@ public class UploadFileService implements IUploadFileService {
     @Override
     public Boolean deleteUploadFile(String fileName) {
 
-        UploadFile uploadFile =  getUploadFileByName(fileName);
+        UploadFile uploadFile = getUploadFileByName(fileName);
 
-        if(uploadFile == null)
-        {
+        if (uploadFile == null) {
             return false;
         }
 
-        String savePath=uploadFile.getPath();
+        String savePath = uploadFile.getPath();
         uploadFile.setStatus(CommonStatus.INACTIVE.getValue());
         uploadFile.setUpdateDateTime(new Date());
         updateUploadFile(uploadFile);
@@ -103,8 +103,8 @@ public class UploadFileService implements IUploadFileService {
 
     @Override
     public Integer updateUploadFile(UploadFile uploadFile) {
-        if(uploadFile == null)
-        return null;
+        if (uploadFile == null)
+            return null;
 
         Integer primaryKey = uploadFileMapper.updateUploadFile(uploadFile);
         return primaryKey;
@@ -124,8 +124,7 @@ public class UploadFileService implements IUploadFileService {
     }
 
     @Override
-    public List<UploadFile> getUploadFileByNames(String names)
-    {
+    public List<UploadFile> getUploadFileByNames(String names) {
         if (StringUtil.isNullOrEmpty(names))
             return null;
 
@@ -135,5 +134,21 @@ public class UploadFileService implements IUploadFileService {
         List<UploadFile> uploadFileList = getUploadFileByNameList(attachmentList);
 
         return uploadFileList;
+    }
+
+    @Override
+    public void setFileNameAsOriginName(UploadFile uploadFile) {
+        if (uploadFile == null)
+            return;
+
+        if (StringUtil.isNullOrEmpty(uploadFile.getOriginName()))
+            return;
+
+        String directoryPath = FileUtil.getDirectoryPath(uploadFile.getPath());
+        if (StringUtil.isNullOrEmpty(directoryPath)) {
+            return;
+        }
+
+        uploadFile.setPath(String.format("%s/%s", directoryPath, uploadFile.getOriginName()));
     }
 }

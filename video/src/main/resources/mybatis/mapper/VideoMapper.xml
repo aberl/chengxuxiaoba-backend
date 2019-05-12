@@ -7,8 +7,8 @@
             <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
                 SELECT LAST_INSERT_ID()
             </selectKey>
-            INSERT INTO Video(courseModuleId, path, name,attachments, duration, description, images)
-            VALUES(#{courseModuleId},#{path},#{name},#{attachments}, #{duration}, #{description}, #{images})
+            INSERT INTO Video(courseModuleId, file, name,attachments, duration, description, images, status)
+            VALUES(#{courseModuleId},#{file},#{name},#{attachments}, #{duration}, #{description}, #{images},#{status})
         </insert>
 
     <select id="getListWithPage" parameterType="com.chengxuxiaoba.video.model.query.VideoQuery" resultType="com.chengxuxiaoba.video.model.po.Video">
@@ -31,7 +31,7 @@
         UPDATE Video
         <trim prefix="set" suffixOverrides=",">
             <if test="courseModuleId != null">courseModuleId=#{courseModuleId},</if>
-            <if test="path != null">path=#{path},</if>
+            <if test="file != null">file=#{file},</if>
             <if test="name != null">name=#{name},</if>
             <if test="attachments != null">attachments=#{attachments},</if>
             <if test="duration != null">duration=#{duration},</if>

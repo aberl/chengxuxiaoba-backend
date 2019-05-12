@@ -53,6 +53,9 @@ public class JSONUtil {
 
 	public static List<String> convertToList(String arrayStr)
 	{
+		if(arrayStr == null || arrayStr.trim().equals(""))
+			return new ArrayList<>();
+
 		ObjectMapper mapper = new ObjectMapper();
 		List<String> imageNameList = new ArrayList<>();
 		try {

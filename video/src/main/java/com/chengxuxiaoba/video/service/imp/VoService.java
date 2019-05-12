@@ -77,6 +77,10 @@ public class VoService implements IVoService {
         if (ListUtil.isNullOrEmpty(uploadFileList))
             return courseResponseVo;
 
+        for (UploadFile file : uploadFileList) {
+            uploadFileService.setFileNameAsOriginName(file);
+        }
+
         List<String> imagesFilePath = uploadFileList.stream().map(file -> file.getPath()).collect(Collectors.toList());
 
         try {
@@ -119,7 +123,9 @@ public class VoService implements IVoService {
 
         if (ListUtil.isNullOrEmpty(uploadFileList))
             return courseModuleResponseVo;
-
+        for (UploadFile file : uploadFileList) {
+            uploadFileService.setFileNameAsOriginName(file);
+        }
         List<String> imagesFilePath = uploadFileList.stream().map(file -> file.getPath()).collect(Collectors.toList());
 
         try {
@@ -172,17 +178,30 @@ public class VoService implements IVoService {
 
         BeanUtils.copyProperties(video, videoResponseVo);
 
-        List<UploadFile> uploadFileList = uploadFileService.getUploadFileByNames(video.getAttachments());
+        videoResponseVo.setStatusDesc(CommonStatus.getEnum(videoResponseVo.getStatus()).toString());
+
+        List<String> attachmentList = JSONUtil.convertToList(video.getAttachments());
+        attachmentList.add(video.getFile());
+
+        if (ListUtil.isNullOrEmpty(attachmentList))
+            return videoResponseVo;
+
+        List<UploadFile> uploadFileList = uploadFileService.getUploadFileByNameList(attachmentList);
 
         if (ListUtil.isNullOrEmpty(uploadFileList))
             return videoResponseVo;
 
-        videoResponseVo.setAttachments(new HashMap<String, List<String>>());
+        videoResponseVo.setAttachmentMap(new HashMap<String, List<String>>());
         for (UploadFile file : uploadFileList) {
-            if (videoResponseVo.getAttachments().containsKey(file.getPurpose()))
-                videoResponseVo.getAttachments().get(file.getPurpose()).add(file.getPath());
+            uploadFileService.setFileNameAsOriginName(file);
+            if (file.getName().equalsIgnoreCase(video.getFile())) {
+                videoResponseVo.setFile(file.getPath());
+                continue;
+            }
+            if (videoResponseVo.getAttachmentMap().containsKey(file.getPurpose()))
+                videoResponseVo.getAttachmentMap().get(file.getPurpose()).add(file.getPath());
             else
-                videoResponseVo.getAttachments().put(file.getPurpose(), new ArrayList<String>(Arrays.asList(file.getPath())));
+                videoResponseVo.getAttachmentMap().put(file.getPurpose(), new ArrayList<String>(Arrays.asList(file.getPath())));
         }
 
         return videoResponseVo;
