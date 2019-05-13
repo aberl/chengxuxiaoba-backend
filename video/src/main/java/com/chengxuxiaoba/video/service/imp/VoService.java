@@ -191,17 +191,15 @@ public class VoService implements IVoService {
         if (ListUtil.isNullOrEmpty(uploadFileList))
             return videoResponseVo;
 
-        videoResponseVo.setAttachmentMap(new HashMap<String, List<String>>());
+        videoResponseVo.setAttachmentList(new ArrayList<UploadFileResponseVo>());
         for (UploadFile file : uploadFileList) {
             uploadFileService.setFileNameAsOriginName(file);
             if (file.getName().equalsIgnoreCase(video.getFile())) {
-                videoResponseVo.setFile(file.getPath());
+                videoResponseVo.setVideo(convertToUploadFileResponseVo(file));
                 continue;
             }
-            if (videoResponseVo.getAttachmentMap().containsKey(file.getPurpose()))
-                videoResponseVo.getAttachmentMap().get(file.getPurpose()).add(file.getPath());
-            else
-                videoResponseVo.getAttachmentMap().put(file.getPurpose(), new ArrayList<String>(Arrays.asList(file.getPath())));
+
+            videoResponseVo.getAttachmentList().add(convertToUploadFileResponseVo(file));
         }
 
         return videoResponseVo;

@@ -3,6 +3,7 @@ package com.chengxuxiaoba.video.model.Request.VO;
 import org.springframework.web.multipart.MultipartFile;
 
 public class VideoRequestVo {
+    private Integer id;
     private Integer courseModuleId;
     private String file;
     private String name;
@@ -13,6 +14,14 @@ public class VideoRequestVo {
     private Integer viewCount;
     private Integer praiseCount;
     private Integer status;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getCourseModuleId() {
         return courseModuleId;

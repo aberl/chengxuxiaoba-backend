@@ -9,9 +9,9 @@ import java.util.List;
 public class VideoResponseVo {
     private Integer id;
     private Integer courseModuleId;
-    private String file;
+    private UploadFileResponseVo video;
     private String name;
-    private Map<String,List<String>> attachmentMap;
+    private List<UploadFileResponseVo> attachmentList;
     private String duration;
     private String description;
     private String images;
@@ -38,12 +38,12 @@ public class VideoResponseVo {
         this.courseModuleId = courseModuleId;
     }
 
-    public String getFile() {
-        return file;
+    public UploadFileResponseVo getVideo() {
+        return video;
     }
 
-    public void setFile(String file) {
-        this.file = file;
+    public void setVideo(UploadFileResponseVo video) {
+        this.video = video;
     }
 
     public String getName() {
@@ -110,12 +110,12 @@ public class VideoResponseVo {
         this.createDateTime = createDateTime;
     }
 
-    public Map<String, List<String>> getAttachmentMap() {
-        return attachmentMap;
+    public List<UploadFileResponseVo> getAttachmentList() {
+        return attachmentList;
     }
 
-    public void setAttachmentMap(Map<String, List<String>> attachmentMap) {
-        this.attachmentMap = attachmentMap;
+    public void setAttachmentList(List<UploadFileResponseVo> attachmentList) {
+        this.attachmentList = attachmentList;
     }
 
     public String getStatusDesc() {

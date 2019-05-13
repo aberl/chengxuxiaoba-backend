@@ -23,10 +23,10 @@ public interface IVideoService {
     PageResult<Video> getVideoByCourseModuleIdWithPage(Integer courseModuleId, PageInfo pageInfo);
 
     /**
-     * upload file, and return a KeyValuePair object, key is upload flag, value is message when upload success then message is upload file path and name
-     * @param file
+     *
+     *  * @param video
      * @return
      * @throws IOException
      */
-    KeyValuePair<Boolean, String> uploadVideo(MultipartFile multipartFile) throws IOException;
+    Boolean uploadVideo(Video video);
 }

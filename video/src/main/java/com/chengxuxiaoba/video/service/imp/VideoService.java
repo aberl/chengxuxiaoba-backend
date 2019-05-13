@@ -46,6 +46,8 @@ public class VideoService  extends IBaseService<Video> implements IVideoService 
 
     @Override
     public Video getSingle(Integer id) {
+        if(id == null)
+            return  null;
         return videoMapper.getVideo(id);
     }
 
@@ -82,8 +84,9 @@ public class VideoService  extends IBaseService<Video> implements IVideoService 
     }
 
     @Override
-    public KeyValuePair<Boolean, String> uploadVideo(MultipartFile multipartFile) throws IOException {
-        return FileHandler.uploadFile(multipartFile,videoSuffexNameLimitation,videoUploadPath);
+    public Boolean uploadVideo(Video video)  {
+        Integer primaryKey= videoMapper.updateVideo(video);
+        return primaryKey>0;
     }
 
 }

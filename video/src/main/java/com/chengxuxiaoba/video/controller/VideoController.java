@@ -21,6 +21,7 @@ public class VideoController extends BaseController {
 
     @Autowired
     private IVoService voService;
+    private Result<Boolean> booleanResult;
 
     @PostMapping("/videos")
     public Result<Boolean> createVideo(@RequestBody VideoRequestVo requestBody) throws IOException {
@@ -37,6 +38,22 @@ public class VideoController extends BaseController {
         return new Result<Boolean>(ResultCode.Success, flag, ResultMessage.Success);
     }
 
+    @PutMapping("/videos")
+    public Result<Boolean> updateVideo(@RequestBody VideoRequestVo requestBody) throws IOException {
+        Video video = videoService.getSingle(requestBody.getId());
+        if (video == null)
+            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.VideoIsNotExist);
+
+        video = voService.convertToVideo(requestBody);
+
+        Boolean flag = videoService.uploadVideo(video);
+
+        if (!flag)
+            return booleanResult;
+
+        return new Result<Boolean>(ResultCode.Success, flag, ResultMessage.Success);
+    }
+
     @GetMapping("/videos/{id}")
     public Result<VideoResponseVo> getVideo(@PathVariable("id") Integer id) {
         Video video = videoService.getSingle(id);
@@ -47,9 +64,9 @@ public class VideoController extends BaseController {
 
     @GetMapping("/courses/{courseModuleId}/videos")
     public Result<PageResult<VideoResponseVo>> getVideoListByCourseModuleId(@PathVariable("courseModuleId") Integer courseModuleId,
-                                                                        @RequestParam("pagenum") Integer pageNum,
-                                                                        @RequestParam(name = "pagesize", required = false) Integer pageSize,
-                                                                        @RequestParam(name = "sort", required = false) String sort) {
+                                                                            @RequestParam("pagenum") Integer pageNum,
+                                                                            @RequestParam(name = "pagesize", required = false) Integer pageSize,
+                                                                            @RequestParam(name = "sort", required = false) String sort) {
         if (courseModuleId == null || courseModuleId == 0)
             return new Result<PageResult<VideoResponseVo>>(ResultCode.Error, null, ResultMessage.ParameterError);
 
