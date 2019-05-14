@@ -1,7 +1,11 @@
 package com.chengxuxiaoba.video.service.imp;
 
 import com.chengxuxiaoba.video.mapper.AccountMapper;
+import com.chengxuxiaoba.video.model.PageInfo;
+import com.chengxuxiaoba.video.model.PageResult;
 import com.chengxuxiaoba.video.model.po.Account;
+import com.chengxuxiaoba.video.model.query.UserQuery;
+import com.chengxuxiaoba.video.service.IBaseService;
 import com.chengxuxiaoba.video.service.IUserService;
 import com.chengxuxiaoba.video.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserService implements IUserService {
+public class UserService extends IBaseService<Account> implements IUserService {
     @Autowired
     private AccountMapper accountMapper;
 
@@ -94,5 +98,16 @@ public class UserService implements IUserService {
         Account account =  accountMapper.getAccountByMobilePhone(mobilePhoneNo);
 
         return account;
+    }
+    @Override
+    public PageResult<Account> getAccountListWithPage(UserQuery userQuery, PageInfo pageInfo) {
+        if (pageInfo == null)
+            return null;
+
+        userQuery.setPageInfo(pageInfo);
+
+        PageResult<Account> pageResult =  super.getListByQuery(accountMapper, userQuery);
+
+        return pageResult;
     }
 }

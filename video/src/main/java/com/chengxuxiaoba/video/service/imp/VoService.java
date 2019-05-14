@@ -40,6 +40,21 @@ public class VoService implements IVoService {
     }
 
     @Override
+    public List<UserResponseVo> convertToUserResponseVo(List<Account> accountList) {
+        if (accountList == null)
+            return null;
+        List<UserResponseVo> userList=new ArrayList<UserResponseVo>();
+        if(accountList.size()==0)
+            return userList;
+
+        for(Account user : accountList)
+        {
+            userList.add(convertToUserResponseVo(user));
+        }
+        return userList;
+    }
+
+    @Override
     public Course convertToCourse(CourseRequestVo courseVo) {
         if (courseVo == null)
             return null;
@@ -119,6 +134,8 @@ public class VoService implements IVoService {
         CourseModuleResponseVo courseModuleResponseVo = new CourseModuleResponseVo();
         BeanUtils.copyProperties(courseModule, courseModuleResponseVo);
 
+        courseModuleResponseVo.setStatusDesc(CommonStatus.getEnum(courseModuleResponseVo.getStatus()).toString());
+
         List<UploadFile> uploadFileList = uploadFileService.getUploadFileByNames(courseModule.getImages());
 
         if (ListUtil.isNullOrEmpty(uploadFileList))
@@ -135,9 +152,6 @@ public class VoService implements IVoService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-
-
-        courseModuleResponseVo.setStatusDesc(CommonStatus.getEnum(courseModuleResponseVo.getStatus()).toString());
 
         return courseModuleResponseVo;
     }

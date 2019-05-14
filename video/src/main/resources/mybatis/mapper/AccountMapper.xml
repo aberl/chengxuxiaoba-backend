@@ -34,6 +34,9 @@
         where id=#{userId} limit 1
     </select>
 
+    <select id="getListWithPage" parameterType="com.chengxuxiaoba.video.model.query.UserQuery" resultType="com.chengxuxiaoba.video.model.po.Account">
+        SELECT * from account
+    </select>
 
     <update id="modifyPasswordByMobilePhone" parameterType="string">
         UPDATE account

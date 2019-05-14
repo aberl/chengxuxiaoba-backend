@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-public interface AccountMapper {
+public interface AccountMapper extends  BaseMapper<Account>{
     Integer insert(Account account);
 
     Account getAccount(@Param("userId") Integer userId);
@@ -15,6 +15,4 @@ public interface AccountMapper {
     Account getAccountByMobilePhone(String mobilePhone);
 
     Integer modifyPasswordByMobilePhone(String mobilePhoneNo, String newPassword);
-
-    //  Integer updateAccount(Account account);
 }
