@@ -36,6 +36,8 @@ public class VoService implements IVoService {
 
         BeanUtils.copyProperties(account, userResponseVo);
 
+        userResponseVo.setStatusDesc(CommonStatus.getEnum(account.getStatus()).toString());
+
         return userResponseVo;
     }
 

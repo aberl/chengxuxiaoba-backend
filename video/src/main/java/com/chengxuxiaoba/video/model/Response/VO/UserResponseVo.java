@@ -9,6 +9,7 @@ public class UserResponseVo {
     private String wechatAccount;
     private String wechatHeaderImg;
     private Integer status;
+    private String statusDesc;
 
     public String getName() {
         return name;
@@ -56,5 +57,13 @@ public class UserResponseVo {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getStatusDesc() {
+        return statusDesc;
+    }
+
+    public void setStatusDesc(String statusDesc) {
+        this.statusDesc = statusDesc;
     }
 }

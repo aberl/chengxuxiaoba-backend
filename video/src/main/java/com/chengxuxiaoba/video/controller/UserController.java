@@ -86,7 +86,7 @@ public class UserController extends BaseController{
     }
 
     @GetMapping("")
-    public Result<List<UserResponseVo>> getUserInfoList(@RequestParam("pagenum") Integer pageNum,
+    public Result<PageResult<UserResponseVo>> getUserInfoList(@RequestParam("pagenum") Integer pageNum,
                                                         @RequestParam(name = "pagesize", required = false) Integer pageSize,
                                                         @RequestParam(name = "sort", required = false) String sort) {
 
@@ -94,9 +94,12 @@ public class UserController extends BaseController{
         UserQuery userQuery = new UserQuery();
         PageResult<Account> accountListWithPage = userService.getAccountListWithPage(userQuery, pageInfo);
         List<Account> accountList = accountListWithPage == null ? null : accountListWithPage.getData();
+
         List<UserResponseVo> userResponseVoList = voService.convertToUserResponseVo(accountList);
 
-        return new Result<List<UserResponseVo>>(ResultCode.Success, userResponseVoList, ResultMessage.Success);
+        PageResult<UserResponseVo> result = new PageResult<UserResponseVo>(accountListWithPage.getCurrentNum(), accountListWithPage.getTotalCount(), userResponseVoList);
+
+        return new Result<PageResult<UserResponseVo>>(ResultCode.Success, result, ResultMessage.Success);
     }
 
     @GetMapping("/{id}")
