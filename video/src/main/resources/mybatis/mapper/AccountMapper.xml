@@ -36,6 +36,11 @@
 
     <select id="getListWithPage" parameterType="com.chengxuxiaoba.video.model.query.UserQuery" resultType="com.chengxuxiaoba.video.model.po.Account">
         SELECT * from account
+        <where>
+            <if test="accountName != null and accountName != ''"> OR name LIKE CONCAT('%',#{accountName},'%')</if>
+            <if test="mobilePhone != null and mobilePhone != ''"> OR mobilePhoneNo LIKE CONCAT('%',#{mobilePhone},'%')</if>
+            <if test="status != null"> OR status=#{status}</if>
+        </where>
     </select>
 
     <update id="modifyPasswordByMobilePhone" parameterType="string">

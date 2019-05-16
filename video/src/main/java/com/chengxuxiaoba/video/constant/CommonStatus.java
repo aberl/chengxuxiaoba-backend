@@ -22,4 +22,14 @@ public enum  CommonStatus {
             return CommonStatus.INACTIVE;
         return null;
     }
+    public static CommonStatus getEnum(String text){
+        if(text == null || text.trim()=="")
+            return  null;
+
+        if(text.trim().toUpperCase().equals(CommonStatus.ACTIVE.toString()))
+            return CommonStatus.ACTIVE;
+        if(text.trim().toUpperCase().equals(CommonStatus.INACTIVE.toString()))
+            return CommonStatus.INACTIVE;
+        return null;
+    }
 }
