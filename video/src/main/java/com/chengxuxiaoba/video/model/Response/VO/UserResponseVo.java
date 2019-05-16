@@ -1,5 +1,7 @@
 package com.chengxuxiaoba.video.model.Response.VO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class UserResponseVo {
@@ -10,6 +12,8 @@ public class UserResponseVo {
     private String wechatHeaderImg;
     private Integer status;
     private String statusDesc;
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
+    private Date createDateTime;
 
     public String getName() {
         return name;
@@ -65,5 +69,13 @@ public class UserResponseVo {
 
     public void setStatusDesc(String statusDesc) {
         this.statusDesc = statusDesc;
+    }
+
+    public Date getCreateDateTime() {
+        return createDateTime;
+    }
+
+    public void setCreateDateTime(Date createDateTime) {
+        this.createDateTime = createDateTime;
     }
 }
