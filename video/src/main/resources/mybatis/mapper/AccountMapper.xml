@@ -11,6 +11,78 @@
         VALUES(#{name},#{headerImg},#{mobilePhoneNo}, #{password}, #{wechatAccount}, #{wechatHeaderImg})
     </insert>
 
+    <update id="update">
+        UPDATE account
+        <trim prefix="set" suffixOverrides=",">
+            <if test="name != null">name=#{name},</if>
+            <if test="headerImg != null">headerImg=#{headerImg},</if>
+            <if test="mobilePhoneNo != null">mobilePhoneNo=#{mobilePhoneNo},</if>
+            <if test="wechatAccount != null">wechatAccount=#{wechatAccount},</if>
+            <if test="wechatHeaderImg != null">wechatHeaderImg=#{wechatHeaderImg},</if>
+            <if test="status != null">status=#{status},</if>
+        </trim>
+        WHERE id=#{id}
+    </update>
+
+    <insert id="buildAccountRoleRelationship">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO accountrole_relationship(accountId, roleId)
+        VALUES
+        <if test="roleIdList !=null and roleIdList.size() != 0">
+            <foreach collection="roleIdList" index="index" item="roleId" open=""
+                     separator="," close="">
+               (#{accountId},#{roleId})
+            </foreach>
+        </if>
+    </insert>
+
+    <delete id="deleteAccountRoleRelationship" parameterType="java.lang.String">
+        delete from accountrole_relationship
+        <where>
+        accountId=#{accountId}
+        <if test="roleId != null"> and roleId=#{roleId}</if>
+        </where>
+    </delete>
+
+    <select id="getAccountRoleRelationShip" parameterType="java.util.List" resultType="com.chengxuxiaoba.video.model.po.AccountRoleRelationShip" >
+        SELECT accountrole_relationship.*,role.name as 'roleName'  from accountrole_relationship
+        left join role on accountrole_relationship.roleId = role.id
+        <where>
+            <if test="accountIdList !=null and accountIdList.size() != 0">
+                accountId IN
+                <foreach collection="accountIdList" index="index" item="accountId" open="("
+                         separator="," close=")">
+                    #{accountId}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <insert id="buildAccountVipTimeRange">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO accountviptimerange(accountId, startDate,endDate)
+        VALUES(#{accountId},#{startDate},#{endDate})
+    </insert>
+    <update id="updateAccountVipTimeRange">
+        UPDATE accountviptimerange
+        <trim prefix="set" suffixOverrides=",">
+            <if test="startDate != null">startDate=#{startDate},</if>
+            <if test="endDate != null">endDate=#{endDate},</if>
+            <if test="status != null">status=#{status},</if>
+            updateDateTime = now()
+        </trim>
+        WHERE accountId=#{accountId}
+    </update>
+
+    <select id="getAccountVipTimeRange" parameterType="string" resultType="com.chengxuxiaoba.video.model.po.AccountVipTimeRange" >
+        SELECT * from accountviptimerange
+        where accountId=#{accountId}
+    </select>
+
     <select id="getAccountByMobilePhone" parameterType="string" resultType="com.chengxuxiaoba.video.model.po.Account">
         SELECT * from account
         where mobilePhoneNo=#{mobilePhoneNo} limit 1
@@ -34,12 +106,14 @@
         where id=#{userId} limit 1
     </select>
 
-    <select id="getListWithPage" parameterType="com.chengxuxiaoba.video.model.query.UserQuery" resultType="com.chengxuxiaoba.video.model.po.Account">
+    <select id="getListWithPage" parameterType="com.chengxuxiaoba.video.model.query.UserQuery"
+            resultType="com.chengxuxiaoba.video.model.po.Account">
         SELECT * from account
         <where>
-            <if test="accountName != null and accountName != ''"> OR name LIKE CONCAT('%',#{accountName},'%')</if>
-            <if test="mobilePhone != null and mobilePhone != ''"> OR mobilePhoneNo LIKE CONCAT('%',#{mobilePhone},'%')</if>
-            <if test="status != null"> OR status=#{status}</if>
+            <if test="accountName != null and accountName != ''">OR name LIKE CONCAT('%',#{accountName},'%')</if>
+            <if test="mobilePhone != null and mobilePhone != ''">OR mobilePhoneNo LIKE CONCAT('%',#{mobilePhone},'%')
+            </if>
+            <if test="status != null">OR status=#{status}</if>
         </where>
     </select>
 
@@ -48,4 +122,5 @@
         SET password = #{newPassword}
         where mobilePhoneNo=#{mobilePhoneNo} limit 1
     </update>
+
 </mapper>

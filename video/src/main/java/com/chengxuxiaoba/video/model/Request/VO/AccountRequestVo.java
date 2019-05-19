@@ -1,11 +1,9 @@
-package com.chengxuxiaoba.video.model.Response.VO;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
+package com.chengxuxiaoba.video.model.Request.VO;
 
 import java.util.Date;
-import java.util.Map;
+import java.util.List;
 
-public class UserResponseVo {
+public class AccountRequestVo {
     private Integer id;
     private String name;
     private String headerImg;
@@ -13,10 +11,7 @@ public class UserResponseVo {
     private String wechatAccount;
     private String wechatHeaderImg;
     private Integer status;
-    private String statusDesc;
-    private Map<Integer, String> roles;
-    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
-    private Date createDateTime;
+    private List<Integer> roleIdList;
 
     public Integer getId() {
         return id;
@@ -74,27 +69,11 @@ public class UserResponseVo {
         this.status = status;
     }
 
-    public String getStatusDesc() {
-        return statusDesc;
+    public List<Integer> getRoleIdList() {
+        return roleIdList;
     }
 
-    public void setStatusDesc(String statusDesc) {
-        this.statusDesc = statusDesc;
-    }
-
-    public Date getCreateDateTime() {
-        return createDateTime;
-    }
-
-    public void setCreateDateTime(Date createDateTime) {
-        this.createDateTime = createDateTime;
-    }
-
-    public Map<Integer, String> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Map<Integer, String> roles) {
-        this.roles = roles;
+    public void setRoleIdList(List<Integer> roleIdList) {
+        this.roleIdList = roleIdList;
     }
 }

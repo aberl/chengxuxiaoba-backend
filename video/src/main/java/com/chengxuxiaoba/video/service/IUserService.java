@@ -1,14 +1,20 @@
 package com.chengxuxiaoba.video.service;
 
+import com.chengxuxiaoba.video.constant.Role;
 import com.chengxuxiaoba.video.model.PageInfo;
 import com.chengxuxiaoba.video.model.PageResult;
 import com.chengxuxiaoba.video.model.po.Account;
+import com.chengxuxiaoba.video.model.po.AccountRoleRelationShip;
 import com.chengxuxiaoba.video.model.query.UserQuery;
 
 import java.util.List;
 
 public interface IUserService {
-    Boolean regier(String mobilePhoneNo,String password);
+    Boolean regier(String mobilePhoneNo, String password, Role... roles);
+
+    Boolean updateAccount(Account account);
+
+    Boolean updateAccountRoleRelationship(Integer accountId, Role... roleArray);
 
     Boolean isMobilePhoneExist(String mobilePhone);
 
@@ -25,4 +31,8 @@ public interface IUserService {
     Account getUserByMobilePhone(String mobilePhoneNo);
 
     PageResult<Account> getAccountListWithPage(UserQuery userQuery, PageInfo pageInfo);
+
+    Role[] convertToRoleArray(List<Integer> roleList);
+
+    List<AccountRoleRelationShip> getAccountRoleRelationShipList(List<Integer> accountIdList);
 }

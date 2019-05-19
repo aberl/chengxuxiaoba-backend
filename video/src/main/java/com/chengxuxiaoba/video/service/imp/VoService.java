@@ -28,7 +28,26 @@ public class VoService implements IVoService {
     private UserService userService;
 
     @Override
+    public Account convertToUser(AccountRequestVo accountRequestVo) {
+        if (accountRequestVo == null)
+            return null;
+
+        Account  account = new Account();
+
+        BeanUtils.copyProperties(accountRequestVo, account);
+
+        return account;
+    }
+
+    @Override
     public UserResponseVo convertToUserResponseVo(Account account) {
+        List<AccountRoleRelationShip> accountRoleRelationShipList=  userService.getAccountRoleRelationShipList(new ArrayList<>(Arrays.asList(account.getId())));
+
+        return convertToUserResponseVo(account, accountRoleRelationShipList);
+    }
+
+    @Override
+    public UserResponseVo convertToUserResponseVo(Account account, List<AccountRoleRelationShip> accountRoleRelationShipList) {
         if (account == null)
             return null;
 
@@ -38,6 +57,20 @@ public class VoService implements IVoService {
 
         userResponseVo.setStatusDesc(CommonStatus.getEnum(account.getStatus()).toString());
 
+        accountRoleRelationShipList=accountRoleRelationShipList == null? null: accountRoleRelationShipList.stream().filter(relationship->{
+            return relationship.getAccountId().equals(account.getId());
+        }).collect(Collectors.toList());
+
+        userResponseVo.setRoles(new HashMap<>());
+
+        if(ListUtil.isNullOrEmpty(accountRoleRelationShipList))
+            return userResponseVo;
+
+        for(AccountRoleRelationShip relationship: accountRoleRelationShipList)
+        {
+            userResponseVo.getRoles().put(relationship.getRoleId(),relationship.getRoleName());
+        }
+
         return userResponseVo;
     }
 
@@ -45,13 +78,16 @@ public class VoService implements IVoService {
     public List<UserResponseVo> convertToUserResponseVo(List<Account> accountList) {
         if (accountList == null)
             return null;
-        List<UserResponseVo> userList=new ArrayList<UserResponseVo>();
-        if(accountList.size()==0)
+        List<UserResponseVo> userList = new ArrayList<UserResponseVo>();
+        if (accountList.size() == 0)
             return userList;
 
-        for(Account user : accountList)
-        {
-            userList.add(convertToUserResponseVo(user));
+        List<Integer> _accountIdList = accountList.stream().map(account -> account.getId()).collect(Collectors.toList());
+
+        List<AccountRoleRelationShip> accountRoleRelationShipList = userService.getAccountRoleRelationShipList(_accountIdList);
+
+        for (Account user : accountList) {
+            userList.add(convertToUserResponseVo(user, accountRoleRelationShipList));
         }
         return userList;
     }

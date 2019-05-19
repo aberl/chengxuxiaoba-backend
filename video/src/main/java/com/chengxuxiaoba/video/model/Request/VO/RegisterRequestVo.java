@@ -1,10 +1,13 @@
 package com.chengxuxiaoba.video.model.Request.VO;
 
+import java.util.List;
 public class RegisterRequestVo {
     private  String mobilePhoneNo;
     private String validationCode;
     private String password;
     private String confirmPassword;
+
+    private List<Integer> roleIdList;
 
     public String getMobilePhoneNo() {
         return mobilePhoneNo;
@@ -36,5 +39,13 @@ public class RegisterRequestVo {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+    }
+
+    public List<Integer> getRoleIdList() {
+        return roleIdList;
+    }
+
+    public void setRoleIdList(List<Integer> roleIdList) {
+        this.roleIdList = roleIdList;
     }
 }

@@ -7,7 +7,11 @@ import com.chengxuxiaoba.video.model.po.*;
 import java.util.List;
 
 public interface IVoService {
+    Account convertToUser(AccountRequestVo account);
+
     UserResponseVo convertToUserResponseVo(Account account);
+
+    UserResponseVo convertToUserResponseVo(Account account, List<AccountRoleRelationShip> accountRoleRelationShipList);
 
     List<UserResponseVo> convertToUserResponseVo(List<Account> accountList);
 
