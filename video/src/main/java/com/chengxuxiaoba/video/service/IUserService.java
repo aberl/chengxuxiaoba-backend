@@ -5,8 +5,10 @@ import com.chengxuxiaoba.video.model.PageInfo;
 import com.chengxuxiaoba.video.model.PageResult;
 import com.chengxuxiaoba.video.model.po.Account;
 import com.chengxuxiaoba.video.model.po.AccountRoleRelationShip;
+import com.chengxuxiaoba.video.model.po.AccountVipTimeRange;
 import com.chengxuxiaoba.video.model.query.UserQuery;
 
+import java.util.Date;
 import java.util.List;
 
 public interface IUserService {
@@ -15,6 +17,8 @@ public interface IUserService {
     Boolean updateAccount(Account account);
 
     Boolean updateAccountRoleRelationship(Integer accountId, Role... roleArray);
+
+    Boolean updateAccountVipTimeRange(Integer accountId, Date startDateTime, Date endDateTime);
 
     Boolean isMobilePhoneExist(String mobilePhone);
 
@@ -35,4 +39,6 @@ public interface IUserService {
     Role[] convertToRoleArray(List<Integer> roleList);
 
     List<AccountRoleRelationShip> getAccountRoleRelationShipList(List<Integer> accountIdList);
+
+    AccountVipTimeRange getVipTimeRange(Integer accountId);
 }

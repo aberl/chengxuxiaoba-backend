@@ -1,5 +1,7 @@
 package com.chengxuxiaoba.video.model.Request.VO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +13,9 @@ public class AccountRequestVo {
     private String wechatAccount;
     private String wechatHeaderImg;
     private Integer status;
-    private List<Integer> roleIdList;
+    private Date vipStartDate;
+    private Date vipEndDate;
+    private List<Integer> roles;
 
     public Integer getId() {
         return id;
@@ -69,11 +73,27 @@ public class AccountRequestVo {
         this.status = status;
     }
 
-    public List<Integer> getRoleIdList() {
-        return roleIdList;
+    public List<Integer> getRoles() {
+        return roles;
     }
 
-    public void setRoleIdList(List<Integer> roleIdList) {
-        this.roleIdList = roleIdList;
+    public void setRoles(List<Integer> roles) {
+        this.roles = roles;
+    }
+
+    public Date getVipStartDate() {
+        return vipStartDate;
+    }
+
+    public void setVipStartDate(Date vipStartDate) {
+        this.vipStartDate = vipStartDate;
+    }
+
+    public Date getVipEndDate() {
+        return vipEndDate;
+    }
+
+    public void setVipEndDate(Date vipEndDate) {
+        this.vipEndDate = vipEndDate;
     }
 }

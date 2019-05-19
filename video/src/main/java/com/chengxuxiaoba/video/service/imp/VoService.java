@@ -43,7 +43,16 @@ public class VoService implements IVoService {
     public UserResponseVo convertToUserResponseVo(Account account) {
         List<AccountRoleRelationShip> accountRoleRelationShipList=  userService.getAccountRoleRelationShipList(new ArrayList<>(Arrays.asList(account.getId())));
 
-        return convertToUserResponseVo(account, accountRoleRelationShipList);
+        UserResponseVo userResponseVo= convertToUserResponseVo(account, accountRoleRelationShipList);
+
+        if(userResponseVo != null) {
+            AccountVipTimeRange accountVipTimeRange = userService.getVipTimeRange(userResponseVo.getId());
+            if (accountVipTimeRange != null) {
+                userResponseVo.setVipStartDate(accountVipTimeRange.getStartDate());
+                userResponseVo.setVipEndDate(accountVipTimeRange.getEndDate());
+            }
+        }
+        return userResponseVo;
     }
 
     @Override
@@ -61,14 +70,14 @@ public class VoService implements IVoService {
             return relationship.getAccountId().equals(account.getId());
         }).collect(Collectors.toList());
 
-        userResponseVo.setRoles(new HashMap<>());
+        userResponseVo.setRoles(new ArrayList<>());
 
         if(ListUtil.isNullOrEmpty(accountRoleRelationShipList))
             return userResponseVo;
 
         for(AccountRoleRelationShip relationship: accountRoleRelationShipList)
         {
-            userResponseVo.getRoles().put(relationship.getRoleId(),relationship.getRoleName());
+            userResponseVo.getRoles().add(relationship.getRoleId().toString());
         }
 
         return userResponseVo;

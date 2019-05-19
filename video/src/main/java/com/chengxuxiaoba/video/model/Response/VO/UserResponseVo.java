@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.List;
 
 public class UserResponseVo {
     private Integer id;
@@ -14,8 +15,12 @@ public class UserResponseVo {
     private String wechatHeaderImg;
     private Integer status;
     private String statusDesc;
-    private Map<Integer, String> roles;
-    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
+    private List<String> roles;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private Date vipStartDate;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private Date vipEndDate;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createDateTime;
 
     public Integer getId() {
@@ -90,11 +95,27 @@ public class UserResponseVo {
         this.createDateTime = createDateTime;
     }
 
-    public Map<Integer, String> getRoles() {
+    public List<String> getRoles() {
         return roles;
     }
 
-    public void setRoles(Map<Integer, String> roles) {
+    public void setRoles(List<String> roles) {
         this.roles = roles;
+    }
+
+    public Date getVipStartDate() {
+        return vipStartDate;
+    }
+
+    public void setVipStartDate(Date vipStartDate) {
+        this.vipStartDate = vipStartDate;
+    }
+
+    public Date getVipEndDate() {
+        return vipEndDate;
+    }
+
+    public void setVipEndDate(Date vipEndDate) {
+        this.vipEndDate = vipEndDate;
     }
 }

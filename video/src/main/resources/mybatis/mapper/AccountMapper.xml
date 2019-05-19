@@ -78,7 +78,7 @@
         WHERE accountId=#{accountId}
     </update>
 
-    <select id="getAccountVipTimeRange" parameterType="string" resultType="com.chengxuxiaoba.video.model.po.AccountVipTimeRange" >
+    <select id="getAccountVipTimeRange" parameterType="java.lang.Integer" resultType="com.chengxuxiaoba.video.model.po.AccountVipTimeRange" >
         SELECT * from accountviptimerange
         where accountId=#{accountId}
     </select>

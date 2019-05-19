@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -34,6 +35,13 @@ public class UserController extends BaseController {
     private IUserService userService;
     @Autowired
     private IVoService voService;
+
+    @GetMapping("/roles")
+    public Result<Map<Integer, String>> getRoleList()
+    {
+        Map<Integer, String> ret= Role.getAllMap();
+        return new Result<Map<Integer, String>>(ResultCode.Success, ret, ResultMessage.Success);
+    }
 
     @PostMapping("/account")
     public Result<Boolean> createAccount(@RequestBody RegisterRequestVo registerBody) {
@@ -67,11 +75,12 @@ public class UserController extends BaseController {
         if (!flag)
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.Fail);
 
-        Role[] roles = userService.convertToRoleArray(accountRequestVo.getRoleIdList());
+        Role[] roles = userService.convertToRoleArray(accountRequestVo.getRoles());
 
-        flag = userService.updateAccountRoleRelationship(account.getId(), roles);
-        if (!flag)
-            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.Fail);
+        if(roles != null && roles.length >0)
+        userService.updateAccountRoleRelationship(account.getId(), roles);
+
+        userService.updateAccountVipTimeRange(accountRequestVo.getId(),accountRequestVo.getVipStartDate(),accountRequestVo.getVipEndDate());
 
         return new Result<Boolean>(ResultCode.Success, true, ResultMessage.Success);
     }
