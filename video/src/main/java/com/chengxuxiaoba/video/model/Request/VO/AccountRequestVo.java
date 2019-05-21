@@ -15,7 +15,9 @@ public class AccountRequestVo {
     private String wechatAccount;
     private String wechatHeaderImg;
     private Integer status;
+    @JsonFormat( pattern="yyyy-MM-dd HH:mm:ss")
     private Date vipStartDate;
+    @JsonFormat( pattern="yyyy-MM-dd HH:mm:ss")
     private Date vipEndDate;
     private List<Integer> roles;
 
