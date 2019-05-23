@@ -26,4 +26,6 @@ public interface IUploadFileService {
     List<UploadFile> getUploadFileByNames(String names);
 
     void setFileNameAsOriginName(UploadFile uploadFile);
+
+    String getAccessHostName();
 }

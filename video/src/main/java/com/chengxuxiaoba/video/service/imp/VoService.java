@@ -133,27 +133,19 @@ public class VoService implements IVoService {
         CourseResponseVo courseResponseVo = new CourseResponseVo();
 
         BeanUtils.copyProperties(course, courseResponseVo);
-
-        List<UploadFile> uploadFileList = uploadFileService.getUploadFileByNames(course.getImages());
-
-        if (ListUtil.isNullOrEmpty(uploadFileList))
-            return courseResponseVo;
-
-        for (UploadFile file : uploadFileList) {
-            uploadFileService.setFileNameAsOriginName(file);
-        }
-
-        List<String> imagesFilePath = uploadFileList.stream().map(file -> file.getPath()).collect(Collectors.toList());
-
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            String _images = mapper.writeValueAsString(imagesFilePath);
-            courseResponseVo.setImages(_images);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
         courseResponseVo.setStatusDesc(CommonStatus.getEnum(courseResponseVo.getStatus()).toString());
+
+        List<String> imageNameList = JSONUtil.convertToList(course.getImages());
+        if (ListUtil.isNullOrEmpty(imageNameList))
+            return courseResponseVo;
+        List<UploadFile> imageList = uploadFileService.getUploadFileByNameList(imageNameList);
+        if (ListUtil.isNullOrEmpty(imageList))
+            return courseResponseVo;
+        courseResponseVo.setImageList(new ArrayList<>());
+        for (UploadFile image : imageList) {
+            courseResponseVo.getImageList().add(convertToUploadFileResponseVo(image));
+        }
+
 
         return courseResponseVo;
     }
@@ -183,21 +175,15 @@ public class VoService implements IVoService {
 
         courseModuleResponseVo.setStatusDesc(CommonStatus.getEnum(courseModuleResponseVo.getStatus()).toString());
 
-        List<UploadFile> uploadFileList = uploadFileService.getUploadFileByNames(courseModule.getImages());
-
-        if (ListUtil.isNullOrEmpty(uploadFileList))
+        List<String> imageNameList = JSONUtil.convertToList(courseModule.getImages());
+        if (ListUtil.isNullOrEmpty(imageNameList))
             return courseModuleResponseVo;
-        for (UploadFile file : uploadFileList) {
-            uploadFileService.setFileNameAsOriginName(file);
-        }
-        List<String> imagesFilePath = uploadFileList.stream().map(file -> file.getPath()).collect(Collectors.toList());
-
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            String _images = mapper.writeValueAsString(imagesFilePath);
-            courseModuleResponseVo.setImages(_images);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+        List<UploadFile> imageList = uploadFileService.getUploadFileByNameList(imageNameList);
+        if (ListUtil.isNullOrEmpty(imageList))
+            return courseModuleResponseVo;
+        courseModuleResponseVo.setImageList(new ArrayList<>());
+        for (UploadFile image : imageList) {
+            courseModuleResponseVo.getImageList().add(convertToUploadFileResponseVo(image));
         }
 
         return courseModuleResponseVo;
@@ -489,6 +475,9 @@ public class VoService implements IVoService {
         UploadFileResponseVo uploadFileResponseVo = new UploadFileResponseVo();
 
         BeanUtils.copyProperties(uploadFile, uploadFileResponseVo);
+
+        String _accessURL=String.format("%s/%s/%s",uploadFileService.getAccessHostName(),uploadFile.getPurpose(),uploadFile.getName());
+        uploadFileResponseVo.setUrl(_accessURL);
 
         return uploadFileResponseVo;
     }

@@ -3,12 +3,14 @@ package com.chengxuxiaoba.video.model.Response.VO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
+import java.util.List;
 
 public class CourseResponseVo {
     private Integer id;
     private String name;
     private String description;
-    private String images;
+   // private String images;
+   private List<UploadFileResponseVo> imageList;
     private Integer status;
     private String statusDesc;
 
@@ -39,12 +41,12 @@ public class CourseResponseVo {
         this.description = description;
     }
 
-    public String getImages() {
-        return images;
+    public List<UploadFileResponseVo> getImageList() {
+        return imageList;
     }
 
-    public void setImages(String images) {
-        this.images = images;
+    public void setImageList(List<UploadFileResponseVo> imageList) {
+        this.imageList = imageList;
     }
 
     public Integer getStatus() {

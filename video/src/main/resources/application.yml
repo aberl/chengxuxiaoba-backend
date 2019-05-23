@@ -57,7 +57,10 @@ image:
   savepath: D:/peoject/chengxuxiaoba/images/
   suffexnamelimitation: jpg,png
   size: 10M
+  accesshostname: http://localhost:9080
 
 uploadfile:
   savepath: D:/peoject/chengxuxiaoba/files
   size: 10M
+  accesshostname: http://localhost:9080/chengxuxiaoba
+

@@ -8,6 +8,7 @@ public class UploadFileResponseVo {
     private Long size;
     private String purpose;
     private String path;
+    private String url;
 
     public String getName() {
         return name;
@@ -47,5 +48,13 @@ public class UploadFileResponseVo {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

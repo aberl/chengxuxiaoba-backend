@@ -26,6 +26,8 @@ public class UploadFileService implements IUploadFileService {
     @Value("${uploadfile.size}")
     private String uploadFileMaxSize;
 
+    @Value("${uploadfile.accesshostname}")
+    private String accessHostName;
     @Autowired
     private UploadFileMapper uploadFileMapper;
 
@@ -150,5 +152,10 @@ public class UploadFileService implements IUploadFileService {
         }
 
         uploadFile.setPath(String.format("%s/%s", directoryPath, uploadFile.getOriginName()));
+    }
+
+    @Override
+    public String getAccessHostName() {
+        return accessHostName;
     }
 }
