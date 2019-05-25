@@ -27,6 +27,9 @@ public class VoService implements IVoService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private VideoService videoService;
+
     @Override
     public Account convertToUser(AccountRequestVo accountRequestVo) {
         if (accountRequestVo == null)
@@ -174,6 +177,14 @@ public class VoService implements IVoService {
         BeanUtils.copyProperties(courseModule, courseModuleResponseVo);
 
         courseModuleResponseVo.setStatusDesc(CommonStatus.getEnum(courseModuleResponseVo.getStatus()).toString());
+
+        VideoSummary videoSummary = videoService.getVideoSummary(courseModule.getId());
+        if(videoSummary != null)
+        {
+            courseModuleResponseVo.setVideoCount(videoSummary.getVideoCount()==null?0:videoSummary.getVideoCount());
+            courseModuleResponseVo.setTotalViewCount(videoSummary.getTotalViewCount()==null?0:videoSummary.getTotalViewCount());
+            courseModuleResponseVo.setTotalPraiseCount(videoSummary.getTotalPraiseCount()==null?0:videoSummary.getTotalPraiseCount());
+        }
 
         List<String> imageNameList = JSONUtil.convertToList(courseModule.getImages());
         if (ListUtil.isNullOrEmpty(imageNameList))

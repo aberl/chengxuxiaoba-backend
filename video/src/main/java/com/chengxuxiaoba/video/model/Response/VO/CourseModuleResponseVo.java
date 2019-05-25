@@ -14,6 +14,9 @@ public class CourseModuleResponseVo {
     private List<UploadFileResponseVo> imageList;
     private Integer status;
     private String statusDesc;
+    private Integer videoCount;
+    private Integer totalViewCount;
+    private Integer totalPraiseCount;
     @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
     private Date createDateTime;
 
@@ -71,6 +74,30 @@ public class CourseModuleResponseVo {
 
     public void setStatusDesc(String statusDesc) {
         this.statusDesc = statusDesc;
+    }
+
+    public Integer getVideoCount() {
+        return videoCount;
+    }
+
+    public void setVideoCount(Integer videoCount) {
+        this.videoCount = videoCount;
+    }
+
+    public Integer getTotalViewCount() {
+        return totalViewCount;
+    }
+
+    public void setTotalViewCount(Integer totalViewCount) {
+        this.totalViewCount = totalViewCount;
+    }
+
+    public Integer getTotalPraiseCount() {
+        return totalPraiseCount;
+    }
+
+    public void setTotalPraiseCount(Integer totalPraiseCount) {
+        this.totalPraiseCount = totalPraiseCount;
     }
 
     public String getCourseName() {

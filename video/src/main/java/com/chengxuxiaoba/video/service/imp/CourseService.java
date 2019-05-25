@@ -2,6 +2,7 @@ package com.chengxuxiaoba.video.service.imp;
 
 import com.chengxuxiaoba.video.constant.CommonStatus;
 import com.chengxuxiaoba.video.mapper.CourseMapper;
+import com.chengxuxiaoba.video.mapper.VideoMapper;
 import com.chengxuxiaoba.video.model.po.Course;
 import com.chengxuxiaoba.video.model.po.CourseModule;
 import com.chengxuxiaoba.video.service.ICourseService;
@@ -16,6 +17,8 @@ import java.util.stream.Collectors;
 public class CourseService implements ICourseService {
     @Autowired
     private CourseMapper courseMapper;
+
+    private VideoMapper videoMapper;
 
     @Override
     public List<Course> getEffectiveCourse() {

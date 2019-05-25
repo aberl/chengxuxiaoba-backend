@@ -4,6 +4,7 @@ import com.chengxuxiaoba.video.model.KeyValuePair;
 import com.chengxuxiaoba.video.model.PageInfo;
 import com.chengxuxiaoba.video.model.PageResult;
 import com.chengxuxiaoba.video.model.po.Video;
+import com.chengxuxiaoba.video.model.po.VideoSummary;
 import com.github.pagehelper.Page;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,4 +30,6 @@ public interface IVideoService {
      * @throws IOException
      */
     Boolean uploadVideo(Video video);
+
+    VideoSummary getVideoSummary(Integer courseModuleId);
 }

@@ -7,6 +7,7 @@ import com.chengxuxiaoba.video.model.PageInfo;
 import com.chengxuxiaoba.video.model.PageResult;
 import com.chengxuxiaoba.video.model.ResultMessage;
 import com.chengxuxiaoba.video.model.po.Video;
+import com.chengxuxiaoba.video.model.po.VideoSummary;
 import com.chengxuxiaoba.video.model.query.VideoQuery;
 import com.chengxuxiaoba.video.service.IBaseService;
 import com.chengxuxiaoba.video.service.IVideoService;
@@ -87,6 +88,14 @@ public class VideoService  extends IBaseService<Video> implements IVideoService 
     public Boolean uploadVideo(Video video)  {
         Integer primaryKey= videoMapper.updateVideo(video);
         return primaryKey>0;
+    }
+
+    @Override
+    public VideoSummary getVideoSummary(Integer courseModuleId)
+    {
+        VideoSummary videoSummary=videoMapper.getVideoSummary(courseModuleId);
+
+        return videoSummary;
     }
 
 }

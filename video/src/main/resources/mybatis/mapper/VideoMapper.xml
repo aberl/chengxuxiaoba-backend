@@ -21,11 +21,20 @@
         where id=#{id} limit 1
     </select>
 
+    <select id="getVideoByCourseModuleId" resultType="com.chengxuxiaoba.video.model.po.Video">
+        SELECT * from Video
+        where courseModuleId = #{courseModuleId}
+    </select>
+
     <select id="getVideoByVideoName" resultType="com.chengxuxiaoba.video.model.po.Video">
         SELECT * from Video
         where courseModuleId = #{courseModuleId} and name=#{name} limit 1
     </select>
 
+    <select id="getVideoSummary" parameterType="int" resultType="com.chengxuxiaoba.video.model.po.VideoSummary">
+        SELECT courseModuleId,count(1) as videoCount,sum(viewCount) as totalViewCount,sum(praiseCount) as totalPraiseCount from Video
+        where courseModuleId = #{courseModuleId}
+    </select>
 
     <update id="updateVideo">
         UPDATE Video
