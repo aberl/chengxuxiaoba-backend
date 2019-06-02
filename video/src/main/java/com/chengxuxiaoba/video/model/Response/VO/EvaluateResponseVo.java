@@ -1,15 +1,20 @@
 package com.chengxuxiaoba.video.model.Response.VO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class EvaluateResponseVo {
     private Integer id;
     private Integer videoId;
     private String content;
-    private Integer starts;
+    private Integer stars;
     private Integer accountId;
+    private String accountName;
     private Integer praiseCount;
     private Integer status;
+
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
     private Date createDateTime;
 
     public Integer getId() {
@@ -36,12 +41,12 @@ public class EvaluateResponseVo {
         this.content = content;
     }
 
-    public Integer getStarts() {
-        return starts;
+    public Integer getStars() {
+        return stars;
     }
 
-    public void setStarts(Integer starts) {
-        this.starts = starts;
+    public void setStars(Integer stars) {
+        this.stars = stars;
     }
 
     public Integer getAccountId() {
@@ -50,6 +55,14 @@ public class EvaluateResponseVo {
 
     public void setAccountId(Integer accountId) {
         this.accountId = accountId;
+    }
+
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
     }
 
     public Integer getPraiseCount() {

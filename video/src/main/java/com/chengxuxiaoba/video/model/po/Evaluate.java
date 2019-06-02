@@ -6,7 +6,7 @@ public class Evaluate {
     private Integer id;
     private Integer videoId;
     private String content;
-    private Integer starts;
+    private Integer stars;
     private Integer accountId;
     private Integer praiseCount;
     private Integer status;
@@ -36,12 +36,12 @@ public class Evaluate {
         this.content = content;
     }
 
-    public Integer getStarts() {
-        return starts;
+    public Integer getStars() {
+        return stars;
     }
 
-    public void setStarts(Integer starts) {
-        this.starts = starts;
+    public void setStars(Integer stars) {
+        this.stars = stars;
     }
 
     public Integer getAccountId() {

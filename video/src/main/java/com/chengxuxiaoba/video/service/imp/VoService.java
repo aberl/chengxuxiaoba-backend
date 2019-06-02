@@ -288,17 +288,22 @@ public class VoService implements IVoService {
 
         return evaluate;
     }
-
     @Override
-    public EvaluateResponseVo convertToEvaluateResponseVo(Evaluate evaluate) {
+    public EvaluateResponseVo convertToEvaluateResponseVo(Evaluate evaluate,String accountName) {
         if (evaluate == null)
             return null;
 
         EvaluateResponseVo evaluateResponseVo = new EvaluateResponseVo();
 
         BeanUtils.copyProperties(evaluate, evaluateResponseVo);
+        evaluateResponseVo.setAccountName(accountName);
 
         return evaluateResponseVo;
+    }
+
+    @Override
+    public EvaluateResponseVo convertToEvaluateResponseVo(Evaluate evaluate) {
+        return convertToEvaluateResponseVo(evaluate, null);
     }
 
     @Override
@@ -308,8 +313,23 @@ public class VoService implements IVoService {
 
         List<EvaluateResponseVo> retList = new ArrayList<>();
         EvaluateResponseVo evaluateResponseVo;
+
+        List<Integer> _accountIdList=new ArrayList<>();
+        evaluateList.forEach(evaluate -> {
+            _accountIdList.add(evaluate.getAccountId());
+        });
+
+        List<Account> _accountList=  userService.getUserList(_accountIdList);
+
+       Map<Integer,String> _accountIdNameMap=new HashMap<Integer, String>();
+       if(!ListUtil.isNullOrEmpty(_accountList))
+       {
+           _accountList.forEach(account -> {
+               _accountIdNameMap.put(account.getId(), account.getName());
+           });
+       }
         for (Evaluate evaluate : evaluateList) {
-            evaluateResponseVo = convertToEvaluateResponseVo(evaluate);
+            evaluateResponseVo = convertToEvaluateResponseVo(evaluate, _accountIdNameMap.get(evaluate.getAccountId()));
             if (evaluateResponseVo != null)
                 retList.add(evaluateResponseVo);
         }

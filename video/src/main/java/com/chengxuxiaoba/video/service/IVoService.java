@@ -37,6 +37,8 @@ public interface IVoService {
 
     EvaluateResponseVo convertToEvaluateResponseVo(Evaluate evaluate);
 
+    EvaluateResponseVo convertToEvaluateResponseVo(Evaluate evaluate,String accountName);
+
     List<EvaluateResponseVo> convertToEvaluateResponseVo(List<Evaluate> evaluateList);
 
     Issue convertToIssue(IssueRequestVo issueRequestVo);

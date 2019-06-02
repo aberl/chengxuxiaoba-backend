@@ -62,5 +62,5 @@ image:
 uploadfile:
   savepath: D:/peoject/chengxuxiaoba/files
   size: 10M
-  accesshostname: http://localhost:9080/chengxuxiaoba
+  accesshostname: http://localhost:7080/chengxuxiaoba
 

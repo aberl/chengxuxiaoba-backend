@@ -3,7 +3,7 @@ package com.chengxuxiaoba.video.model.Request.VO;
 public class EvaluateRequestVo {
     private Integer videoId;
     private String content;
-    private Integer starts;
+    private Integer stars;
     private Integer accountId;
 
     public Integer getVideoId() {
@@ -22,12 +22,12 @@ public class EvaluateRequestVo {
         this.content = content;
     }
 
-    public Integer getStarts() {
-        return starts;
+    public Integer getStars() {
+        return stars;
     }
 
-    public void setStarts(Integer starts) {
-        this.starts = starts;
+    public void setStars(Integer stars) {
+        this.stars = stars;
     }
 
     public Integer getAccountId() {
