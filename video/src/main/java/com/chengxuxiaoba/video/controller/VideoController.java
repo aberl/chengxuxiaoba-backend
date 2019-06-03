@@ -38,6 +38,21 @@ public class VideoController extends BaseController {
         return new Result<Boolean>(ResultCode.Success, flag, ResultMessage.Success);
     }
 
+    @PostMapping("/videos/record")
+    public Result<Boolean> watchVideo(@RequestBody VideoRequestVo requestBody) throws IOException {
+        Video video = videoService.getSingle(requestBody.getId());
+        Integer viewCount = video.getViewCount() == null ? 0 : video.getViewCount();
+
+        video.setViewCount(viewCount + 1);
+
+        Boolean flag = videoService.uploadVideo(video);
+
+        if (!flag)
+            return new Result<Boolean>(ResultCode.Error, flag, ResultMessage.Fail);
+
+        return new Result<Boolean>(ResultCode.Success, flag, ResultMessage.Success);
+    }
+
     @PutMapping("/videos")
     public Result<Boolean> updateVideo(@RequestBody VideoRequestVo requestBody) throws IOException {
         Video video = videoService.getSingle(requestBody.getId());

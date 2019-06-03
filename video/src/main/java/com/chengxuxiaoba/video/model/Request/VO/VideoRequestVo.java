@@ -14,6 +14,7 @@ public class VideoRequestVo {
     private Integer viewCount;
     private Integer praiseCount;
     private Integer status;
+    private Integer watchAccountId;
 
     public Integer getId() {
         return id;
@@ -101,5 +102,13 @@ public class VideoRequestVo {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getWatchAccountId() {
+        return watchAccountId;
+    }
+
+    public void setWatchAccountId(Integer watchAccountId) {
+        this.watchAccountId = watchAccountId;
     }
 }
