@@ -25,7 +25,7 @@ public class IssueController extends BaseController{
     @Autowired
     private IVoService voService;
 
-    @PostMapping("/issues")
+    @PostMapping("/videos/issues")
     public Result<Boolean> createIssue(@RequestBody IssueRequestVo requestBody) throws IOException {
         Issue issue = voService.convertToIssue(requestBody);
 
