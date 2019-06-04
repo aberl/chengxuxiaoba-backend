@@ -45,6 +45,8 @@ public interface IVoService {
 
     IssueResponseVo convertIssueResponseVo(Issue issue, Account account);
 
+    IssueResponseVo convertIssueResponseVo(Issue issue);
+
     List<IssueResponseVo> convertIssueResponseVo(List<Issue> issueList);
 
     Answer convertToAnswer(AnswerRequestVo answerRequestVo);

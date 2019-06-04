@@ -34,6 +34,19 @@ public class IssueController extends BaseController{
         return new Result<Boolean>(ResultCode.Success, result.getKey(), result.getValue());
     }
 
+    @GetMapping("/video/issues/{issueId}")
+    public Result<IssueResponseVo> getIssueListByUserId(@PathVariable("issueId") Integer issueId)
+    {
+        if (issueId == null || issueId == 0)
+            return new Result<IssueResponseVo>(ResultCode.Error, null, ResultMessage.ParameterError);
+
+        Issue issue =  issueService.getSingle(issueId);
+
+        IssueResponseVo  issueResponseVo = voService.convertIssueResponseVo(issue);
+
+        return new Result<IssueResponseVo>(ResultCode.Success, issueResponseVo, ResultMessage.Success);
+    }
+
     @GetMapping("/videos/{videoId}/issues")
     public Result<PageResult<IssueResponseVo>> getIssueListByVideoId(@PathVariable("videoId") Integer videoId,
                                                                      @RequestParam("pagenum") Integer pageNum,

@@ -375,6 +375,18 @@ public class VoService implements IVoService {
     }
 
     @Override
+    public IssueResponseVo convertIssueResponseVo(Issue issue) {
+        if (issue == null)
+            return null;
+
+        Integer questionerId = issue.getQuestionerId();
+
+        Account account =  userService.getUser(questionerId);
+
+        return convertIssueResponseVo(issue,account );
+    }
+
+    @Override
     public IssueResponseVo convertIssueResponseVo(Issue issue, Account account) {
         if (issue == null)
             return null;
