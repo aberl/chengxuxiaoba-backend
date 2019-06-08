@@ -3,6 +3,7 @@ package com.chengxuxiaoba.video.model.Response.VO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
+import java.util.List;
 
 public class IssueResponseVo {
     private Integer id;
@@ -16,6 +17,7 @@ public class IssueResponseVo {
     private Date createDateTime;
 
     private UserResponseVo userResponseVo;
+    private List<AnswerResponseVo> answerResponseVoList;
 
 
     public Integer getId() {
@@ -88,5 +90,13 @@ public class IssueResponseVo {
 
     public void setAnswerCount(Integer answerCount) {
         this.answerCount = answerCount;
+    }
+
+    public List<AnswerResponseVo> getAnswerResponseVoList() {
+        return answerResponseVoList;
+    }
+
+    public void setAnswerResponseVoList(List<AnswerResponseVo> answerResponseVoList) {
+        this.answerResponseVoList = answerResponseVoList;
     }
 }

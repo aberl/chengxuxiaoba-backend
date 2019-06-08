@@ -18,7 +18,8 @@
         VALUES(#{issueId},#{content}, #{answererId})
     </insert>
 
-    <select id="getListWithPage" parameterType="com.chengxuxiaoba.video.model.query.IssueQuery" resultType="com.chengxuxiaoba.video.model.po.Issue">
+    <select id="getListWithPage" parameterType="com.chengxuxiaoba.video.model.query.IssueQuery"
+            resultType="com.chengxuxiaoba.video.model.po.Issue">
         SELECT * from Issue
         <where>
             <if test="videoId != null">and videoId = #{videoId}</if>
@@ -31,9 +32,17 @@
         where id=#{id}
     </select>
 
-    <select id="getAnswerList" parameterType="int" resultType="com.chengxuxiaoba.video.model.po.Answer">
+    <select id="getAnswerList" parameterType="java.util.List" resultType="com.chengxuxiaoba.video.model.po.Answer">
         SELECT * from Answer
-        WHERE issueId = #{issueId}
+        <where>
+            <if test="issueIdList !=null and issueIdList.size() != 0">
+                issueId IN
+                <foreach collection="issueIdList" index="index" item="issueId" open="("
+                         separator="," close=")">
+                    #{issueId}
+                </foreach>
+            </if>
+        </where>
     </select>
 
     <update id="updateIssue">

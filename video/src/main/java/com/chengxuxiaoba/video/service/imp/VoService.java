@@ -4,6 +4,7 @@ import com.chengxuxiaoba.video.constant.CommonStatus;
 import com.chengxuxiaoba.video.model.Request.VO.*;
 import com.chengxuxiaoba.video.model.Response.VO.*;
 import com.chengxuxiaoba.video.model.po.*;
+import com.chengxuxiaoba.video.service.IIssueService;
 import com.chengxuxiaoba.video.service.IVoService;
 import com.chengxuxiaoba.video.util.BeanUtils;
 import com.chengxuxiaoba.video.util.JSONUtil;
@@ -29,6 +30,9 @@ public class VoService implements IVoService {
 
     @Autowired
     private VideoService videoService;
+
+    @Autowired
+    private IIssueService issueService;
 
     @Override
     public Account convertToUser(AccountRequestVo accountRequestVo) {
@@ -355,8 +359,11 @@ public class VoService implements IVoService {
         List<IssueResponseVo> issueResponseVoList = new ArrayList<>();
         List<Integer> accountIdList = new ArrayList<>();
 
+        List<Integer> issueIdList=new ArrayList<>();
+
         for (Issue issue : issueList) {
             accountIdList.add(issue.getQuestionerId());
+            issueIdList.add(issue.getId());
         }
 
         List<Account> accountList = userService.getUserList(accountIdList);
@@ -365,10 +372,26 @@ public class VoService implements IVoService {
         for (Account account : accountList)
             accountMap.put(account.getId(), account);
 
+        List<Answer> answerList=  issueService.getAnswerListByIssueIdList(issueIdList);
+        Map<Integer, List<AnswerResponseVo>> answerResponseVoMap=new HashMap<>();
+        if(!ListUtil.isNullOrEmpty(answerList)) {
+            AnswerResponseVo template;
+            for (Answer answer : answerList)
+            {
+                template=convertAnswerResponseVo(answer, accountMap.get(answer.getAnswererId()));
+                if(!answerResponseVoMap.containsKey(answer.getIssueId()))
+                {
+                    answerResponseVoMap.put(answer.getIssueId(),new ArrayList<>(Arrays.asList(template)));
+                    continue;
+                }
+                answerResponseVoMap.get(answer.getIssueId()).add(template);
+            }
+        }
+
         IssueResponseVo issueResponseVo = null;
         for (Issue issue : issueList) {
             issueResponseVo = convertIssueResponseVo(issue, accountMap.get(issue.getQuestionerId()));
-
+            issueResponseVo.setAnswerResponseVoList(answerResponseVoMap.get(issue.getId()));
             issueResponseVoList.add(issueResponseVo);
         }
         return issueResponseVoList;
@@ -417,9 +440,6 @@ public class VoService implements IVoService {
 
     @Override
     public AnswerResponseVo convertAnswerResponseVo(Answer answer, Account account) {
-        if (answer == null)
-            return null;
-
         AnswerResponseVo answerResponseVo = new AnswerResponseVo();
 
         BeanUtils.copyProperties(answer, answerResponseVo);

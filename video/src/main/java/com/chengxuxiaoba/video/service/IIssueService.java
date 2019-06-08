@@ -21,4 +21,6 @@ public interface IIssueService {
     KeyValuePair<Boolean, String> answerIssue(Answer answer);
 
     List<Answer> getAnswerListByIssueId(Integer issueId);
+
+    List<Answer> getAnswerListByIssueIdList(List<Integer> issueIdList);
 }

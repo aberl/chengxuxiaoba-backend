@@ -15,9 +15,11 @@ import com.chengxuxiaoba.video.service.IBaseService;
 import com.chengxuxiaoba.video.service.IIssueService;
 import com.chengxuxiaoba.video.service.IUserService;
 import com.chengxuxiaoba.video.service.IVideoService;
+import com.chengxuxiaoba.video.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -123,7 +125,16 @@ public class IssueService extends IBaseService<Issue> implements IIssueService {
         if (issueId == null)
             return null;
 
-        List<Answer> resultList = issueMapper.getAnswerList(issueId);
+        List<Answer> resultList = issueMapper.getAnswerList(Arrays.asList(issueId));
+        return resultList;
+    }
+
+    @Override
+    public List<Answer> getAnswerListByIssueIdList(List<Integer> issueIdList) {
+        if (ListUtil.isNullOrEmpty(issueIdList))
+            return null;
+
+        List<Answer> resultList = issueMapper.getAnswerList(issueIdList);
         return resultList;
     }
 }
