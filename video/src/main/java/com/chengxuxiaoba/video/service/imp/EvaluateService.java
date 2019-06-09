@@ -25,6 +25,24 @@ public class EvaluateService extends IBaseService<Evaluate> implements IEvaluate
     }
 
     @Override
+    public Evaluate getSingle(Integer evaluationId) {
+        if (evaluationId == null || evaluationId == 0)
+            return null;
+
+        return evaluateMapper.getSingle(evaluationId);
+    }
+
+    @Override
+    public Boolean updateEvaluate(Evaluate evaluate) {
+        if (evaluate == null)
+            return false;
+
+        Integer primyKey = evaluateMapper.updateEvaluate(evaluate);
+
+        return primyKey>0;
+    }
+
+    @Override
     public PageResult<Evaluate> getEvaluateListByVideoId(Integer videoId, PageInfo pageInfo) {
         if (videoId == null || pageInfo == null)
             return null;

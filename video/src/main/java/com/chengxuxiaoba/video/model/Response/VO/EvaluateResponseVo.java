@@ -13,6 +13,7 @@ public class EvaluateResponseVo {
     private String accountName;
     private Integer praiseCount;
     private Integer status;
+    private String statusDesc;
 
     @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
     private Date createDateTime;
@@ -87,5 +88,13 @@ public class EvaluateResponseVo {
 
     public void setCreateDateTime(Date createDateTime) {
         this.createDateTime = createDateTime;
+    }
+
+    public String getStatusDesc() {
+        return statusDesc;
+    }
+
+    public void setStatusDesc(String statusDesc) {
+        this.statusDesc = statusDesc;
     }
 }

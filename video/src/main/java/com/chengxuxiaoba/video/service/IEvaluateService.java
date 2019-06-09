@@ -8,6 +8,10 @@ import com.chengxuxiaoba.video.model.query.EvaluateQuery;
 public interface IEvaluateService{
     Boolean createNewEvaluate(Evaluate evaluate);
 
+    Evaluate getSingle(Integer evaluationId);
+
+    Boolean updateEvaluate(Evaluate evaluate);
+
     PageResult<Evaluate> getEvaluateListByVideoId(Integer videoId, PageInfo pageInfo);
 
     PageResult<Evaluate> getEvaluateListByAccountId(Integer accountId, PageInfo pageInfo);
