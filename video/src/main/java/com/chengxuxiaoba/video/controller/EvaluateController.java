@@ -81,6 +81,24 @@ public class EvaluateController extends BaseController {
         return new Result<PageResult<EvaluateResponseVo>>(ResultCode.Success, result, ResultMessage.Success);
     }
 
+    @GetMapping("/videos/{videoId}/evaluates/effective")
+    public Result<PageResult<EvaluateResponseVo>> getAllEffectiveEvaluateList(@PathVariable("videoId") Integer videoId,
+                                                                       @RequestParam("pagenum") Integer pageNum,
+                                                                       @RequestParam(name = "pagesize", required = false) Integer pageSize,
+                                                                       @RequestParam(name = "sort", required = false) String sort) {
+        if (videoId == null || videoId == 0)
+            return new Result<PageResult<EvaluateResponseVo>>(ResultCode.Error, null, ResultMessage.ParameterError);
+
+        PageInfo pageInfo = super.generatePageInfo(pageNum, pageSize, sort);
+
+        PageResult<Evaluate> pageData = evaluatevoService.getEvaluateList(videoId, CommonStatus.ACTIVE,pageInfo);
+
+        List<EvaluateResponseVo> resultList = voService.convertToEvaluateResponseVo(pageData.getData());
+
+        PageResult<EvaluateResponseVo> result = new PageResult<EvaluateResponseVo>(pageData.getCurrentNum(), pageData.getTotalCount(), resultList);
+
+        return new Result<PageResult<EvaluateResponseVo>>(ResultCode.Success, result, ResultMessage.Success);
+    }
 
     @GetMapping("/users/{accountId}/evaluates")
     public Result<PageResult<EvaluateResponseVo>> getEvaluateByAccountId(@PathVariable("accountId") Integer accountId,
@@ -101,7 +119,7 @@ public class EvaluateController extends BaseController {
         return new Result<PageResult<EvaluateResponseVo>>(ResultCode.Success, result, ResultMessage.Success);
     }
 
-    @DeleteMapping("/videos/evaluate")
+    @DeleteMapping("/videos/evaluate/{id}")
     public Result<Boolean> createIssue(@PathVariable("id") Integer id) throws IOException {
         if (id == null || id == 0)
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.ParameterError);

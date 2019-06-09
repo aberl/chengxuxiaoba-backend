@@ -1,5 +1,6 @@
 package com.chengxuxiaoba.video.service;
 
+import com.chengxuxiaoba.video.constant.CommonStatus;
 import com.chengxuxiaoba.video.model.PageInfo;
 import com.chengxuxiaoba.video.model.PageResult;
 import com.chengxuxiaoba.video.model.po.Evaluate;
@@ -13,6 +14,8 @@ public interface IEvaluateService{
     Boolean updateEvaluate(Evaluate evaluate);
 
     PageResult<Evaluate> getEvaluateListByVideoId(Integer videoId, PageInfo pageInfo);
+
+    PageResult<Evaluate> getEvaluateList(Integer videoId, CommonStatus status, PageInfo pageInfo);
 
     PageResult<Evaluate> getEvaluateListByAccountId(Integer accountId, PageInfo pageInfo);
 

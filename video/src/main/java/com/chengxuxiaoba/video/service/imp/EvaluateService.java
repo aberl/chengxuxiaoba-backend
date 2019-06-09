@@ -1,5 +1,6 @@
 package com.chengxuxiaoba.video.service.imp;
 
+import com.chengxuxiaoba.video.constant.CommonStatus;
 import com.chengxuxiaoba.video.mapper.EvaluateMapper;
 import com.chengxuxiaoba.video.model.PageInfo;
 import com.chengxuxiaoba.video.model.PageResult;
@@ -49,6 +50,20 @@ public class EvaluateService extends IBaseService<Evaluate> implements IEvaluate
 
         EvaluateQuery query = new EvaluateQuery();
         query.build(null,null,videoId,pageInfo);
+        PageResult<Evaluate> pageResult =  super.getListByQuery(evaluateMapper, query);
+
+        return pageResult;
+    }
+
+    @Override
+    public PageResult<Evaluate> getEvaluateList(Integer videoId, CommonStatus status, PageInfo pageInfo)
+    {
+        if (videoId == null || pageInfo == null || status == null)
+            return null;
+
+        EvaluateQuery query = new EvaluateQuery();
+        query.build(null,null,videoId,pageInfo);
+        query.setStatus(status.getValue());
         PageResult<Evaluate> pageResult =  super.getListByQuery(evaluateMapper, query);
 
         return pageResult;

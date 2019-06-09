@@ -6,6 +6,7 @@ public class EvaluateQuery extends BaseQuery{
     private Integer id;
     private Integer accountId;
     private Integer videoId;
+    private Integer status;
 
     public EvaluateQuery() {
     }
@@ -48,4 +49,11 @@ public class EvaluateQuery extends BaseQuery{
         this.videoId = videoId;
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 }

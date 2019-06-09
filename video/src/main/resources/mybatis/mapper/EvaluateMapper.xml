@@ -17,6 +17,7 @@
             <if test="id != null ">id=#{id}</if>
             <if test="accountId != null ">and  accountId=#{accountId}</if>
             <if test="videoId != null ">and  videoId=#{videoId}</if>
+            <if test="status != null ">and  status=#{status}</if>
         </where>
     </select>
 
@@ -30,7 +31,7 @@
         <trim prefix="set" suffixOverrides=",">
             <if test="videoId != null">videoId=#{videoId},</if>
             <if test="content != null">content=#{content},</if>
-            <if test="starts != null">stars=#{stars},</if>
+            <if test="stars != null">stars=#{stars},</if>
             <if test="accountId != null">accountId=#{accountId},</if>
             <if test="praiseCount != null">praiseCount=#{praiseCount},</if>
             <if test="status != null">status=#{status},</if>
