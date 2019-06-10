@@ -418,6 +418,7 @@ public class VoService implements IVoService {
         IssueResponseVo issueResponseVo = new IssueResponseVo();
 
         BeanUtils.copyProperties(issue, issueResponseVo);
+        issueResponseVo.setStatusDesc(CommonStatus.getEnum(issue.getStatus()).toString());
 
         if (account != null) {
             UserResponseVo userResponseVo = convertToUserResponseVo(account);

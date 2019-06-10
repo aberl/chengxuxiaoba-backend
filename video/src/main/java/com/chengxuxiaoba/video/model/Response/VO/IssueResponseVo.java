@@ -12,6 +12,7 @@ public class IssueResponseVo {
     private String content;
     private Integer questionerId;
     private Integer status;
+    private String statusDesc;
     private Integer answerCount;
     @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
     private Date createDateTime;
@@ -98,5 +99,13 @@ public class IssueResponseVo {
 
     public void setAnswerResponseVoList(List<AnswerResponseVo> answerResponseVoList) {
         this.answerResponseVoList = answerResponseVoList;
+    }
+
+    public String getStatusDesc() {
+        return statusDesc;
+    }
+
+    public void setStatusDesc(String statusDesc) {
+        this.statusDesc = statusDesc;
     }
 }
