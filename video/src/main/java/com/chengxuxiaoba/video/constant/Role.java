@@ -6,11 +6,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public enum Role {
-    ADMIN(1), MEMBER(2), VIPMEMBER(3);
+    ADMIN(1, "管理员"), MEMBER(2, "普通会员"), VIPMEMBER(3, "VIP会员"), VISTOR(4, "游客");
 
     private final Integer value;
 
-    private Role(Integer value) {
+    private Role(Integer value, String text) {
         this.value = value;
     }
 
@@ -19,7 +19,7 @@ public enum Role {
     }
 
     public static List<Role> getAll() {
-        return new ArrayList<>(Arrays.asList(Role.ADMIN, Role.MEMBER, Role.VIPMEMBER));
+        return new ArrayList<>(Arrays.asList(Role.ADMIN, Role.MEMBER, Role.VIPMEMBER, Role.VISTOR));
     }
 
     public static Role getEnum(Integer value) {
