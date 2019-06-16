@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public enum Role {
-    ADMIN(4, "管理员"), MEMBER(2, "普通会员"), VIPMEMBER(3, "VIP会员"), VISTOR(1, "游客");
+    ADMIN(3, "管理员"), VIPMEMBER(2, "VIP会员"), VISTOR(1, "游客");
 
     private final Integer value;
 
@@ -19,7 +19,7 @@ public enum Role {
     }
 
     public static List<Role> getAll() {
-        return new ArrayList<>(Arrays.asList(Role.ADMIN, Role.MEMBER, Role.VIPMEMBER, Role.VISTOR));
+        return new ArrayList<>(Arrays.asList(Role.ADMIN, Role.VIPMEMBER, Role.VISTOR));
     }
 
     public static Role getEnum(Integer value) {
