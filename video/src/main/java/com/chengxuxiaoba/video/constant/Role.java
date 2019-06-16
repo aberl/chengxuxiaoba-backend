@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public enum Role {
-    ADMIN(1, "管理员"), MEMBER(2, "普通会员"), VIPMEMBER(3, "VIP会员"), VISTOR(4, "游客");
+    ADMIN(4, "管理员"), MEMBER(2, "普通会员"), VIPMEMBER(3, "VIP会员"), VISTOR(1, "游客");
 
     private final Integer value;
 
