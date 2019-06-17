@@ -5,6 +5,7 @@ import com.chengxuxiaoba.video.model.Request.VO.*;
 import com.chengxuxiaoba.video.model.Response.VO.*;
 import com.chengxuxiaoba.video.model.po.*;
 import com.chengxuxiaoba.video.service.IIssueService;
+import com.chengxuxiaoba.video.service.IRoleService;
 import com.chengxuxiaoba.video.service.IVoService;
 import com.chengxuxiaoba.video.util.BeanUtils;
 import com.chengxuxiaoba.video.util.JSONUtil;
@@ -33,13 +34,15 @@ public class VoService implements IVoService {
 
     @Autowired
     private IIssueService issueService;
+    @Autowired
+    private IRoleService roleService;
 
     @Override
     public Account convertToUser(AccountRequestVo accountRequestVo) {
         if (accountRequestVo == null)
             return null;
 
-        Account  account = new Account();
+        Account account = new Account();
 
         BeanUtils.copyProperties(accountRequestVo, account);
 
@@ -48,11 +51,11 @@ public class VoService implements IVoService {
 
     @Override
     public UserResponseVo convertToUserResponseVo(Account account) {
-        List<AccountRoleRelationShip> accountRoleRelationShipList=  userService.getAccountRoleRelationShipList(new ArrayList<>(Arrays.asList(account.getId())));
+        List<AccountRoleRelationShip> accountRoleRelationShipList = userService.getAccountRoleRelationShipList(new ArrayList<>(Arrays.asList(account.getId())));
 
-        UserResponseVo userResponseVo= convertToUserResponseVo(account, accountRoleRelationShipList);
+        UserResponseVo userResponseVo = convertToUserResponseVo(account, accountRoleRelationShipList);
 
-        if(userResponseVo != null) {
+        if (userResponseVo != null) {
             AccountVipTimeRange accountVipTimeRange = userService.getVipTimeRange(userResponseVo.getId());
             if (accountVipTimeRange != null) {
                 userResponseVo.setVipStartDate(accountVipTimeRange.getStartDate());
@@ -73,17 +76,16 @@ public class VoService implements IVoService {
 
         userResponseVo.setStatusDesc(CommonStatus.getEnum(account.getStatus()).toString());
 
-        accountRoleRelationShipList=accountRoleRelationShipList == null? null: accountRoleRelationShipList.stream().filter(relationship->{
+        accountRoleRelationShipList = accountRoleRelationShipList == null ? null : accountRoleRelationShipList.stream().filter(relationship -> {
             return relationship.getAccountId().equals(account.getId());
         }).collect(Collectors.toList());
 
         userResponseVo.setRoles(new ArrayList<>());
 
-        if(ListUtil.isNullOrEmpty(accountRoleRelationShipList))
+        if (ListUtil.isNullOrEmpty(accountRoleRelationShipList))
             return userResponseVo;
 
-        for(AccountRoleRelationShip relationship: accountRoleRelationShipList)
-        {
+        for (AccountRoleRelationShip relationship : accountRoleRelationShipList) {
             userResponseVo.getRoles().add(relationship.getRoleId().toString());
         }
 
@@ -183,11 +185,10 @@ public class VoService implements IVoService {
         courseModuleResponseVo.setStatusDesc(CommonStatus.getEnum(courseModuleResponseVo.getStatus()).toString());
 
         VideoSummary videoSummary = videoService.getVideoSummary(courseModule.getId());
-        if(videoSummary != null)
-        {
-            courseModuleResponseVo.setVideoCount(videoSummary.getVideoCount()==null?0:videoSummary.getVideoCount());
-            courseModuleResponseVo.setTotalViewCount(videoSummary.getTotalViewCount()==null?0:videoSummary.getTotalViewCount());
-            courseModuleResponseVo.setTotalPraiseCount(videoSummary.getTotalPraiseCount()==null?0:videoSummary.getTotalPraiseCount());
+        if (videoSummary != null) {
+            courseModuleResponseVo.setVideoCount(videoSummary.getVideoCount() == null ? 0 : videoSummary.getVideoCount());
+            courseModuleResponseVo.setTotalViewCount(videoSummary.getTotalViewCount() == null ? 0 : videoSummary.getTotalViewCount());
+            courseModuleResponseVo.setTotalPraiseCount(videoSummary.getTotalPraiseCount() == null ? 0 : videoSummary.getTotalPraiseCount());
         }
 
         List<String> imageNameList = JSONUtil.convertToList(courseModule.getImages());
@@ -292,8 +293,9 @@ public class VoService implements IVoService {
 
         return evaluate;
     }
+
     @Override
-    public EvaluateResponseVo convertToEvaluateResponseVo(Evaluate evaluate,String accountName) {
+    public EvaluateResponseVo convertToEvaluateResponseVo(Evaluate evaluate, String accountName) {
         if (evaluate == null)
             return null;
 
@@ -319,20 +321,19 @@ public class VoService implements IVoService {
         List<EvaluateResponseVo> retList = new ArrayList<>();
         EvaluateResponseVo evaluateResponseVo;
 
-        List<Integer> _accountIdList=new ArrayList<>();
+        List<Integer> _accountIdList = new ArrayList<>();
         evaluateList.forEach(evaluate -> {
             _accountIdList.add(evaluate.getAccountId());
         });
 
-        List<Account> _accountList=  userService.getUserList(_accountIdList);
+        List<Account> _accountList = userService.getUserList(_accountIdList);
 
-       Map<Integer,String> _accountIdNameMap=new HashMap<Integer, String>();
-       if(!ListUtil.isNullOrEmpty(_accountList))
-       {
-           _accountList.forEach(account -> {
-               _accountIdNameMap.put(account.getId(), account.getName());
-           });
-       }
+        Map<Integer, String> _accountIdNameMap = new HashMap<Integer, String>();
+        if (!ListUtil.isNullOrEmpty(_accountList)) {
+            _accountList.forEach(account -> {
+                _accountIdNameMap.put(account.getId(), account.getName());
+            });
+        }
         for (Evaluate evaluate : evaluateList) {
             evaluateResponseVo = convertToEvaluateResponseVo(evaluate, _accountIdNameMap.get(evaluate.getAccountId()));
             if (evaluateResponseVo != null)
@@ -360,7 +361,7 @@ public class VoService implements IVoService {
         List<IssueResponseVo> issueResponseVoList = new ArrayList<>();
         List<Integer> accountIdList = new ArrayList<>();
 
-        List<Integer> issueIdList=new ArrayList<>();
+        List<Integer> issueIdList = new ArrayList<>();
 
         for (Issue issue : issueList) {
             accountIdList.add(issue.getQuestionerId());
@@ -373,16 +374,14 @@ public class VoService implements IVoService {
         for (Account account : accountList)
             accountMap.put(account.getId(), account);
 
-        List<Answer> answerList=  issueService.getAnswerListByIssueIdList(issueIdList);
-        Map<Integer, List<AnswerResponseVo>> answerResponseVoMap=new HashMap<>();
-        if(!ListUtil.isNullOrEmpty(answerList)) {
+        List<Answer> answerList = issueService.getAnswerListByIssueIdList(issueIdList);
+        Map<Integer, List<AnswerResponseVo>> answerResponseVoMap = new HashMap<>();
+        if (!ListUtil.isNullOrEmpty(answerList)) {
             AnswerResponseVo template;
-            for (Answer answer : answerList)
-            {
-                template=convertAnswerResponseVo(answer, accountMap.get(answer.getAnswererId()));
-                if(!answerResponseVoMap.containsKey(answer.getIssueId()))
-                {
-                    answerResponseVoMap.put(answer.getIssueId(),new ArrayList<>(Arrays.asList(template)));
+            for (Answer answer : answerList) {
+                template = convertAnswerResponseVo(answer, accountMap.get(answer.getAnswererId()));
+                if (!answerResponseVoMap.containsKey(answer.getIssueId())) {
+                    answerResponseVoMap.put(answer.getIssueId(), new ArrayList<>(Arrays.asList(template)));
                     continue;
                 }
                 answerResponseVoMap.get(answer.getIssueId()).add(template);
@@ -405,9 +404,9 @@ public class VoService implements IVoService {
 
         Integer questionerId = issue.getQuestionerId();
 
-        Account account =  userService.getUser(questionerId);
+        Account account = userService.getUser(questionerId);
 
-        return convertIssueResponseVo(issue,account );
+        return convertIssueResponseVo(issue, account);
     }
 
     @Override
@@ -541,9 +540,29 @@ public class VoService implements IVoService {
 
         BeanUtils.copyProperties(uploadFile, uploadFileResponseVo);
 
-        String _accessURL=String.format("%s/%s/%s",uploadFileService.getAccessHostName(),uploadFile.getPurpose(),uploadFile.getName());
+        String _accessURL = String.format("%s/%s/%s", uploadFileService.getAccessHostName(), uploadFile.getPurpose(), uploadFile.getName());
         uploadFileResponseVo.setUrl(_accessURL);
 
         return uploadFileResponseVo;
+    }
+
+    @Override
+    public RoleResponseVo convertToRoleResponseVo(Role role) {
+        if (role == null)
+            return null;
+        RoleResponseVo roleResponseVo = new RoleResponseVo();
+        BeanUtils.copyProperties(role, roleResponseVo);
+        Integer roleId = role.getId();
+
+        if (roleId != null && roleId > 0) {
+            List<Permission> permissionList = roleService.getPermissionListByRoleId(roleId);
+            roleResponseVo.setPermissionList(permissionList);
+        }
+
+        List<Role> morePriorityRoleList = roleService.getMorePriorityRoleList(role);
+        if (!ListUtil.isNullOrEmpty(morePriorityRoleList)) {
+            roleResponseVo.setUpgradeRoleList(morePriorityRoleList);
+        }
+        return roleResponseVo;
     }
 }

@@ -64,4 +64,6 @@ public interface IVoService {
     UploadFile convertToUploadFile(UploadFileRequestVo uploadFileRequestVo);
 
     UploadFileResponseVo convertToUploadFileResponseVo(UploadFile uploadFile);
+
+    RoleResponseVo convertToRoleResponseVo(Role role);
 }
