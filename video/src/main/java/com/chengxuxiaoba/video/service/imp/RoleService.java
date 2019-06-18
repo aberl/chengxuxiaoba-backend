@@ -27,7 +27,7 @@ public class RoleService implements IRoleService {
 
     @Override
     public List<Role> getMorePriorityRoleList(Role role) {
-       if(role == null || role.getPriority()==0 || role.getPriority() == null)
+       if(role == null || role.getPriority() == null)
            return null;
 
        Integer pirority=role.getPriority();

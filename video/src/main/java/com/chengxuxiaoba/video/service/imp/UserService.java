@@ -1,7 +1,6 @@
 package com.chengxuxiaoba.video.service.imp;
 
-import com.chengxuxiaoba.video.constant.CommonStatus;
-import com.chengxuxiaoba.video.constant.Role;
+import com.chengxuxiaoba.video.constant.RoleConstant;
 import com.chengxuxiaoba.video.mapper.AccountMapper;
 import com.chengxuxiaoba.video.model.PageInfo;
 import com.chengxuxiaoba.video.model.PageResult;
@@ -30,7 +29,7 @@ public class UserService extends IBaseService<Account> implements IUserService {
 
     @Override
     @Transactional
-    public Boolean regier(String mobilePhoneNo, String password, Role... roles) {
+    public Boolean regier(String mobilePhoneNo, String password, RoleConstant... roles) {
         Account account = accountMapper.getAccountByMobilePhone(mobilePhoneNo);
 
         if (account != null)
@@ -48,7 +47,7 @@ public class UserService extends IBaseService<Account> implements IUserService {
 
         if (roles != null && roles.length > 0) {
             List<Integer> roleList = new ArrayList<>();
-            for (Role role : roles) {
+            for (RoleConstant role : roles) {
                 if (role != null && !roleList.contains(role))
                     roleList.add(role.getValue());
             }
@@ -148,7 +147,7 @@ public class UserService extends IBaseService<Account> implements IUserService {
     }
 
     @Override
-    public Boolean updateAccountRoleRelationship(Integer accountId, Role... roleArray) {
+    public Boolean updateAccountRoleRelationship(Integer accountId, RoleConstant... roleArray) {
         Integer primaryKey = 0;
 
         if (roleArray == null || roleArray.length == 0)
@@ -162,7 +161,7 @@ public class UserService extends IBaseService<Account> implements IUserService {
 
         if (roleArray != null && roleArray.length > 0) {
             List<Integer> roleList = new ArrayList<>();
-            for (Role role : roleArray) {
+            for (RoleConstant role : roleArray) {
                 if (role != null && !roleList.contains(role))
                     roleList.add(role.getValue());
             }
@@ -200,14 +199,14 @@ public class UserService extends IBaseService<Account> implements IUserService {
     }
 
     @Override
-    public Role[] convertToRoleArray(List<Integer> roleList) {
+    public RoleConstant[] convertToRoleArray(List<Integer> roleList) {
         if (ListUtil.isNullOrEmpty(roleList))
             return null;
 
-        Role[] roles = new Role[roleList.size()];
+        RoleConstant[] roles = new RoleConstant[roleList.size()];
 
         for (Integer index = 0; index < roleList.size(); index++) {
-            roles[index] = Role.getEnum(roleList.get(index));
+            roles[index] = RoleConstant.getEnum(roleList.get(index));
         }
 
         return roles;

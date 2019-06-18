@@ -5,12 +5,12 @@ import com.chengxuxiaoba.video.util.ListUtil;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public enum Role {
+public enum RoleConstant {
     ADMIN(3, "管理员"), VIPMEMBER(2, "VIP会员"), VISTOR(1, "游客");
 
     private final Integer value;
 
-    private Role(Integer value, String text) {
+    private RoleConstant(Integer value, String text) {
         this.value = value;
     }
 
@@ -18,12 +18,12 @@ public enum Role {
         return value;
     }
 
-    public static List<Role> getAll() {
-        return new ArrayList<>(Arrays.asList(Role.ADMIN, Role.VIPMEMBER, Role.VISTOR));
+    public static List<RoleConstant> getAll() {
+        return new ArrayList<>(Arrays.asList(RoleConstant.ADMIN, RoleConstant.VIPMEMBER, RoleConstant.VISTOR));
     }
 
-    public static Role getEnum(Integer value) {
-        List<Role> _list = getAll();
+    public static RoleConstant getEnum(Integer value) {
+        List<RoleConstant> _list = getAll();
 
         _list = _list.stream().filter(role -> {
             return role.value.equals(value);
@@ -37,8 +37,8 @@ public enum Role {
 
     public static Map<Integer, String> getAllMap() {
         Map<Integer, String> _map = new HashMap<>();
-        List<Role> _list = getAll();
-        for (Role role : _list) {
+        List<RoleConstant> _list = getAll();
+        for (RoleConstant role : _list) {
             _map.put(role.getValue(), role.toString());
         }
         return _map;

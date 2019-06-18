@@ -1,6 +1,6 @@
 package com.chengxuxiaoba.video.service;
 
-import com.chengxuxiaoba.video.constant.Role;
+import com.chengxuxiaoba.video.constant.RoleConstant;
 import com.chengxuxiaoba.video.model.PageInfo;
 import com.chengxuxiaoba.video.model.PageResult;
 import com.chengxuxiaoba.video.model.po.Account;
@@ -12,11 +12,11 @@ import java.util.Date;
 import java.util.List;
 
 public interface IUserService {
-    Boolean regier(String mobilePhoneNo, String password, Role... roles);
+    Boolean regier(String mobilePhoneNo, String password, RoleConstant... roles);
 
     Boolean updateAccount(Account account);
 
-    Boolean updateAccountRoleRelationship(Integer accountId, Role... roleArray);
+    Boolean updateAccountRoleRelationship(Integer accountId, RoleConstant... roleArray);
 
     Boolean updateAccountVipTimeRange(Integer accountId, Date startDateTime, Date endDateTime);
 
@@ -36,7 +36,7 @@ public interface IUserService {
 
     PageResult<Account> getAccountListWithPage(UserQuery userQuery, PageInfo pageInfo);
 
-    Role[] convertToRoleArray(List<Integer> roleList);
+    RoleConstant[] convertToRoleArray(List<Integer> roleList);
 
     List<AccountRoleRelationShip> getAccountRoleRelationShipList(List<Integer> accountIdList);
 

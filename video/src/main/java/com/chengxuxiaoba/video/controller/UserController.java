@@ -1,7 +1,7 @@
 package com.chengxuxiaoba.video.controller;
 
 import com.chengxuxiaoba.video.constant.CommonStatus;
-import com.chengxuxiaoba.video.constant.Role;
+import com.chengxuxiaoba.video.constant.RoleConstant;
 import com.chengxuxiaoba.video.constant.ValidationCodeCategory;
 import com.chengxuxiaoba.video.model.*;
 import com.chengxuxiaoba.video.model.Request.VO.AccountRequestVo;
@@ -9,6 +9,7 @@ import com.chengxuxiaoba.video.model.Request.VO.LoginRequestVo;
 import com.chengxuxiaoba.video.model.Request.VO.RegisterRequestVo;
 import com.chengxuxiaoba.video.model.Response.VO.UserResponseVo;
 import com.chengxuxiaoba.video.model.po.Account;
+import com.chengxuxiaoba.video.model.po.Role;
 import com.chengxuxiaoba.video.model.query.UserQuery;
 import com.chengxuxiaoba.video.service.IUserService;
 import com.chengxuxiaoba.video.service.IValidationService;
@@ -36,13 +37,6 @@ public class UserController extends BaseController {
     @Autowired
     private IVoService voService;
 
-    @GetMapping("/roles")
-    public Result<Map<Integer, String>> getRoleList()
-    {
-        Map<Integer, String> ret= Role.getAllMap();
-        return new Result<Map<Integer, String>>(ResultCode.Success, ret, ResultMessage.Success);
-    }
-
     @PostMapping("/account")
     public Result<Boolean> createAccount(@RequestBody RegisterRequestVo registerBody) {
 //        if (!registerBody.getPassword().equals(registerBody.getConfirmPassword()))
@@ -53,7 +47,7 @@ public class UserController extends BaseController {
         if (!isValid)
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.ValidationCodeIsIlegal);
 
-        Role[] roles = userService.convertToRoleArray(registerBody.getRoleIdList());
+        RoleConstant[] roles = userService.convertToRoleArray(registerBody.getRoleIdList());
         ;
         Boolean flag = userService.regier(registerBody.getMobilePhoneNo(), registerBody.getPassword(), roles);
 
@@ -75,7 +69,7 @@ public class UserController extends BaseController {
         if (!flag)
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.Fail);
 
-        Role[] roles = userService.convertToRoleArray(accountRequestVo.getRoles());
+        RoleConstant[] roles = userService.convertToRoleArray(accountRequestVo.getRoles());
 
         if(roles != null && roles.length >0)
         userService.updateAccountRoleRelationship(account.getId(), roles);
