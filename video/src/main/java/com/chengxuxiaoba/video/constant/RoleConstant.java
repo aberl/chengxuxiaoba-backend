@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public enum RoleConstant {
-    ADMIN(3, "管理员"), VIPMEMBER(2, "VIP会员"), VISTOR(1, "游客");
+    ADMIN(3, "管理员"), VIPMEMBER(2, "VIP会员"), VISTOR(1, "普通会员");
 
     private final Integer value;
 

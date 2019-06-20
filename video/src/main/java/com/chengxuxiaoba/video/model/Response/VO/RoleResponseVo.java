@@ -13,7 +13,9 @@ public class RoleResponseVo {
     private Integer status;
 
     private List<Permission> permissionList;
-    private List<Role> upgradeRoleList;
+    private List<RoleResponseVo> upgradeRoleList;
+
+    private Boolean isNeedUpgrade;
 
     public Integer getId() {
         return id;
@@ -63,11 +65,19 @@ public class RoleResponseVo {
         this.permissionList = permissionList;
     }
 
-    public List<Role> getUpgradeRoleList() {
+    public List<RoleResponseVo> getUpgradeRoleList() {
         return upgradeRoleList;
     }
 
-    public void setUpgradeRoleList(List<Role> upgradeRoleList) {
+    public void setUpgradeRoleList(List<RoleResponseVo> upgradeRoleList) {
         this.upgradeRoleList = upgradeRoleList;
+    }
+
+    public Boolean getNeedUpgrade() {
+        return isNeedUpgrade;
+    }
+
+    public void setNeedUpgrade(Boolean needUpgrade) {
+        isNeedUpgrade = needUpgrade;
     }
 }

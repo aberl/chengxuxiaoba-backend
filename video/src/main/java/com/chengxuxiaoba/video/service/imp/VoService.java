@@ -7,10 +7,7 @@ import com.chengxuxiaoba.video.model.po.*;
 import com.chengxuxiaoba.video.service.IIssueService;
 import com.chengxuxiaoba.video.service.IRoleService;
 import com.chengxuxiaoba.video.service.IVoService;
-import com.chengxuxiaoba.video.util.BeanUtils;
-import com.chengxuxiaoba.video.util.JSONUtil;
-import com.chengxuxiaoba.video.util.ListUtil;
-import com.chengxuxiaoba.video.util.StringUtil;
+import com.chengxuxiaoba.video.util.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -60,6 +57,10 @@ public class VoService implements IVoService {
             if (accountVipTimeRange != null) {
                 userResponseVo.setVipStartDate(accountVipTimeRange.getStartDate());
                 userResponseVo.setVipEndDate(accountVipTimeRange.getEndDate());
+
+                Integer diffDays = DateUtil.differentDays(new Date(), accountVipTimeRange.getEndDate());
+
+                userResponseVo.setOverDue(diffDays > 0);
             }
         }
         return userResponseVo;
@@ -560,8 +561,21 @@ public class VoService implements IVoService {
         }
 
         List<Role> morePriorityRoleList = roleService.getMorePriorityRoleList(role);
-        if (!ListUtil.isNullOrEmpty(morePriorityRoleList)) {
-            roleResponseVo.setUpgradeRoleList(morePriorityRoleList);
+
+        List<RoleResponseVo> morePriorityRoleResponseVoList=null;
+        if(!ListUtil.isNullOrEmpty(morePriorityRoleList))
+        {
+            morePriorityRoleResponseVoList=new ArrayList<>();
+            for(Role roleItem : morePriorityRoleList)
+            {
+                morePriorityRoleResponseVoList.add(convertToRoleResponseVo(roleItem));
+            }
+        }
+
+        roleResponseVo.setNeedUpgrade(false);
+        if (!ListUtil.isNullOrEmpty(morePriorityRoleResponseVoList)) {
+            roleResponseVo.setUpgradeRoleList(morePriorityRoleResponseVoList);
+            roleResponseVo.setNeedUpgrade(true);
         }
         return roleResponseVo;
     }

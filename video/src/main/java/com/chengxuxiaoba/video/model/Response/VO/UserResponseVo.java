@@ -21,6 +21,8 @@ public class UserResponseVo {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date vipEndDate;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private Boolean isOverDue;
+
     private Date createDateTime;
 
     public Integer getId() {
@@ -113,6 +115,14 @@ public class UserResponseVo {
 
     public Date getVipEndDate() {
         return vipEndDate;
+    }
+
+    public Boolean getOverDue() {
+        return isOverDue;
+    }
+
+    public void setOverDue(Boolean overDue) {
+        isOverDue = overDue;
     }
 
     public void setVipEndDate(Date vipEndDate) {
