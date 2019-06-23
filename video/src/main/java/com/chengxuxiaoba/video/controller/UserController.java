@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -71,10 +72,10 @@ public class UserController extends BaseController {
 
         RoleConstant[] roles = userService.convertToRoleArray(accountRequestVo.getRoles());
 
-        if(roles != null && roles.length >0)
-        userService.updateAccountRoleRelationship(account.getId(), roles);
+        if (roles != null && roles.length > 0)
+            userService.updateAccountRoleRelationship(account.getId(), roles);
 
-        userService.updateAccountVipTimeRange(accountRequestVo.getId(),accountRequestVo.getVipStartDate(),accountRequestVo.getVipEndDate());
+        userService.updateAccountVipTimeRange(accountRequestVo.getId(), accountRequestVo.getVipStartDate(), accountRequestVo.getVipEndDate());
 
         return new Result<Boolean>(ResultCode.Success, true, ResultMessage.Success);
     }
@@ -163,5 +164,28 @@ public class UserController extends BaseController {
         return new Result<UserResponseVo>(ResultCode.Success, userResponseVo, ResultMessage.Success);
     }
 
+
+    @PutMapping("/updaterole")
+    public Result<Boolean> updateAccountRoleRelationShip(@RequestBody AccountRequestVo accountRequestVo) {
+        if (accountRequestVo == null)
+            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.DataIsNULL);
+
+        if (ListUtil.isNullOrEmpty(accountRequestVo.getRoles()))
+            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.DataIsNULL);
+
+        Account account = userService.getUser(accountRequestVo.getId());
+        if (account == null)
+            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.UserIsNotExist);
+
+        RoleConstant[] roleArray = accountRequestVo.getRoles().stream().map(role -> {
+            return RoleConstant.getEnum(role);
+        }).collect(Collectors.toList()).toArray(new RoleConstant[accountRequestVo.getRoles().size()]);
+
+        Boolean flag = userService.updateAccountRoleRelationship(accountRequestVo.getId(), roleArray);
+
+
+        return new Result<Boolean>(ResultCode.Success, flag, ResultMessage.Success);
+
+    }
 
 }

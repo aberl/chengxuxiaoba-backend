@@ -45,14 +45,19 @@ public class UserService extends IBaseService<Account> implements IUserService {
 
         Integer accountId = account.getId();
 
+        List<Integer> roleList = new ArrayList<>();
+
         if (roles != null && roles.length > 0) {
-            List<Integer> roleList = new ArrayList<>();
             for (RoleConstant role : roles) {
                 if (role != null && !roleList.contains(role))
                     roleList.add(role.getValue());
             }
-            accountMapper.buildAccountRoleRelationship(accountId, roleList);
         }
+        else
+        {
+            roleList.add(RoleConstant.VISTOR.getValue());
+        }
+        accountMapper.buildAccountRoleRelationship(accountId, roleList);
         return accountId > 0;
     }
 
