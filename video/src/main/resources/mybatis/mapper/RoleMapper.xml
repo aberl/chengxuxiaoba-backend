@@ -17,4 +17,7 @@
     <select id="getMorePriorityRoleList" parameterType="java.lang.Integer" resultType="com.chengxuxiaoba.video.model.po.Role">
         SELECT * FROM role where priority>#{pirority}
     </select>
+    <select id="getRolePaymentList" resultType="com.chengxuxiaoba.video.model.po.RolePayment">
+        SELECT * FROM rolepayment
+    </select>
 </mapper>

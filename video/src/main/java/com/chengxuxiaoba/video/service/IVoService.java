@@ -66,4 +66,8 @@ public interface IVoService {
     UploadFileResponseVo convertToUploadFileResponseVo(UploadFile uploadFile);
 
     RoleResponseVo convertToRoleResponseVo(Role role);
+
+    RolePaymentResponseVo convertToRolePaymentResponseVo(RolePayment rolePayment);
+
+    List<RolePaymentResponseVo> convertToRolePaymentResponseVo(List<RolePayment> rolePaymentList);
 }

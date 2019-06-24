@@ -579,4 +579,32 @@ public class VoService implements IVoService {
         }
         return roleResponseVo;
     }
+
+    @Override
+    public RolePaymentResponseVo convertToRolePaymentResponseVo(RolePayment rolePayment)
+    {
+        if(rolePayment ==null)
+            return null;
+
+        RolePaymentResponseVo rolePaymentResponseVo = new RolePaymentResponseVo();
+        BeanUtils.copyProperties(rolePayment, rolePaymentResponseVo);
+
+        return rolePaymentResponseVo;
+    }
+
+    @Override
+    public List<RolePaymentResponseVo> convertToRolePaymentResponseVo(List<RolePayment> rolePaymentList)
+    {
+        if(ListUtil.isNullOrEmpty(rolePaymentList))
+            return null;
+
+        List<RolePaymentResponseVo> _rolePaymentResponseVoList=new ArrayList<>();
+        rolePaymentList.forEach(rolePayment -> {
+            if(rolePayment !=null)
+            {
+                _rolePaymentResponseVoList.add(convertToRolePaymentResponseVo(rolePayment));
+            }
+        });
+        return _rolePaymentResponseVoList;
+    }
 }
