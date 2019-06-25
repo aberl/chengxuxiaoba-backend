@@ -1,6 +1,7 @@
 package com.chengxuxiaoba.video.service.imp;
 
 import com.chengxuxiaoba.video.constant.CommonStatus;
+import com.chengxuxiaoba.video.constant.RolePaymentTypeEnum;
 import com.chengxuxiaoba.video.model.Request.VO.*;
 import com.chengxuxiaoba.video.model.Response.VO.*;
 import com.chengxuxiaoba.video.model.po.*;
@@ -588,6 +589,12 @@ public class VoService implements IVoService {
 
         RolePaymentResponseVo rolePaymentResponseVo = new RolePaymentResponseVo();
         BeanUtils.copyProperties(rolePayment, rolePaymentResponseVo);
+
+        RolePaymentTypeEnum rolePaymentTypeEnum=RolePaymentTypeEnum.getEnum(rolePayment.getName());
+        Date startDate=new Date();
+        Date endDate=roleService.generateEndDateForRolePayment(rolePaymentTypeEnum);
+        rolePaymentResponseVo.setStartDate(startDate);
+        rolePaymentResponseVo.setEndDate(endDate);
 
         return rolePaymentResponseVo;
     }

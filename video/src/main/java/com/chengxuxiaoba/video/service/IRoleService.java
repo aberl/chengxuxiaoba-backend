@@ -1,9 +1,11 @@
 package com.chengxuxiaoba.video.service;
 
+import com.chengxuxiaoba.video.constant.RolePaymentTypeEnum;
 import com.chengxuxiaoba.video.model.po.Permission;
 import com.chengxuxiaoba.video.model.po.Role;
 import com.chengxuxiaoba.video.model.po.RolePayment;
 
+import java.util.Date;
 import java.util.List;
 
 public interface IRoleService {
@@ -14,4 +16,6 @@ public interface IRoleService {
     List<Role> getMorePriorityRoleList(Role role);
 
     List<RolePayment> getRolePaymentList(Integer... roleIdArray);
+
+    Date generateEndDateForRolePayment(RolePaymentTypeEnum rolePaymentTypeEnum);
 }
