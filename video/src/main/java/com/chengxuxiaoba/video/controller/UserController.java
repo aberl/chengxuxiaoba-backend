@@ -70,10 +70,10 @@ public class UserController extends BaseController {
         if (!flag)
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.Fail);
 
-        RoleConstant[] roles = userService.convertToRoleArray(accountRequestVo.getRoles());
+        RoleConstant role = RoleConstant.getEnum(accountRequestVo.getRole());
 
-        if (roles != null && roles.length > 0)
-            userService.updateAccountRoleRelationship(account.getId(), roles);
+        if (role != null)
+            userService.updateAccountRoleRelationship(account.getId(),role);
 
         userService.updateAccountVipTimeRange(accountRequestVo.getId(), accountRequestVo.getVipStartDate(), accountRequestVo.getVipEndDate());
 
@@ -170,18 +170,16 @@ public class UserController extends BaseController {
         if (accountRequestVo == null)
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.DataIsNULL);
 
-        if (ListUtil.isNullOrEmpty(accountRequestVo.getRoles()))
+        if (accountRequestVo.getRole() == null)
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.DataIsNULL);
 
         Account account = userService.getUser(accountRequestVo.getId());
         if (account == null)
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.UserIsNotExist);
 
-        RoleConstant[] roleArray = accountRequestVo.getRoles().stream().map(role -> {
-            return RoleConstant.getEnum(role);
-        }).collect(Collectors.toList()).toArray(new RoleConstant[accountRequestVo.getRoles().size()]);
+        RoleConstant role = RoleConstant.getEnum(accountRequestVo.getRole());
 
-        Boolean flag = userService.updateAccountRoleRelationship(accountRequestVo.getId(), roleArray);
+        Boolean flag = userService.updateAccountRoleRelationship(accountRequestVo.getId(), role);
 
 
         return new Result<Boolean>(ResultCode.Success, flag, ResultMessage.Success);

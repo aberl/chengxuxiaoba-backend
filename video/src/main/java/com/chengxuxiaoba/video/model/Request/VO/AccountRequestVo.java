@@ -19,7 +19,7 @@ public class AccountRequestVo {
     private Date vipStartDate;
     @JsonFormat( pattern="yyyy-MM-dd HH:mm:ss")
     private Date vipEndDate;
-    private List<Integer> roles;
+    private Integer role;
 
     public Integer getId() {
         return id;
@@ -77,12 +77,12 @@ public class AccountRequestVo {
         this.status = status;
     }
 
-    public List<Integer> getRoles() {
-        return roles;
+    public Integer getRole() {
+        return role;
     }
 
-    public void setRoles(List<Integer> roles) {
-        this.roles = roles;
+    public void setRole(Integer role) {
+        this.role = role;
     }
 
     public Date getVipStartDate() {

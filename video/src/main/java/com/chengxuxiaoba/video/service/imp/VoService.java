@@ -82,13 +82,8 @@ public class VoService implements IVoService {
             return relationship.getAccountId().equals(account.getId());
         }).collect(Collectors.toList());
 
-        userResponseVo.setRoles(new ArrayList<>());
-
-        if (ListUtil.isNullOrEmpty(accountRoleRelationShipList))
-            return userResponseVo;
-
-        for (AccountRoleRelationShip relationship : accountRoleRelationShipList) {
-            userResponseVo.getRoles().add(relationship.getRoleId().toString());
+        if (!ListUtil.isNullOrEmpty(accountRoleRelationShipList)) {
+            userResponseVo.setRole(accountRoleRelationShipList.get(0).getRoleId().toString());
         }
 
         return userResponseVo;
@@ -563,12 +558,10 @@ public class VoService implements IVoService {
 
         List<Role> morePriorityRoleList = roleService.getMorePriorityRoleList(role);
 
-        List<RoleResponseVo> morePriorityRoleResponseVoList=null;
-        if(!ListUtil.isNullOrEmpty(morePriorityRoleList))
-        {
-            morePriorityRoleResponseVoList=new ArrayList<>();
-            for(Role roleItem : morePriorityRoleList)
-            {
+        List<RoleResponseVo> morePriorityRoleResponseVoList = null;
+        if (!ListUtil.isNullOrEmpty(morePriorityRoleList)) {
+            morePriorityRoleResponseVoList = new ArrayList<>();
+            for (Role roleItem : morePriorityRoleList) {
                 morePriorityRoleResponseVoList.add(convertToRoleResponseVo(roleItem));
             }
         }
@@ -582,17 +575,16 @@ public class VoService implements IVoService {
     }
 
     @Override
-    public RolePaymentResponseVo convertToRolePaymentResponseVo(RolePayment rolePayment)
-    {
-        if(rolePayment ==null)
+    public RolePaymentResponseVo convertToRolePaymentResponseVo(RolePayment rolePayment) {
+        if (rolePayment == null)
             return null;
 
         RolePaymentResponseVo rolePaymentResponseVo = new RolePaymentResponseVo();
         BeanUtils.copyProperties(rolePayment, rolePaymentResponseVo);
 
-        RolePaymentTypeEnum rolePaymentTypeEnum=RolePaymentTypeEnum.getEnum(rolePayment.getName());
-        Date startDate=new Date();
-        Date endDate=roleService.generateEndDateForRolePayment(rolePaymentTypeEnum);
+        RolePaymentTypeEnum rolePaymentTypeEnum = RolePaymentTypeEnum.getEnum(rolePayment.getName());
+        Date startDate = new Date();
+        Date endDate = roleService.generateEndDateForRolePayment(rolePaymentTypeEnum);
         rolePaymentResponseVo.setStartDate(startDate);
         rolePaymentResponseVo.setEndDate(endDate);
 
@@ -600,15 +592,13 @@ public class VoService implements IVoService {
     }
 
     @Override
-    public List<RolePaymentResponseVo> convertToRolePaymentResponseVo(List<RolePayment> rolePaymentList)
-    {
-        if(ListUtil.isNullOrEmpty(rolePaymentList))
+    public List<RolePaymentResponseVo> convertToRolePaymentResponseVo(List<RolePayment> rolePaymentList) {
+        if (ListUtil.isNullOrEmpty(rolePaymentList))
             return null;
 
-        List<RolePaymentResponseVo> _rolePaymentResponseVoList=new ArrayList<>();
+        List<RolePaymentResponseVo> _rolePaymentResponseVoList = new ArrayList<>();
         rolePaymentList.forEach(rolePayment -> {
-            if(rolePayment !=null)
-            {
+            if (rolePayment != null) {
                 _rolePaymentResponseVoList.add(convertToRolePaymentResponseVo(rolePayment));
             }
         });

@@ -15,7 +15,7 @@ public class UserResponseVo {
     private String wechatHeaderImg;
     private Integer status;
     private String statusDesc;
-    private List<String> roles;
+    private String role;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date vipStartDate;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
@@ -97,12 +97,12 @@ public class UserResponseVo {
         this.createDateTime = createDateTime;
     }
 
-    public List<String> getRoles() {
-        return roles;
+    public String getRole() {
+        return role;
     }
 
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public Date getVipStartDate() {

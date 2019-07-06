@@ -10,7 +10,6 @@ import com.chengxuxiaoba.video.service.IValidationService;
 import com.chengxuxiaoba.video.util.DateUtil;
 import com.chengxuxiaoba.video.util.RegexUtil;
 import com.chengxuxiaoba.video.util.StringUtil;
-import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
