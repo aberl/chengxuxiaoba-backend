@@ -4,7 +4,7 @@ public class VideoWatchRecordCourseModuleStatisticResponseVo {
     private Integer courseModuleId;
     private Integer videoStatisticCount;
     private String courseModuleName;
-    private Integer totaCcourseModuleVideoCount;
+    private Integer totalcourseModuleVideoCount;
 
     public Integer getCourseModuleId() {
         return courseModuleId;
@@ -30,11 +30,11 @@ public class VideoWatchRecordCourseModuleStatisticResponseVo {
         this.courseModuleName = courseModuleName;
     }
 
-    public Integer getTotaCcourseModuleVideoCount() {
-        return totaCcourseModuleVideoCount;
+    public Integer getTotalcourseModuleVideoCount() {
+        return totalcourseModuleVideoCount;
     }
 
-    public void setTotaCcourseModuleVideoCount(Integer totaCcourseModuleVideoCount) {
-        this.totaCcourseModuleVideoCount = totaCcourseModuleVideoCount;
+    public void setTotalcourseModuleVideoCount(Integer totaCcourseModuleVideoCount) {
+        this.totalcourseModuleVideoCount = totaCcourseModuleVideoCount;
     }
 }

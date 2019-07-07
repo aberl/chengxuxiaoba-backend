@@ -613,7 +613,7 @@ public class VoService implements IVoService {
         BeanUtils.copyProperties(videoWatchRecordCourseModuleStatistic, responseVo);
 
         responseVo.setCourseModuleName(courseModuleName);
-        responseVo.setTotaCcourseModuleVideoCount(totalCourseModuleVideoCount);
+        responseVo.setTotalcourseModuleVideoCount(totalCourseModuleVideoCount);
 
         return responseVo;
     }
@@ -642,7 +642,7 @@ public class VoService implements IVoService {
         if(!ListUtil.isNullOrEmpty(courseModuleList))
         {
             courseModuleList.forEach(module->{
-                courseModuleNameMap.put(module.getCourseId(),module.getName());
+                courseModuleNameMap.put(module.getId(),module.getName());
             });
         }
 
