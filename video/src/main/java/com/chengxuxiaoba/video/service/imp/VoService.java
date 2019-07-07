@@ -5,13 +5,11 @@ import com.chengxuxiaoba.video.constant.RolePaymentTypeEnum;
 import com.chengxuxiaoba.video.model.Request.VO.*;
 import com.chengxuxiaoba.video.model.Response.VO.*;
 import com.chengxuxiaoba.video.model.po.*;
+import com.chengxuxiaoba.video.service.ICourseService;
 import com.chengxuxiaoba.video.service.IIssueService;
 import com.chengxuxiaoba.video.service.IRoleService;
 import com.chengxuxiaoba.video.service.IVoService;
 import com.chengxuxiaoba.video.util.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,8 +30,12 @@ public class VoService implements IVoService {
 
     @Autowired
     private IIssueService issueService;
+
     @Autowired
     private IRoleService roleService;
+
+    @Autowired
+    private ICourseService courseService;
 
     @Override
     public Account convertToUser(AccountRequestVo accountRequestVo) {
@@ -603,5 +605,66 @@ public class VoService implements IVoService {
             }
         });
         return _rolePaymentResponseVoList;
+    }
+
+    @Override
+    public VideoWatchRecordCourseModuleStatisticResponseVo convertToVideoWatchRecordCourseModuleStatisticResponseVo(VideoWatchRecordCourseModuleStatistic videoWatchRecordCourseModuleStatistic, String courseModuleName, Integer totalCourseModuleVideoCount) {
+        VideoWatchRecordCourseModuleStatisticResponseVo responseVo=new VideoWatchRecordCourseModuleStatisticResponseVo();
+        BeanUtils.copyProperties(videoWatchRecordCourseModuleStatistic, responseVo);
+
+        responseVo.setCourseModuleName(courseModuleName);
+        responseVo.setTotaCcourseModuleVideoCount(totalCourseModuleVideoCount);
+
+        return responseVo;
+    }
+
+    @Override
+    public List<VideoWatchRecordCourseModuleStatisticResponseVo> convertToVideoWatchRecordCourseModuleStatisticResponseVo(List<VideoWatchRecordCourseModuleStatistic> videoWatchRecordCourseModuleStatisticList) {
+        if(ListUtil.isNullOrEmpty(videoWatchRecordCourseModuleStatisticList))
+            return null;
+
+        List<Integer> courseModuleIdList=new ArrayList<>();
+        List<Integer> videoIdList=new ArrayList<>();
+
+        videoWatchRecordCourseModuleStatisticList.forEach(statistic ->{
+            if(statistic.getCourseModuleId() != null)
+                courseModuleIdList.add(statistic.getCourseModuleId());
+        });
+
+        List<CourseModule> courseModuleList=  courseService.getCourseModuleList(courseModuleIdList);
+
+        List<VideoSummary> videoSummaryList = videoService.getVideoSummary(courseModuleIdList);
+
+        Map<Integer, String> courseModuleNameMap=new HashMap<>();
+
+        Map<Integer, Integer> courseModuleVideoCountMap=new HashMap<>();
+
+        if(!ListUtil.isNullOrEmpty(courseModuleList))
+        {
+            courseModuleList.forEach(module->{
+                courseModuleNameMap.put(module.getCourseId(),module.getName());
+            });
+        }
+
+        if(!ListUtil.isNullOrEmpty(videoSummaryList))
+        {
+            videoSummaryList.forEach(summary->{
+                courseModuleVideoCountMap.put(summary.getCourseModuleId(),summary.getVideoCount());
+            });
+        }
+
+        List<VideoWatchRecordCourseModuleStatisticResponseVo> responseVoList=new ArrayList<>();
+
+        videoWatchRecordCourseModuleStatisticList.forEach(statistic->{
+            VideoWatchRecordCourseModuleStatisticResponseVo    responseVo=new VideoWatchRecordCourseModuleStatisticResponseVo();
+            String courseModuleName=courseModuleNameMap.get(statistic.getCourseModuleId());
+            Integer totalVideoCount=courseModuleVideoCountMap.get(statistic.getCourseModuleId());
+
+            responseVo= convertToVideoWatchRecordCourseModuleStatisticResponseVo(statistic,courseModuleName,totalVideoCount);
+
+            responseVoList.add(responseVo);
+        });
+
+        return responseVoList;
     }
 }

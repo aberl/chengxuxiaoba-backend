@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-    <mapper namespace="com.chengxuxiaoba.video.mapper.VideoMapper">
-        <insert id="insert" parameterType="com.chengxuxiaoba.video.model.po.Video">
-            <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
-                SELECT LAST_INSERT_ID()
-            </selectKey>
-            INSERT INTO Video(courseModuleId, file, name,attachments, duration, description, images, status)
-            VALUES(#{courseModuleId},#{file},#{name},#{attachments}, #{duration}, #{description}, #{images},#{status})
-        </insert>
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chengxuxiaoba.video.mapper.VideoMapper">
+    <insert id="insert" parameterType="com.chengxuxiaoba.video.model.po.Video">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO Video(courseModuleId, file, name,attachments, duration, description, images, status)
+        VALUES(#{courseModuleId},#{file},#{name},#{attachments}, #{duration}, #{description}, #{images},#{status})
+    </insert>
 
-    <select id="getListWithPage" parameterType="com.chengxuxiaoba.video.model.query.VideoQuery" resultType="com.chengxuxiaoba.video.model.po.Video">
+    <select id="getListWithPage" parameterType="com.chengxuxiaoba.video.model.query.VideoQuery"
+            resultType="com.chengxuxiaoba.video.model.po.Video">
         SELECT * from Video
         where courseModuleId=#{courseModuleId}
     </select>
@@ -31,9 +32,18 @@
         where courseModuleId = #{courseModuleId} and name=#{name} limit 1
     </select>
 
-    <select id="getVideoSummary" parameterType="int" resultType="com.chengxuxiaoba.video.model.po.VideoSummary">
+    <select id="getVideoSummary" parameterType="java.util.List" resultType="com.chengxuxiaoba.video.model.po.VideoSummary">
         SELECT courseModuleId,count(1) as videoCount,sum(viewCount) as totalViewCount,sum(praiseCount) as totalPraiseCount from Video
-        where courseModuleId = #{courseModuleId}
+        <where>
+            <if test="courseModuleIdList !=null and courseModuleIdList.size() != 0">
+                courseModuleId IN
+                <foreach collection="courseModuleIdList" index="index" item="courseModuleId" open="("
+                         separator="," close=")">
+                    #{courseModuleId}
+                </foreach>
+            </if>
+        </where>
+        group by courseModuleId
     </select>
 
     <update id="updateVideo">
@@ -52,4 +62,40 @@
         </trim>
         WHERE id=#{id}
     </update>
+
+    <insert id="insertWatchRecord" parameterType="com.chengxuxiaoba.video.model.po.VideoWatchRecord">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO videoWatchRecord(courseModuleId, videoId, accountId)
+        VALUES(#{courseModuleId},#{videoId},#{accountId})
+    </insert>
+
+    <update id="updateWatchRecordTime">
+        UPDATE videoWatchRecord
+        SET lastWatchTime = now()
+        WHERE accountId=#{accountId} and videoId=#{videoId}
+    </update>
+
+    <select id="getVideoWatchRecord" resultType="com.chengxuxiaoba.video.model.po.VideoWatchRecord">
+        SELECT * from videoWatchRecord
+        WHERE accountId=#{accountId} and videoId=#{videoId}
+    </select>
+
+    <select id="getVideoWatchRecordList" resultType="com.chengxuxiaoba.video.model.po.VideoWatchRecord">
+        SELECT * from videoWatchRecord
+        WHERE accountId=#{accountId} and courseModuleId=#{courseModuleId}
+    </select>
+
+    <select id="getVideoWatchRecordListByAccountId" resultType="com.chengxuxiaoba.video.model.po.VideoWatchRecord">
+        SELECT * from videoWatchRecord
+        WHERE accountId=#{accountId}
+    </select>
+
+    <select id="getVideoWatchRecordCourseModuleStatistic"
+            resultType="com.chengxuxiaoba.video.model.po.VideoWatchRecordCourseModuleStatistic">
+        SELECT courseModuleId, count(1) videoStatisticCount from videoWatchRecord
+        WHERE accountId=#{accountId}
+        group by courseModuleId
+    </select>
 </mapper>

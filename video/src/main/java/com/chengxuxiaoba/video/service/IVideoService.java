@@ -5,6 +5,8 @@ import com.chengxuxiaoba.video.model.PageInfo;
 import com.chengxuxiaoba.video.model.PageResult;
 import com.chengxuxiaoba.video.model.po.Video;
 import com.chengxuxiaoba.video.model.po.VideoSummary;
+import com.chengxuxiaoba.video.model.po.VideoWatchRecord;
+import com.chengxuxiaoba.video.model.po.VideoWatchRecordCourseModuleStatistic;
 import com.github.pagehelper.Page;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,4 +34,14 @@ public interface IVideoService {
     Boolean uploadVideo(Video video);
 
     VideoSummary getVideoSummary(Integer courseModuleId);
+
+    List<VideoSummary> getVideoSummary(List<Integer> courseModuleIdList);
+
+    Boolean recordVideoWatching(Integer accountId, Integer videoId);
+
+    Boolean recordVideoWatching(Integer accountId, Integer courseModuleId, Integer videoId);
+
+    List<VideoWatchRecord> getVideoWatchRecordList(Integer accountId,Integer courseModuleId);
+
+    List<VideoWatchRecordCourseModuleStatistic> getVideoWatchRecordCourseModuleStatistic(Integer accountId);
 }

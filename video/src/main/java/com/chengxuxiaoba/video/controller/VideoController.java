@@ -4,7 +4,9 @@ import com.chengxuxiaoba.video.handler.Handler;
 import com.chengxuxiaoba.video.model.*;
 import com.chengxuxiaoba.video.model.Request.VO.VideoRequestVo;
 import com.chengxuxiaoba.video.model.Response.VO.VideoResponseVo;
+import com.chengxuxiaoba.video.model.Response.VO.VideoWatchRecordCourseModuleStatisticResponseVo;
 import com.chengxuxiaoba.video.model.po.Video;
+import com.chengxuxiaoba.video.model.po.VideoWatchRecordCourseModuleStatistic;
 import com.chengxuxiaoba.video.service.IVideoService;
 import com.chengxuxiaoba.video.service.IVoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +42,18 @@ public class VideoController extends BaseController {
 
     @PostMapping("/videos/record")
     public Result<Boolean> watchVideo(@RequestBody VideoRequestVo requestBody) throws IOException {
+        if(requestBody.getId() == null || requestBody.getId() ==0)
+            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.ParameterError);
+
+        if(requestBody.getWatchAccountId() == null || requestBody.getWatchAccountId() ==0)
+            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.ParameterError);
+
         Video video = videoService.getSingle(requestBody.getId());
         Integer viewCount = video.getViewCount() == null ? 0 : video.getViewCount();
 
         video.setViewCount(viewCount + 1);
+
+        videoService.recordVideoWatching(requestBody.getWatchAccountId(), video.getCourseModuleId(),requestBody.getId());
 
         Boolean flag = videoService.uploadVideo(video);
 
@@ -94,5 +104,15 @@ public class VideoController extends BaseController {
         PageResult<VideoResponseVo> result = new PageResult<VideoResponseVo>(pageData.getCurrentNum(), pageData.getTotalCount(), resultList);
 
         return new Result<PageResult<VideoResponseVo>>(ResultCode.Success, result, ResultMessage.Success);
+    }
+
+    @GetMapping("/videos/recordstatistic/{accountid}")
+    public Result<List<VideoWatchRecordCourseModuleStatisticResponseVo>> getWatchingRecordStatistic(@PathVariable("accountid") Integer accountid) {
+
+        List<VideoWatchRecordCourseModuleStatistic>  recordStatisticList = videoService.getVideoWatchRecordCourseModuleStatistic(accountid);
+
+        List<VideoWatchRecordCourseModuleStatisticResponseVo> responseVoResult=voService.convertToVideoWatchRecordCourseModuleStatisticResponseVo(recordStatisticList);
+
+        return new Result<List<VideoWatchRecordCourseModuleStatisticResponseVo>>(ResultCode.Success, responseVoResult, ResultMessage.Success);
     }
 }

@@ -69,4 +69,17 @@
     <select id="getCourseModule" parameterType="int" resultType="com.chengxuxiaoba.video.model.po.CourseModule">
         SELECT * from CourseModule where id=#{courseModuleId} limit 1
     </select>
+
+    <select id="getCourseModuleList" parameterType="java.util.List" resultType="com.chengxuxiaoba.video.model.po.CourseModule">
+        SELECT * from CourseModule
+        <where>
+            <if test="courseModuleIdList !=null and courseModuleIdList.size() != 0">
+                id IN
+                <foreach collection="courseModuleIdList" index="index" item="courseModuleId" open="("
+                         separator="," close=")">
+                    #{courseModuleId}
+                </foreach>
+            </if>
+        </where>
+    </select>
 </mapper>

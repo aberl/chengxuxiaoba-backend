@@ -24,4 +24,6 @@ public interface CourseMapper {
     List<CourseModule> getAllCourseModuleList(@Param("courseId") Integer courseId);
 
     CourseModule getCourseModule(@Param("courseModuleId") Integer courseModuleId);
+
+    List<CourseModule> getCourseModuleList(@Param("courseModuleIdList")List<Integer> courseModuleIdList);
 }

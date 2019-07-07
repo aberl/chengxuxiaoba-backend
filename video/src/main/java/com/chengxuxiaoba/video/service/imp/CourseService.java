@@ -78,6 +78,14 @@ public class CourseService implements ICourseService {
     }
 
     @Override
+    public List<CourseModule> getCourseModuleList(List<Integer> courseModuleIdList) {
+        if(ListUtil.isNullOrEmpty(courseModuleIdList))
+            return null;
+
+        return courseMapper.getCourseModuleList(courseModuleIdList);
+    }
+
+    @Override
     public List<CourseModule> getAllCourseModuleList(Integer courseId) {
         return courseMapper.getAllCourseModuleList(courseId);
     }

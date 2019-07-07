@@ -8,10 +8,13 @@ import com.chengxuxiaoba.video.model.PageResult;
 import com.chengxuxiaoba.video.model.ResultMessage;
 import com.chengxuxiaoba.video.model.po.Video;
 import com.chengxuxiaoba.video.model.po.VideoSummary;
+import com.chengxuxiaoba.video.model.po.VideoWatchRecord;
+import com.chengxuxiaoba.video.model.po.VideoWatchRecordCourseModuleStatistic;
 import com.chengxuxiaoba.video.model.query.VideoQuery;
 import com.chengxuxiaoba.video.service.IBaseService;
 import com.chengxuxiaoba.video.service.IVideoService;
 import com.chengxuxiaoba.video.util.FileUtil;
+import com.chengxuxiaoba.video.util.ListUtil;
 import com.chengxuxiaoba.video.util.StringUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -21,11 +24,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Service
-public class VideoService  extends IBaseService<Video> implements IVideoService {
+public class VideoService extends IBaseService<Video> implements IVideoService {
 
     @Value("${video.savepath}")
     private String videoUploadPath;
@@ -47,14 +51,14 @@ public class VideoService  extends IBaseService<Video> implements IVideoService 
 
     @Override
     public Video getSingle(Integer id) {
-        if(id == null)
-            return  null;
+        if (id == null)
+            return null;
         return videoMapper.getVideo(id);
     }
 
     @Override
     public Video getSingle(Integer courseModuleId, String name) {
-        if(courseModuleId == null || StringUtil.isNullOrEmpty(name))
+        if (courseModuleId == null || StringUtil.isNullOrEmpty(name))
             return null;
 
         return videoMapper.getVideoByVideoName(courseModuleId, name);
@@ -79,23 +83,73 @@ public class VideoService  extends IBaseService<Video> implements IVideoService 
         query.setCourseModuleId(courseModuleId);
         query.setPageInfo(pageInfo);
 
-        PageResult<Video> pageResult =  super.getListByQuery(videoMapper, query);
+        PageResult<Video> pageResult = super.getListByQuery(videoMapper, query);
 
         return pageResult;
     }
 
     @Override
-    public Boolean uploadVideo(Video video)  {
-        Integer primaryKey= videoMapper.updateVideo(video);
-        return primaryKey>0;
+    public Boolean uploadVideo(Video video) {
+        Integer primaryKey = videoMapper.updateVideo(video);
+        return primaryKey > 0;
     }
 
     @Override
-    public VideoSummary getVideoSummary(Integer courseModuleId)
-    {
-        VideoSummary videoSummary=videoMapper.getVideoSummary(courseModuleId);
+    public VideoSummary getVideoSummary(Integer courseModuleId) {
+        List<VideoSummary> videoSummaryList = getVideoSummary(new ArrayList<>(courseModuleId));
 
-        return videoSummary;
+        return ListUtil.isNullOrEmpty(videoSummaryList)?null:videoSummaryList.get(0);
+    }
+    @Override
+    public List<VideoSummary> getVideoSummary(List<Integer> courseModuleIdList) {
+        if(ListUtil.isNullOrEmpty(courseModuleIdList))
+            return null;
+
+        List<VideoSummary> videoSummaryList = videoMapper.getVideoSummary(courseModuleIdList);
+
+        return videoSummaryList;
+    }
+
+    @Override
+    public Boolean recordVideoWatching(Integer accountId, Integer videoId) {
+        VideoWatchRecord existVideoWatchRecord = videoMapper.getVideoWatchRecord(accountId, videoId);
+        if (existVideoWatchRecord != null)
+            videoMapper.updateWatchRecordTime(accountId, videoId);
+        else {
+            Video video = getSingle(videoId);
+            if (video == null)
+                return false;
+
+            return recordVideoWatching(accountId,video.getCourseModuleId(),videoId);
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean recordVideoWatching(Integer accountId,Integer courseModuleId, Integer videoId) {
+        VideoWatchRecord existVideoWatchRecord = videoMapper.getVideoWatchRecord(accountId, videoId);
+        if (existVideoWatchRecord != null)
+            videoMapper.updateWatchRecordTime(accountId, videoId);
+        else {
+            existVideoWatchRecord = new VideoWatchRecord();
+            existVideoWatchRecord.setAccountId(accountId);
+            existVideoWatchRecord.setVideoId(videoId);
+            existVideoWatchRecord.setCourseModuleId(courseModuleId);
+            Integer _primaryKey = videoMapper.insertWatchRecord(existVideoWatchRecord);
+
+            return _primaryKey > 0;
+        }
+        return false;
+    }
+
+    @Override
+    public List<VideoWatchRecord> getVideoWatchRecordList(Integer accountId,Integer courseModuleId) {
+        return videoMapper.getVideoWatchRecordList(accountId,courseModuleId);
+    }
+
+    @Override
+    public List<VideoWatchRecordCourseModuleStatistic> getVideoWatchRecordCourseModuleStatistic(Integer accountId) {
+        return videoMapper.getVideoWatchRecordCourseModuleStatistic(accountId);
     }
 
 }
