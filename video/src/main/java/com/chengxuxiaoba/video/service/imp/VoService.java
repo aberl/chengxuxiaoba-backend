@@ -232,13 +232,22 @@ public class VoService implements IVoService {
     }
 
     @Override
-    public VideoResponseVo convertToVideoResponseVo(Video video) {
+    public VideoResponseVo convertToVideoResponseVo(Video video)
+    {
+        return convertToVideoResponseVo(video, null);
+    }
+
+    @Override
+    public VideoResponseVo convertToVideoResponseVo(Video video, Boolean isLoadExtentProperties) {
         if (video == null)
             return null;
 
         VideoResponseVo videoResponseVo = new VideoResponseVo();
 
         BeanUtils.copyProperties(video, videoResponseVo);
+
+        if(isLoadExtentProperties != null && !isLoadExtentProperties)
+            return videoResponseVo;
 
         videoResponseVo.setStatusDesc(CommonStatus.getEnum(videoResponseVo.getStatus()).toString());
 
@@ -268,13 +277,19 @@ public class VoService implements IVoService {
     }
 
     @Override
-    public List<VideoResponseVo> convertToVideoResponseVo(List<Video> videoList) {
+    public List<VideoResponseVo> convertToVideoResponseVo(List<Video> videoList)
+    {
+        return convertToVideoResponseVo(videoList, null);
+    }
+
+    @Override
+    public List<VideoResponseVo> convertToVideoResponseVo(List<Video> videoList, Boolean isLoadExtentProperties) {
         if (ListUtil.isNullOrEmpty(videoList))
             return null;
         List<VideoResponseVo> retList = new ArrayList<>();
         VideoResponseVo videoResponseVo;
         for (Video video : videoList) {
-            videoResponseVo = convertToVideoResponseVo(video);
+            videoResponseVo = convertToVideoResponseVo(video, isLoadExtentProperties);
             if (videoResponseVo != null)
                 retList.add(videoResponseVo);
         }

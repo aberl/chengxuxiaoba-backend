@@ -32,8 +32,10 @@
         where courseModuleId = #{courseModuleId} and name=#{name} limit 1
     </select>
 
-    <select id="getVideoSummary" parameterType="java.util.List" resultType="com.chengxuxiaoba.video.model.po.VideoSummary">
-        SELECT courseModuleId,count(1) as videoCount,sum(viewCount) as totalViewCount,sum(praiseCount) as totalPraiseCount from Video
+    <select id="getVideoSummary" parameterType="java.util.List"
+            resultType="com.chengxuxiaoba.video.model.po.VideoSummary">
+        SELECT courseModuleId,count(1) as videoCount,sum(viewCount) as totalViewCount,sum(praiseCount) as
+        totalPraiseCount from Video
         <where>
             <if test="courseModuleIdList !=null and courseModuleIdList.size() != 0">
                 courseModuleId IN
@@ -97,5 +99,11 @@
         SELECT courseModuleId, count(1) videoStatisticCount from videoWatchRecord
         WHERE accountId=#{accountId}
         group by courseModuleId
+    </select>
+
+    <select id="getVideoListHasBeenWatch" resultType="com.chengxuxiaoba.video.model.po.Video">
+        SELECT video.* from video
+        inner JOIN videoWatchRecord on video.id=videoWatchRecord.videoId
+        WHERE accountId=#{accountId} and videoWatchRecord.courseModuleId=#{courseModuleId}
     </select>
 </mapper>

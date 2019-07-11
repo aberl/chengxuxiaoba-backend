@@ -31,7 +31,11 @@ public interface IVoService {
 
     VideoResponseVo convertToVideoResponseVo(Video video);
 
+    VideoResponseVo convertToVideoResponseVo(Video video, Boolean isLoadExtentProperties);
+
     List<VideoResponseVo> convertToVideoResponseVo(List<Video> videoList);
+
+    List<VideoResponseVo> convertToVideoResponseVo(List<Video> videoList, Boolean isLoadExtentProperties);
 
     Evaluate convertToEvalueate(EvaluateRequestVo evaluateRequestVo);
 

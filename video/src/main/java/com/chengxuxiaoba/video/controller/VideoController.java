@@ -6,9 +6,11 @@ import com.chengxuxiaoba.video.model.Request.VO.VideoRequestVo;
 import com.chengxuxiaoba.video.model.Response.VO.VideoResponseVo;
 import com.chengxuxiaoba.video.model.Response.VO.VideoWatchRecordCourseModuleStatisticResponseVo;
 import com.chengxuxiaoba.video.model.po.Video;
+import com.chengxuxiaoba.video.model.po.VideoWatchRecord;
 import com.chengxuxiaoba.video.model.po.VideoWatchRecordCourseModuleStatistic;
 import com.chengxuxiaoba.video.service.IVideoService;
 import com.chengxuxiaoba.video.service.IVoService;
+import com.chengxuxiaoba.video.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,10 +44,10 @@ public class VideoController extends BaseController {
 
     @PostMapping("/videos/record")
     public Result<Boolean> watchVideo(@RequestBody VideoRequestVo requestBody) throws IOException {
-        if(requestBody.getId() == null || requestBody.getId() ==0)
+        if (requestBody.getId() == null || requestBody.getId() == 0)
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.ParameterError);
 
-        if(requestBody.getWatchAccountId() == null || requestBody.getWatchAccountId() ==0)
+        if (requestBody.getWatchAccountId() == null || requestBody.getWatchAccountId() == 0)
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.ParameterError);
 
         Video video = videoService.getSingle(requestBody.getId());
@@ -53,7 +55,7 @@ public class VideoController extends BaseController {
 
         video.setViewCount(viewCount + 1);
 
-        videoService.recordVideoWatching(requestBody.getWatchAccountId(), video.getCourseModuleId(),requestBody.getId());
+        videoService.recordVideoWatching(requestBody.getWatchAccountId(), video.getCourseModuleId(), requestBody.getId());
 
         Boolean flag = videoService.uploadVideo(video);
 
@@ -109,10 +111,23 @@ public class VideoController extends BaseController {
     @GetMapping("/videos/recordstatistic/{accountid}")
     public Result<List<VideoWatchRecordCourseModuleStatisticResponseVo>> getWatchingRecordStatistic(@PathVariable("accountid") Integer accountid) {
 
-        List<VideoWatchRecordCourseModuleStatistic>  recordStatisticList = videoService.getVideoWatchRecordCourseModuleStatistic(accountid);
+        List<VideoWatchRecordCourseModuleStatistic> recordStatisticList = videoService.getVideoWatchRecordCourseModuleStatistic(accountid);
 
-        List<VideoWatchRecordCourseModuleStatisticResponseVo> responseVoResult=voService.convertToVideoWatchRecordCourseModuleStatisticResponseVo(recordStatisticList);
+        List<VideoWatchRecordCourseModuleStatisticResponseVo> responseVoResult = voService.convertToVideoWatchRecordCourseModuleStatisticResponseVo(recordStatisticList);
 
         return new Result<List<VideoWatchRecordCourseModuleStatisticResponseVo>>(ResultCode.Success, responseVoResult, ResultMessage.Success);
+    }
+
+    @GetMapping("/videos/record/{accountid}/{coursemoduleid}")
+    public Result<List<VideoResponseVo>> getWatchingRecordList(@PathVariable("accountid") Integer accountid, @PathVariable("coursemoduleid") Integer coursemoduleid) {
+
+        List<Video> recordList = videoService.getVideoListHasBeenWatch(accountid, coursemoduleid);
+
+        if (ListUtil.isNullOrEmpty(recordList))
+            return new Result<List<VideoResponseVo>>(ResultCode.Success, null, ResultMessage.Success);
+
+        List<VideoResponseVo> videoResponseVoList = voService.convertToVideoResponseVo(recordList, false);
+
+        return new Result<List<VideoResponseVo>>(ResultCode.Success, videoResponseVoList, ResultMessage.Success);
     }
 }

@@ -1,11 +1,8 @@
 package com.chengxuxiaoba.video.service.imp;
 
-import com.chengxuxiaoba.video.handler.FileHandler;
 import com.chengxuxiaoba.video.mapper.VideoMapper;
-import com.chengxuxiaoba.video.model.KeyValuePair;
 import com.chengxuxiaoba.video.model.PageInfo;
 import com.chengxuxiaoba.video.model.PageResult;
-import com.chengxuxiaoba.video.model.ResultMessage;
 import com.chengxuxiaoba.video.model.po.Video;
 import com.chengxuxiaoba.video.model.po.VideoSummary;
 import com.chengxuxiaoba.video.model.po.VideoWatchRecord;
@@ -13,20 +10,14 @@ import com.chengxuxiaoba.video.model.po.VideoWatchRecordCourseModuleStatistic;
 import com.chengxuxiaoba.video.model.query.VideoQuery;
 import com.chengxuxiaoba.video.service.IBaseService;
 import com.chengxuxiaoba.video.service.IVideoService;
-import com.chengxuxiaoba.video.util.FileUtil;
 import com.chengxuxiaoba.video.util.ListUtil;
 import com.chengxuxiaoba.video.util.StringUtil;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class VideoService extends IBaseService<Video> implements IVideoService {
@@ -152,4 +143,9 @@ public class VideoService extends IBaseService<Video> implements IVideoService {
         return videoMapper.getVideoWatchRecordCourseModuleStatistic(accountId);
     }
 
+    @Override
+    public List<Video> getVideoListHasBeenWatch(Integer accountId,Integer courseModuleId)
+    {
+        return videoMapper.getVideoListHasBeenWatch(accountId,courseModuleId);
+    }
 }

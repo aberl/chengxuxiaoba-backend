@@ -44,4 +44,6 @@ public interface IVideoService {
     List<VideoWatchRecord> getVideoWatchRecordList(Integer accountId,Integer courseModuleId);
 
     List<VideoWatchRecordCourseModuleStatistic> getVideoWatchRecordCourseModuleStatistic(Integer accountId);
+
+    List<Video> getVideoListHasBeenWatch(Integer accountId,Integer courseModuleId);
 }

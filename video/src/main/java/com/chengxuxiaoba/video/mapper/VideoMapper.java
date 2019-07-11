@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-public interface VideoMapper extends  BaseMapper<Video>{
+public interface VideoMapper extends BaseMapper<Video> {
     Integer insert(Video video);
 
     List<Video> getVideoByCourseModuleId(Integer courseModuleId);
@@ -26,11 +26,13 @@ public interface VideoMapper extends  BaseMapper<Video>{
 
     Integer updateWatchRecordTime(Integer accountId, Integer videoId);
 
-    VideoWatchRecord getVideoWatchRecord(Integer accountId, Integer videoId);
+    VideoWatchRecord getVideoWatchRecord(@Param("accountId") Integer accountId, @Param("videoId") Integer videoId);
 
-    List<VideoWatchRecord> getVideoWatchRecordList(Integer accountId,Integer courseModuleId);
+    List<VideoWatchRecord> getVideoWatchRecordList(Integer accountId, Integer courseModuleId);
 
     List<VideoWatchRecord> getVideoWatchRecordListByAccountId(Integer accountId);
 
     List<VideoWatchRecordCourseModuleStatistic> getVideoWatchRecordCourseModuleStatistic(Integer accountId);
+
+    List<Video> getVideoListHasBeenWatch(@Param("accountId") Integer accountId, @Param("courseModuleId") Integer courseModuleId);
 }
