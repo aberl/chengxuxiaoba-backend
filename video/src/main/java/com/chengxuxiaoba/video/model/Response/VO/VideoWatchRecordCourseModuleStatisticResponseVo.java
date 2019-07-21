@@ -1,10 +1,19 @@
 package com.chengxuxiaoba.video.model.Response.VO;
 
 public class VideoWatchRecordCourseModuleStatisticResponseVo {
+    private String courseName;
     private Integer courseModuleId;
     private Integer videoStatisticCount;
     private String courseModuleName;
     private Integer totalcourseModuleVideoCount;
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
 
     public Integer getCourseModuleId() {
         return courseModuleId;

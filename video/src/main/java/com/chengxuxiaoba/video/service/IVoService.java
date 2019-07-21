@@ -76,7 +76,7 @@ public interface IVoService {
     List<RolePaymentResponseVo> convertToRolePaymentResponseVo(List<RolePayment> rolePaymentList);
 
     VideoWatchRecordCourseModuleStatisticResponseVo convertToVideoWatchRecordCourseModuleStatisticResponseVo(VideoWatchRecordCourseModuleStatistic videoWatchRecordCourseModuleStatistic
-    ,String courseModuleName, Integer totalCourseModuleVideoCount);
+    ,CourseModule courseModule, Integer totalCourseModuleVideoCount);
 
     List<VideoWatchRecordCourseModuleStatisticResponseVo> convertToVideoWatchRecordCourseModuleStatisticResponseVo(List<VideoWatchRecordCourseModuleStatistic> videoWatchRecordCourseModuleStatisticList);
 }

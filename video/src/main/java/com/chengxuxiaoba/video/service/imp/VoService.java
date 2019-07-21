@@ -630,13 +630,13 @@ public class VoService implements IVoService {
     }
 
     @Override
-    public VideoWatchRecordCourseModuleStatisticResponseVo convertToVideoWatchRecordCourseModuleStatisticResponseVo(VideoWatchRecordCourseModuleStatistic videoWatchRecordCourseModuleStatistic, String courseModuleName, Integer totalCourseModuleVideoCount) {
+    public VideoWatchRecordCourseModuleStatisticResponseVo convertToVideoWatchRecordCourseModuleStatisticResponseVo(VideoWatchRecordCourseModuleStatistic videoWatchRecordCourseModuleStatistic, CourseModule courseModule, Integer totalCourseModuleVideoCount) {
         VideoWatchRecordCourseModuleStatisticResponseVo responseVo=new VideoWatchRecordCourseModuleStatisticResponseVo();
         BeanUtils.copyProperties(videoWatchRecordCourseModuleStatistic, responseVo);
 
-        responseVo.setCourseModuleName(courseModuleName);
+        responseVo.setCourseModuleName(courseModule.getName());
         responseVo.setTotalcourseModuleVideoCount(totalCourseModuleVideoCount);
-
+        responseVo.setCourseName(courseModule.getCourseName());
         return responseVo;
     }
 
@@ -657,14 +657,14 @@ public class VoService implements IVoService {
 
         List<VideoSummary> videoSummaryList = videoService.getVideoSummary(courseModuleIdList);
 
-        Map<Integer, String> courseModuleNameMap=new HashMap<>();
+        Map<Integer, CourseModule> courseModuleMap=new HashMap<>();
 
         Map<Integer, Integer> courseModuleVideoCountMap=new HashMap<>();
 
         if(!ListUtil.isNullOrEmpty(courseModuleList))
         {
             courseModuleList.forEach(module->{
-                courseModuleNameMap.put(module.getId(),module.getName());
+                courseModuleMap.put(module.getId(),module);
             });
         }
 
@@ -679,10 +679,10 @@ public class VoService implements IVoService {
 
         videoWatchRecordCourseModuleStatisticList.forEach(statistic->{
             VideoWatchRecordCourseModuleStatisticResponseVo    responseVo=new VideoWatchRecordCourseModuleStatisticResponseVo();
-            String courseModuleName=courseModuleNameMap.get(statistic.getCourseModuleId());
+            CourseModule courseModule=courseModuleMap.get(statistic.getCourseModuleId());
             Integer totalVideoCount=courseModuleVideoCountMap.get(statistic.getCourseModuleId());
 
-            responseVo= convertToVideoWatchRecordCourseModuleStatisticResponseVo(statistic,courseModuleName,totalVideoCount);
+            responseVo= convertToVideoWatchRecordCourseModuleStatisticResponseVo(statistic,courseModule,totalVideoCount);
 
             responseVoList.add(responseVo);
         });
