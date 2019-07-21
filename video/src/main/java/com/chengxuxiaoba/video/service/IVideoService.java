@@ -8,6 +8,7 @@ import com.chengxuxiaoba.video.model.po.VideoSummary;
 import com.chengxuxiaoba.video.model.po.VideoWatchRecord;
 import com.chengxuxiaoba.video.model.po.VideoWatchRecordCourseModuleStatistic;
 import com.github.pagehelper.Page;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -46,4 +47,6 @@ public interface IVideoService {
     List<VideoWatchRecordCourseModuleStatistic> getVideoWatchRecordCourseModuleStatistic(Integer accountId);
 
     List<Video> getVideoListHasBeenWatch(Integer accountId,Integer courseModuleId);
+
+    List<Video> getVideoList(List<Integer> videoIdList);
 }

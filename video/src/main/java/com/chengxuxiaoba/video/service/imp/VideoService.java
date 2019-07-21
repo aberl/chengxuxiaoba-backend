@@ -148,4 +148,14 @@ public class VideoService extends IBaseService<Video> implements IVideoService {
     {
         return videoMapper.getVideoListHasBeenWatch(accountId,courseModuleId);
     }
+
+
+    @Override
+    public List<Video> getVideoList(List<Integer> videoIdList)
+    {
+        if(ListUtil.isNullOrEmpty(videoIdList))
+            return null;
+
+        return videoMapper.getVideoList(videoIdList);
+    }
 }

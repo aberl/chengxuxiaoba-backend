@@ -35,4 +35,7 @@ public interface VideoMapper extends BaseMapper<Video> {
     List<VideoWatchRecordCourseModuleStatistic> getVideoWatchRecordCourseModuleStatistic(Integer accountId);
 
     List<Video> getVideoListHasBeenWatch(@Param("accountId") Integer accountId, @Param("courseModuleId") Integer courseModuleId);
+
+
+    List<Video> getVideoList(@Param("videoIdList") List<Integer> videoIdList);
 }

@@ -374,19 +374,25 @@ public class VoService implements IVoService {
 
         List<IssueResponseVo> issueResponseVoList = new ArrayList<>();
         List<Integer> accountIdList = new ArrayList<>();
+        List<Integer> videoIdList = new ArrayList<>();
 
         List<Integer> issueIdList = new ArrayList<>();
 
         for (Issue issue : issueList) {
             accountIdList.add(issue.getQuestionerId());
             issueIdList.add(issue.getId());
+            videoIdList.add(issue.getVideoId());
         }
 
         List<Account> accountList = userService.getUserList(accountIdList);
-
+        List<Video> videoList=videoService.getVideoList(videoIdList);
         Map<Integer, Account> accountMap = new HashMap<>();
+        Map<Integer, String> videoMap = new HashMap<>();
         for (Account account : accountList)
             accountMap.put(account.getId(), account);
+
+        for (Video video : videoList)
+            videoMap.put(video.getId(), video.getName());
 
         List<Answer> answerList = issueService.getAnswerListByIssueIdList(issueIdList);
         Map<Integer, List<AnswerResponseVo>> answerResponseVoMap = new HashMap<>();
@@ -406,6 +412,7 @@ public class VoService implements IVoService {
         for (Issue issue : issueList) {
             issueResponseVo = convertIssueResponseVo(issue, accountMap.get(issue.getQuestionerId()));
             issueResponseVo.setAnswerResponseVoList(answerResponseVoMap.get(issue.getId()));
+            issueResponseVo.setVideoName(videoMap.get(issue.getVideoId()));
             issueResponseVoList.add(issueResponseVo);
         }
         return issueResponseVoList;

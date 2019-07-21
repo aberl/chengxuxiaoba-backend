@@ -106,4 +106,16 @@
         inner JOIN videoWatchRecord on video.id=videoWatchRecord.videoId
         WHERE accountId=#{accountId} and videoWatchRecord.courseModuleId=#{courseModuleId}
     </select>
+
+    <select id="getVideoList" parameterType="java.util.List"
+            resultType="com.chengxuxiaoba.video.model.po.Video">
+        SELECT * from Video
+        <where>
+                id IN
+                <foreach collection="videoIdList" index="index" item="videoId" open="("
+                         separator="," close=")">
+                    #{videoId}
+                </foreach>
+        </where>
+    </select>
 </mapper>

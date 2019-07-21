@@ -21,6 +21,8 @@ public class IssueResponseVo {
     private List<AnswerResponseVo> answerResponseVoList;
 
 
+    private String videoName;
+
     public Integer getId() {
         return id;
     }
@@ -107,5 +109,13 @@ public class IssueResponseVo {
 
     public void setStatusDesc(String statusDesc) {
         this.statusDesc = statusDesc;
+    }
+
+    public String getVideoName() {
+        return videoName;
+    }
+
+    public void setVideoName(String videoName) {
+        this.videoName = videoName;
     }
 }

@@ -17,6 +17,8 @@ public class FilePurpose {
     public final static String PAYMENT_QR_IMAGES="PAYMENT_IMAGES";
     public final static String PAYMENT_QR_SCANWAY_IMAGES="PAYMENT_QR_SCANWAY_IMAGES";
 
+    public final static String MATERIAL_DOWNLOAD="MATERIAL_DOWNLOAD";
+
     public static List<String> getAllPurposeList()
     {
         List<String> list=new ArrayList<>();
@@ -30,6 +32,7 @@ public class FilePurpose {
         list.add(VIDEO_ATTACHMENTS);
         list.add(PAYMENT_QR_IMAGES);
         list.add(PAYMENT_QR_SCANWAY_IMAGES);
+        list.add(MATERIAL_DOWNLOAD);
 
         return list;
     }
