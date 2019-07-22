@@ -232,8 +232,7 @@ public class VoService implements IVoService {
     }
 
     @Override
-    public VideoResponseVo convertToVideoResponseVo(Video video)
-    {
+    public VideoResponseVo convertToVideoResponseVo(Video video) {
         return convertToVideoResponseVo(video, null);
     }
 
@@ -246,7 +245,7 @@ public class VoService implements IVoService {
 
         BeanUtils.copyProperties(video, videoResponseVo);
 
-        if(isLoadExtentProperties != null && !isLoadExtentProperties)
+        if (isLoadExtentProperties != null && !isLoadExtentProperties)
             return videoResponseVo;
 
         videoResponseVo.setStatusDesc(CommonStatus.getEnum(videoResponseVo.getStatus()).toString());
@@ -277,8 +276,7 @@ public class VoService implements IVoService {
     }
 
     @Override
-    public List<VideoResponseVo> convertToVideoResponseVo(List<Video> videoList)
-    {
+    public List<VideoResponseVo> convertToVideoResponseVo(List<Video> videoList) {
         return convertToVideoResponseVo(videoList, null);
     }
 
@@ -385,7 +383,7 @@ public class VoService implements IVoService {
         }
 
         List<Account> accountList = userService.getUserList(accountIdList);
-        List<Video> videoList=videoService.getVideoList(videoIdList);
+        List<Video> videoList = videoService.getVideoList(videoIdList);
         Map<Integer, Account> accountMap = new HashMap<>();
         Map<Integer, String> videoMap = new HashMap<>();
         for (Account account : accountList)
@@ -631,7 +629,7 @@ public class VoService implements IVoService {
 
     @Override
     public VideoWatchRecordCourseModuleStatisticResponseVo convertToVideoWatchRecordCourseModuleStatisticResponseVo(VideoWatchRecordCourseModuleStatistic videoWatchRecordCourseModuleStatistic, CourseModule courseModule, Integer totalCourseModuleVideoCount) {
-        VideoWatchRecordCourseModuleStatisticResponseVo responseVo=new VideoWatchRecordCourseModuleStatisticResponseVo();
+        VideoWatchRecordCourseModuleStatisticResponseVo responseVo = new VideoWatchRecordCourseModuleStatisticResponseVo();
         BeanUtils.copyProperties(videoWatchRecordCourseModuleStatistic, responseVo);
 
         responseVo.setCourseModuleName(courseModule.getName());
@@ -642,51 +640,108 @@ public class VoService implements IVoService {
 
     @Override
     public List<VideoWatchRecordCourseModuleStatisticResponseVo> convertToVideoWatchRecordCourseModuleStatisticResponseVo(List<VideoWatchRecordCourseModuleStatistic> videoWatchRecordCourseModuleStatisticList) {
-        if(ListUtil.isNullOrEmpty(videoWatchRecordCourseModuleStatisticList))
+        if (ListUtil.isNullOrEmpty(videoWatchRecordCourseModuleStatisticList))
             return null;
 
-        List<Integer> courseModuleIdList=new ArrayList<>();
-        List<Integer> videoIdList=new ArrayList<>();
+        List<Integer> courseModuleIdList = new ArrayList<>();
+        List<Integer> videoIdList = new ArrayList<>();
 
-        videoWatchRecordCourseModuleStatisticList.forEach(statistic ->{
-            if(statistic.getCourseModuleId() != null)
+        videoWatchRecordCourseModuleStatisticList.forEach(statistic -> {
+            if (statistic.getCourseModuleId() != null)
                 courseModuleIdList.add(statistic.getCourseModuleId());
         });
 
-        List<CourseModule> courseModuleList=  courseService.getCourseModuleList(courseModuleIdList);
+        List<CourseModule> courseModuleList = courseService.getCourseModuleList(courseModuleIdList);
 
         List<VideoSummary> videoSummaryList = videoService.getVideoSummary(courseModuleIdList);
 
-        Map<Integer, CourseModule> courseModuleMap=new HashMap<>();
+        Map<Integer, CourseModule> courseModuleMap = new HashMap<>();
 
-        Map<Integer, Integer> courseModuleVideoCountMap=new HashMap<>();
+        Map<Integer, Integer> courseModuleVideoCountMap = new HashMap<>();
 
-        if(!ListUtil.isNullOrEmpty(courseModuleList))
-        {
-            courseModuleList.forEach(module->{
-                courseModuleMap.put(module.getId(),module);
+        if (!ListUtil.isNullOrEmpty(courseModuleList)) {
+            courseModuleList.forEach(module -> {
+                courseModuleMap.put(module.getId(), module);
             });
         }
 
-        if(!ListUtil.isNullOrEmpty(videoSummaryList))
-        {
-            videoSummaryList.forEach(summary->{
-                courseModuleVideoCountMap.put(summary.getCourseModuleId(),summary.getVideoCount());
+        if (!ListUtil.isNullOrEmpty(videoSummaryList)) {
+            videoSummaryList.forEach(summary -> {
+                courseModuleVideoCountMap.put(summary.getCourseModuleId(), summary.getVideoCount());
             });
         }
 
-        List<VideoWatchRecordCourseModuleStatisticResponseVo> responseVoList=new ArrayList<>();
+        List<VideoWatchRecordCourseModuleStatisticResponseVo> responseVoList = new ArrayList<>();
 
-        videoWatchRecordCourseModuleStatisticList.forEach(statistic->{
-            VideoWatchRecordCourseModuleStatisticResponseVo    responseVo=new VideoWatchRecordCourseModuleStatisticResponseVo();
-            CourseModule courseModule=courseModuleMap.get(statistic.getCourseModuleId());
-            Integer totalVideoCount=courseModuleVideoCountMap.get(statistic.getCourseModuleId());
+        videoWatchRecordCourseModuleStatisticList.forEach(statistic -> {
+            VideoWatchRecordCourseModuleStatisticResponseVo responseVo = new VideoWatchRecordCourseModuleStatisticResponseVo();
+            CourseModule courseModule = courseModuleMap.get(statistic.getCourseModuleId());
+            Integer totalVideoCount = courseModuleVideoCountMap.get(statistic.getCourseModuleId());
 
-            responseVo= convertToVideoWatchRecordCourseModuleStatisticResponseVo(statistic,courseModule,totalVideoCount);
+            responseVo = convertToVideoWatchRecordCourseModuleStatisticResponseVo(statistic, courseModule, totalVideoCount);
 
             responseVoList.add(responseVo);
         });
 
         return responseVoList;
+    }
+
+    @Override
+    public Material convertToMaterial(MaterialRequestVo materialRequestVo) {
+        Material material = new Material();
+
+        BeanUtils.copyProperties(materialRequestVo, material);
+
+        return material;
+    }
+
+    @Override
+    public MaterialResponseVo convertToMaterialResponseVo(Material material, UploadFile materialFile) {
+        if (material == null)
+            return null;
+
+        MaterialResponseVo materialResponseVo = new MaterialResponseVo();
+
+        BeanUtils.copyProperties(material, materialResponseVo);
+
+        materialResponseVo.setStatusDesc(CommonStatus.getEnum(material.getStatus()).toString());
+
+        if (materialFile == null)
+            materialFile = uploadFileService.getUploadFileByName(material.getName());
+
+        UploadFileResponseVo uploadFileResponseVo = convertToUploadFileResponseVo(materialFile);
+
+        if (uploadFileResponseVo != null)
+            materialResponseVo.setDownLoadUrl(uploadFileResponseVo.getUrl());
+
+        return materialResponseVo;
+    }
+
+    @Override
+    public List<MaterialResponseVo> convertToMaterialResponseVo(List<Material> materialList) {
+        if (ListUtil.isNullOrEmpty(materialList))
+            return null;
+        List<MaterialResponseVo> materialResponseVoList = new ArrayList<>();
+
+        List<String> materialNameList = new ArrayList<>();
+        for (Material material : materialList) {
+            materialNameList.add(material.getName());
+        }
+
+        List<UploadFile> uploadFileList = uploadFileService.getUploadFileByNameList(materialNameList);
+
+        Map<String, UploadFile> materialNameMap = new HashMap<>();
+
+        if (!ListUtil.isNullOrEmpty(uploadFileList)) {
+            for (UploadFile uploadFile : uploadFileList) {
+                materialNameMap.put(uploadFile.getName(), uploadFile);
+            }
+        }
+
+        for (Material material : materialList) {
+            materialResponseVoList.add(convertToMaterialResponseVo(material, materialNameMap.get(material.getName())));
+        }
+
+        return materialResponseVoList;
     }
 }

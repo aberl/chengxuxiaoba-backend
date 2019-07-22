@@ -79,4 +79,10 @@ public interface IVoService {
     ,CourseModule courseModule, Integer totalCourseModuleVideoCount);
 
     List<VideoWatchRecordCourseModuleStatisticResponseVo> convertToVideoWatchRecordCourseModuleStatisticResponseVo(List<VideoWatchRecordCourseModuleStatistic> videoWatchRecordCourseModuleStatisticList);
+
+    Material convertToMaterial(MaterialRequestVo materialRequestVo);
+
+    MaterialResponseVo convertToMaterialResponseVo(Material material, UploadFile materialFile);
+
+    List<MaterialResponseVo> convertToMaterialResponseVo(List<Material> materialList);
 }

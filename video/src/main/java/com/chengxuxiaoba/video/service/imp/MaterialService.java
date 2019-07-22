@@ -2,6 +2,7 @@ package com.chengxuxiaoba.video.service.imp;
 
 import com.chengxuxiaoba.video.constant.CommonStatus;
 import com.chengxuxiaoba.video.mapper.MaterialMapper;
+import com.chengxuxiaoba.video.model.Response.VO.MaterialResponseVo;
 import com.chengxuxiaoba.video.model.po.Material;
 import com.chengxuxiaoba.video.service.IMaterialService;
 import org.springframework.beans.factory.annotation.Autowired;
