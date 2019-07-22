@@ -66,7 +66,7 @@ public class MaterialController {
     }
 
     @GetMapping("/material/effective")
-    public Result<List<MaterialResponseVo>> getEffectiveMaterialList(@PathVariable("id") Integer id)
+    public Result<List<MaterialResponseVo>> getEffectiveMaterialList()
     {
         List<Material> materialList = materialService.getEffectiveMaterialList();
 
@@ -76,7 +76,7 @@ public class MaterialController {
     }
 
     @GetMapping("/material/all")
-    public Result<List<MaterialResponseVo>> getAllMaterialList(@PathVariable("id") Integer id)
+    public Result<List<MaterialResponseVo>> getAllMaterialList()
     {
         List<Material> materialList = materialService.getMaterialList();
 
