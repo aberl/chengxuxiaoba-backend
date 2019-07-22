@@ -23,7 +23,7 @@ public class MaterialController {
     private IVoService voService;
 
     @PostMapping("/material")
-    public Result<Boolean> createMaterial(MaterialRequestVo materialRequestVo) {
+    public Result<Boolean> createMaterial(@RequestBody MaterialRequestVo materialRequestVo) {
         Material material = voService.convertToMaterial(materialRequestVo);
 
         if (material == null)
@@ -35,7 +35,7 @@ public class MaterialController {
     }
 
     @PutMapping("/material")
-    public Result<Boolean> updateMaterial(MaterialRequestVo materialRequestVo) {
+    public Result<Boolean> updateMaterial(@RequestBody MaterialRequestVo materialRequestVo) {
         Material material =materialService.getMaterial(materialRequestVo.getId());
 
         if (material == null)
@@ -49,7 +49,7 @@ public class MaterialController {
     }
 
     @PutMapping("/material/inactive")
-    public Result<Boolean> inactiveMaterial(MaterialRequestVo materialRequestVo) {
+    public Result<Boolean> inactiveMaterial(@RequestBody MaterialRequestVo materialRequestVo) {
         Boolean flag = materialService.inactiveMaterial(materialRequestVo.getId());
 
         return new Result<Boolean>(ResultCode.Success, flag, flag ? ResultMessage.Success : ResultMessage.Fail);
