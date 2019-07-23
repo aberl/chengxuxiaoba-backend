@@ -711,8 +711,10 @@ public class VoService implements IVoService {
 
         UploadFileResponseVo uploadFileResponseVo = convertToUploadFileResponseVo(materialFile);
 
-        if (uploadFileResponseVo != null)
+        if (uploadFileResponseVo != null) {
+            materialResponseVo.setFileDetail(uploadFileResponseVo);
             materialResponseVo.setDownLoadUrl(uploadFileResponseVo.getUrl());
+        }
 
         return materialResponseVo;
     }

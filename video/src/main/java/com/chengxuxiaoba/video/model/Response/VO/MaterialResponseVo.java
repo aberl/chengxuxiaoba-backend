@@ -7,6 +7,7 @@ import java.util.Date;
 public class MaterialResponseVo {
     private Integer id;
     private String file;
+    private UploadFileResponseVo fileDetail;
     private String name;
     private String description;
     private Integer status;
@@ -37,6 +38,14 @@ public class MaterialResponseVo {
 
     public void setFile(String file) {
         this.file = file;
+    }
+
+    public UploadFileResponseVo getFileDetail() {
+        return fileDetail;
+    }
+
+    public void setFileDetail(UploadFileResponseVo fileDetail) {
+        this.fileDetail = fileDetail;
     }
 
     public String getDescription() {
