@@ -1,5 +1,7 @@
 package com.chengxuxiaoba.video.model.Response.VO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class MaterialResponseVo {
@@ -9,6 +11,7 @@ public class MaterialResponseVo {
     private String description;
     private Integer status;
     private String statusDesc;
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
     private Date createDateTime;
     private String downLoadUrl;
 
