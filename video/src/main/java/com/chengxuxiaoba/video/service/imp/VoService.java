@@ -707,7 +707,7 @@ public class VoService implements IVoService {
         materialResponseVo.setStatusDesc(CommonStatus.getEnum(material.getStatus()).toString());
 
         if (materialFile == null)
-            materialFile = uploadFileService.getUploadFileByName(material.getName());
+            materialFile = uploadFileService.getUploadFileByName(material.getFile());
 
         UploadFileResponseVo uploadFileResponseVo = convertToUploadFileResponseVo(materialFile);
 
@@ -725,7 +725,7 @@ public class VoService implements IVoService {
 
         List<String> materialNameList = new ArrayList<>();
         for (Material material : materialList) {
-            materialNameList.add(material.getName());
+            materialNameList.add(material.getFile());
         }
 
         List<UploadFile> uploadFileList = uploadFileService.getUploadFileByNameList(materialNameList);
@@ -739,7 +739,7 @@ public class VoService implements IVoService {
         }
 
         for (Material material : materialList) {
-            materialResponseVoList.add(convertToMaterialResponseVo(material, materialNameMap.get(material.getName())));
+            materialResponseVoList.add(convertToMaterialResponseVo(material, materialNameMap.get(material.getFile())));
         }
 
         return materialResponseVoList;

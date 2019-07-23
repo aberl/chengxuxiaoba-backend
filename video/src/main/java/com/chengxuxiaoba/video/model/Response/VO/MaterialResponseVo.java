@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class MaterialResponseVo {
     private Integer id;
+    private String file;
     private String name;
     private String description;
     private Integer status;
@@ -25,6 +26,14 @@ public class MaterialResponseVo {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getFile() {
+        return file;
+    }
+
+    public void setFile(String file) {
+        this.file = file;
     }
 
     public String getDescription() {

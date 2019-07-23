@@ -5,6 +5,7 @@ import java.util.Date;
 public class Material {
     private Integer id;
     private String name;
+    private String file;
     private String description;
     private Integer status;
     private Date createDateTime;
@@ -23,6 +24,14 @@ public class Material {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getFile() {
+        return file;
+    }
+
+    public void setFile(String file) {
+        this.file = file;
     }
 
     public String getDescription() {
