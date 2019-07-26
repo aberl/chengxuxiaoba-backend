@@ -24,7 +24,7 @@ public interface VideoMapper extends BaseMapper<Video> {
 
     Integer insertWatchRecord(VideoWatchRecord videoWatchRecord);
 
-    Integer updateWatchRecordTime(Integer accountId, Integer videoId);
+    Integer updateWatchRecordTime(@Param("accountId") Integer accountId,@Param("videoId")  Integer videoId);
 
     VideoWatchRecord getVideoWatchRecord(@Param("accountId") Integer accountId, @Param("videoId") Integer videoId);
 
