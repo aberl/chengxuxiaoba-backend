@@ -143,6 +143,7 @@ public class MessageService extends IBaseService<Message> implements IMessageSer
         AccountMessageRelationShip accountMessageRelationShip = null;
 
         List<AccountMessageRelationShip> accountMessageRelationShipList = new ArrayList<>();
+
         for (Integer accountId : accountList) {
             accountMessageRelationShip = new AccountMessageRelationShip(accountId, messageCategory, messageId);
             accountMessageRelationShipList.add(accountMessageRelationShip);

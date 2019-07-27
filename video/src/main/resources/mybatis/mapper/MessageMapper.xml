@@ -92,7 +92,6 @@
         where accountId=#{accountId} and isRead=0 limit 1
     </select>
 
-
     <update id="updateMessage">
         UPDATE Message
         <trim prefix="set" suffixOverrides=",">

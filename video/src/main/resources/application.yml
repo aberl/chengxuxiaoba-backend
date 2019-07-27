@@ -64,6 +64,7 @@ uploadfile:
   size: 10M
   accesshostname: http://localhost:7080/chengxuxiaoba
 
+#消息
 message:
   template:
     newvideo: 尊敬的会员, %s课程%s模块有了新的学习视频--%s视频，有兴趣及时观看哦，祝您学习愉快
