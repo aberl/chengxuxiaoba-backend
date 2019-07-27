@@ -52,6 +52,11 @@
         where id=#{id} limit 1
     </select>
 
+    <select id="getMessageByContent" parameterType="string" resultType="com.chengxuxiaoba.video.model.po.Message">
+        SELECT * from Message
+        where content=#{content} limit 1
+    </select>
+
     <update id="setRead">
         update accountmessage_relationship
         set isRead=1, readDateTime = now()

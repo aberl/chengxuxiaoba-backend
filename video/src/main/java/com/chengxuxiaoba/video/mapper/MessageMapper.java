@@ -15,6 +15,8 @@ public interface MessageMapper extends BaseMapper<Message> {
 
     Message getMessage(Integer id);
 
+    Message getMessageByContent(String content);
+
     Integer setRead(@Param("accountId")Integer accountId, @Param("messageId")Integer messageId);
 
     Integer updateMessage(Message message);

@@ -2,12 +2,8 @@ package com.chengxuxiaoba.video.aspect;
 
 import com.chengxuxiaoba.video.constant.MessageCategory;
 import com.chengxuxiaoba.video.model.KeyValuePair;
-import com.chengxuxiaoba.video.model.po.Account;
-import com.chengxuxiaoba.video.model.po.CourseModule;
-import com.chengxuxiaoba.video.model.po.Message;
-import com.chengxuxiaoba.video.model.po.Video;
-import com.chengxuxiaoba.video.service.ICourseService;
-import com.chengxuxiaoba.video.service.IMessageService;
+import com.chengxuxiaoba.video.model.po.*;
+import com.chengxuxiaoba.video.service.*;
 import com.chengxuxiaoba.video.service.imp.CourseService;
 import com.chengxuxiaoba.video.util.ArrayUtil;
 import org.aspectj.lang.JoinPoint;
@@ -18,6 +14,8 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
 
 @Aspect
 @Component
@@ -39,6 +37,15 @@ public class MessageAspect {
     @Autowired
     private IMessageService messageService;
 
+    @Autowired
+    private IIssueService issueService;
+
+    @Autowired
+    private IVideoService videoService;
+
+    @Autowired
+    private IUserService userService;
+
     private Account currentAccount=null;
 
     static {
@@ -53,12 +60,11 @@ public class MessageAspect {
     public void coursePointCut() {
     }
 
-    @Pointcut("execution(* com.chengxuxiaoba.video.service.ICourseService.createNewCourseModule(..))")
-    public void courseModulePointCut() {
-    }
-
     @Pointcut("execution(* com.chengxuxiaoba.video.service.IIssueService.answerIssue(..))")
     public void answerIssuePointCut() {
+    }
+    @Pointcut("execution(* com.chengxuxiaoba.video.service.IUserService.regier(..))")
+    public void userRegisterPointCut() {
     }
 
     @AfterReturning(value = "videoPointCut()", returning = "result")
@@ -91,17 +97,69 @@ public class MessageAspect {
 
     @AfterReturning(value = "coursePointCut()", returning = "result")
     public void addCoursePointCutNotificationMessage(JoinPoint joinPoint, Integer result) {
+        Object[] args = joinPoint.getArgs();
 
-        System.out.println(":::" + joinPoint);
-    }
+        if (ArrayUtil.isNullOrEmpty(args))
+            return;
 
-    //     @AfterReturning(value ="courseModulePointCut()", returning = "result")
-    public void addcourseModuleNotificationMessage(JoinPoint joinPoint, Integer result) {
-        System.out.println(":::" + joinPoint);
+        Object object = args[0];
+
+        if (!(object instanceof Course))
+            return;
+
+        Course course=(Course)object;
+        String courseName=course.getName();
+
+        String content=String.format(newcourseTemplate,courseName);
+
+        Message message=Message.build(MessageCategory.System.getValue(),"新增课程", content);
+
+        messageService.createNewMessage(message, true);
+
     }
 
     @AfterReturning(value = "answerIssuePointCut()", returning = "result")
     public void addAnswerIssueNotificationMessage(JoinPoint joinPoint, KeyValuePair<Boolean, String> result) {
-        System.out.println(":::" + joinPoint);
+        Object[] args = joinPoint.getArgs();
+
+        if (ArrayUtil.isNullOrEmpty(args))
+            return;
+
+        Object object = args[0];
+
+        if (!(object instanceof Answer))
+            return;
+
+        Answer answer = (Answer)object;
+
+        Issue issue=issueService.getSingle(answer.getIssueId());
+
+        Video video = videoService.getSingle(issue.getVideoId());
+
+        String content=String.format(answerissueTemplate,video.getName());
+
+        Message message=Message.build(MessageCategory.User.getValue(),"问题答复", content);
+
+        messageService.createNewMessage(message, Arrays.asList(issue.getQuestionerId()));
+    }
+    @AfterReturning(value = "userRegisterPointCut()", returning = "result")
+    public void accountRegisterNotificationMessage(JoinPoint joinPoint, Boolean result) {
+        if(!result)
+            return;
+
+        Object[] args = joinPoint.getArgs();
+
+        if (ArrayUtil.isNullOrEmpty(args))
+            return;
+
+        Object object = args[0];
+
+        String mobilePhone=object.toString();
+
+        Account account=userService.getUserByMobilePhone(mobilePhone);
+
+        Message message=Message.build(MessageCategory.User.getValue(),"新用户注册", registerTemplate);
+
+        messageService.createNewMessage(message, Arrays.asList(account.getId()));
     }
 }

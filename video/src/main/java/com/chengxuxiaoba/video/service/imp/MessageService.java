@@ -13,6 +13,7 @@ import com.chengxuxiaoba.video.service.IBaseService;
 import com.chengxuxiaoba.video.service.IMessageService;
 import com.chengxuxiaoba.video.service.IUserService;
 import com.chengxuxiaoba.video.util.ListUtil;
+import com.chengxuxiaoba.video.util.StringUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,23 @@ public class MessageService extends IBaseService<Message> implements IMessageSer
     @Autowired
     private IUserService userService;
 
+
+    @Override
+    public KeyValuePair<Boolean, String> createNewMessage(Message message, List<Integer> accountList) {
+        Integer primaryKey = messageMapper.insertMessage(message);
+
+        if (primaryKey <= 0)
+            return new KeyValuePair<Boolean, String>(false, ResultMessage.MessageCreateFail);
+
+        if(!ListUtil.isNullOrEmpty(accountList)) {
+            Integer messageId = message.getId();
+
+            Boolean broadcastFlag = broadcastMessage(messageId, accountList);
+        }
+
+        return new KeyValuePair<Boolean, String>(true, ResultMessage.Success);
+    }
+
     @Override
     public KeyValuePair<Boolean, String> createNewMessage(Message message) {
         if (message == null)
@@ -38,7 +56,7 @@ public class MessageService extends IBaseService<Message> implements IMessageSer
 
         Integer primaryKey = messageMapper.insertMessage(message);
 
-        return createNewMessage(message, null);
+        return createNewMessage(message, false);
     }
 
     @Override
@@ -69,6 +87,17 @@ public class MessageService extends IBaseService<Message> implements IMessageSer
 
         return message;
     }
+
+    @Override
+    public Message getMessageByContent(String content) {
+        if (StringUtil.isNullOrEmpty(content))
+            return null;
+
+        Message message = messageMapper.getMessageByContent(content);
+
+        return message;
+    }
+
 
     @Override
     public Boolean setRead(Integer accountId, Integer messageId)

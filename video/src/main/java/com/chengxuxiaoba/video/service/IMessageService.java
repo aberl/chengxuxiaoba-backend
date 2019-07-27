@@ -9,11 +9,15 @@ import com.chengxuxiaoba.video.model.po.Message;
 import java.util.List;
 
 public interface IMessageService {
+    KeyValuePair<Boolean, String> createNewMessage(Message message, List<Integer> accountList);
+
     KeyValuePair<Boolean, String> createNewMessage(Message message);
 
     KeyValuePair<Boolean, String> createNewMessage(Message message, Boolean isBroadcast);
 
     Message getMessage(Integer messageId);
+
+    Message getMessageByContent(String content);
 
     Boolean setRead(Integer accountId, Integer messageId);
 

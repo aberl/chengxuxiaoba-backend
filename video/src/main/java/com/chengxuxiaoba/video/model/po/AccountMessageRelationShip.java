@@ -15,7 +15,7 @@ public class AccountMessageRelationShip {
 
     public AccountMessageRelationShip(){}
 
-    public AccountMessageRelationShip(Integer accountId, Integer messageId, Integer messageCategory){
+    public AccountMessageRelationShip(Integer accountId, Integer messageCategory, Integer messageId){
         this.accountId=accountId;
         this.messageId=messageId;
         this.messageCategory=messageCategory;
