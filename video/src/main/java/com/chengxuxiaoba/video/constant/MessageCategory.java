@@ -5,7 +5,7 @@ public enum  MessageCategory {
 
     private final Integer value;
 
-    private MessageCategory(Integer value)
+    MessageCategory(Integer value)
     {
         this.value=value;
     }
