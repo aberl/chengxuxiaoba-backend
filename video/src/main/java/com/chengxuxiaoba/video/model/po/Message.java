@@ -3,12 +3,21 @@ package com.chengxuxiaoba.video.model.po;
 import java.util.Date;
 
 public class Message {
-    private  Integer id;
+    private Integer id;
     private String name;
     private String content;
     private Integer status;
     private Integer category;
     private Date createDateTime;
+
+    public static Message build(Integer category, String name, String content) {
+        Message message = new Message();
+        message.setCategory(category);
+        message.setName(name);
+        message.setContent(content);
+
+        return message;
+    }
 
     public Integer getId() {
         return id;

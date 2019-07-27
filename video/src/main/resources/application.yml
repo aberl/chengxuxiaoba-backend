@@ -64,3 +64,10 @@ uploadfile:
   size: 10M
   accesshostname: http://localhost:7080/chengxuxiaoba
 
+message:
+  template:
+    newvideo: 尊敬的会员, %s课程%s模块有了新的学习视频--%s视频，有兴趣及时观看哦，祝您学习愉快
+    newcourse: 尊敬的会员, 本站新增新的学习课程--%s，有兴趣及时查看哦，祝您学习愉快
+    register: 尊敬的会员, 欢迎您成为程序小巴会员大家庭一员，具体会员信息以及福利请查看会员手册，祝您学习愉快
+    upgradememberlevel: 尊敬的会员, 恭喜你升级为%s会员，会员有效期至时间%s, 会员期间您可享受全站所有课程免费学习，所有资料免费下载等福利，具体会员信息以及福利请查看会员手册，祝您学习愉快
+    answerissue: 尊敬的会员, 关于您的%s视频的学习问题已有老师回复，请及时查阅，祝您学习愉快
