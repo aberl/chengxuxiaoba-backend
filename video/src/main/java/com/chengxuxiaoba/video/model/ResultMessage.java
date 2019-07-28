@@ -27,4 +27,6 @@ public class ResultMessage {
     public static String uploadFileHasNoPurpose = "上传的文件没有知名用途";
     public static String NameCannotBeNull = "名称不能为空";
     public static String MaterialIsNotExist = "材料不存在";
+    public static String MESSAGEIDLISTCANNOTBENULL = "消息id集合不能为空";
+    public static String ACCOUNTIDCANNOTBENULL = "用户id不能为空";
 }

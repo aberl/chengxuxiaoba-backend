@@ -8,9 +8,11 @@ import com.chengxuxiaoba.video.model.po.Evaluate;
 import com.chengxuxiaoba.video.model.po.Message;
 import com.chengxuxiaoba.video.service.IMessageService;
 import com.chengxuxiaoba.video.service.IVoService;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -40,6 +42,7 @@ public class MessageController extends BaseController{
 
     @GetMapping("/users/{accountId}/messages")
     public Result<PageResult<MessageResponseVo>> getMessageListByAccountId(@PathVariable("accountId") Integer accountId,
+                                                                           @RequestParam(name = "isread", required = false) Boolean isRead,
                                                                         @RequestParam("pagenum") Integer pageNum,
                                                                         @RequestParam(name = "pagesize", required = false) Integer pageSize,
                                                                         @RequestParam(name = "sort", required = false) String sort)
@@ -49,7 +52,7 @@ public class MessageController extends BaseController{
 
         PageInfo pageInfo = super.generatePageInfo(pageNum, pageSize, sort);
 
-        PageResult<Message> pageData = messageService.getMessageListByAccountId(accountId, pageInfo);
+        PageResult<Message> pageData = messageService.getMessageListByAccountId(accountId, isRead, pageInfo);
 
         List<MessageResponseVo> resultList = voService.convertToMessageResponseVo(pageData.getData());
 
@@ -68,7 +71,7 @@ public class MessageController extends BaseController{
         if(message == null)
             return new Result<MessageResponseVo>(ResultCode.Error, null, ResultMessage.MessageIsNotExist);
 
-        Boolean setFlag = messageService.setRead(accountId, id);
+        messageService.setRead(accountId, Arrays.asList(id));
 
         MessageResponseVo messageResponseVo = voService.convertToMessageResponseVo(message);
 
@@ -84,5 +87,25 @@ public class MessageController extends BaseController{
         Integer unreadCount = messageService.getUnReadCount(accountId);
 
         return new Result<Integer>(ResultCode.Success, unreadCount, ResultMessage.Success);
+    }
+
+    @DeleteMapping("/messages")
+    public Result<Boolean> deleteMessage(@RequestBody MessageRequestVo requestBody) {
+        KeyValuePair<Boolean, String> result= messageService.deleteMessage(requestBody.getAccountId(), requestBody.getMessageIdList());
+
+        if(!result.getKey())
+            return new Result<Boolean>(ResultCode.Error, result.getKey(),result.getValue());
+
+        return new Result<Boolean>(ResultCode.Success, result.getKey(), result.getValue());
+    }
+
+    @PutMapping("/messages")
+    public Result<Boolean> readMessage(@RequestBody MessageRequestVo requestBody) {
+        Boolean flag= messageService.setRead(requestBody.getAccountId(), requestBody.getMessageIdList());
+
+        if(!flag)
+            return new Result<Boolean>(ResultCode.Error, flag, ResultMessage.Fail);
+
+        return new Result<Boolean>(ResultCode.Success, flag, ResultMessage.Success);
     }
 }

@@ -13,6 +13,8 @@ public class AccountMessageRelationShip {
 
     private Message message;
 
+    public AccountMessageRelationShip(){}
+
     public AccountMessageRelationShip(Integer accountId, Integer messageCategory, Integer messageId){
         this.accountId=accountId;
         this.messageId=messageId;

@@ -6,7 +6,6 @@ import com.chengxuxiaoba.video.model.PageResult;
 import com.chengxuxiaoba.video.model.po.AccountMessageRelationShip;
 import com.chengxuxiaoba.video.model.po.Message;
 
-
 import java.util.List;
 
 public interface IMessageService {
@@ -20,7 +19,7 @@ public interface IMessageService {
 
     Message getMessageByContent(String content);
 
-    Boolean setRead(Integer accountId, Integer messageId);
+    Boolean setRead(Integer accountId, List<Integer> messageIdList);
 
     Boolean broadcastMessage(Integer messageId, List<Integer> accountList);
 
@@ -28,7 +27,9 @@ public interface IMessageService {
 
     Integer getUnReadCount(Integer accountId);
 
-    PageResult<Message> getMessageListByAccountId(Integer accountId, PageInfo pageInfo);
+    PageResult<Message> getMessageListByAccountId(Integer accountId, Boolean isRead, PageInfo pageInfo);
 
-    PageResult<AccountMessageRelationShip> getAccountMessageRelationShipListByAccountId(Integer accountId, PageInfo pageInfo);
+    PageResult<AccountMessageRelationShip> getAccountMessageRelationShipListByAccountId(Integer accountId, Boolean isRead, PageInfo pageInfo);
+
+    KeyValuePair<Boolean, String> deleteMessage(Integer accountId, List<Integer> messageIdList);
 }

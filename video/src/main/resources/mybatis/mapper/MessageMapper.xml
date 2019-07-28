@@ -60,7 +60,11 @@
     <update id="setRead">
         update accountmessage_relationship
         set isRead=1, readDateTime = now()
-        where accountId=#{accountId} and messageId=#{messageId}
+        where accountId=#{accountId} and messageId in
+        <foreach collection="messageIdList" index="index" item="messageId" open="("
+                 separator="," close=")">
+            #{messageId}
+        </foreach>
     </update>
 
     <select id="getAccountMessageRelationShipList" parameterType="com.chengxuxiaoba.video.model.query.MessageQuery"
@@ -70,19 +74,19 @@
         inner JOIN message on relation.messageId=message.id
         <where>
             <if test="messageId != null">
-                relation.messageId=#{messageId}
+                AND relation.messageId=#{messageId}
             </if>
             <if test="accountId != null">
-                relation.accountId=#{accountId}
+                AND  relation.accountId=#{accountId}
             </if>
             <if test="isRead != null">
-                relation.isRead=#{isRead}
+                AND  relation.isRead=#{isRead}
             </if>
             <if test="status != null">
-                message.status=#{status}
+                AND  message.status=#{status}
             </if>
             <if test="category != null">
-                message.category=#{category}
+                AND  message.category=#{category}
             </if>
         </where>
     </select>
@@ -102,4 +106,13 @@
         </trim>
         WHERE id=#{id}
     </update>
+
+    <delete id="deleteMessage">
+        DELETE FROM accountmessage_relationship
+        WHERE accountId = #{accountId} AND messageId in
+            <foreach collection="messageIdList" index="index" item="messageId" open="("
+                     separator="," close=")">
+                #{messageId}
+            </foreach>
+    </delete>
 </mapper>

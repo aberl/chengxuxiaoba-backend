@@ -100,9 +100,9 @@ public class MessageService extends IBaseService<Message> implements IMessageSer
 
 
     @Override
-    public Boolean setRead(Integer accountId, Integer messageId)
+    public Boolean setRead(Integer accountId, List<Integer> messageIdList)
     {
-        Integer primaryKey=messageMapper.setRead(accountId, messageId);
+        Integer primaryKey=messageMapper.setRead(accountId, messageIdList);
 
         return primaryKey>0;
     }
@@ -166,8 +166,10 @@ public class MessageService extends IBaseService<Message> implements IMessageSer
 
 
     @Override
-    public PageResult<Message> getMessageListByAccountId(Integer accountId, PageInfo pageInfo) {
-        PageResult<AccountMessageRelationShip> accountMessageRelationShip = getAccountMessageRelationShipListByAccountId(accountId, pageInfo);
+    public PageResult<Message> getMessageListByAccountId(Integer accountId, Boolean isRead, PageInfo pageInfo) {
+        isRead=isRead==null?false:isRead;
+
+        PageResult<AccountMessageRelationShip> accountMessageRelationShip = getAccountMessageRelationShipListByAccountId(accountId, isRead,pageInfo);
 
         if (accountMessageRelationShip == null)
             return new PageResult<Message>(pageInfo.getCurrentPageNum(),
@@ -192,7 +194,7 @@ public class MessageService extends IBaseService<Message> implements IMessageSer
     }
 
     @Override
-    public PageResult<AccountMessageRelationShip> getAccountMessageRelationShipListByAccountId(Integer accountId, PageInfo pageInfo) {
+    public PageResult<AccountMessageRelationShip> getAccountMessageRelationShipListByAccountId(Integer accountId, Boolean isRead, PageInfo pageInfo) {
         if (accountId == null || accountId == 0)
             return new PageResult<AccountMessageRelationShip>(pageInfo.getCurrentPageNum(),
                     new Long(0), null);
@@ -200,6 +202,7 @@ public class MessageService extends IBaseService<Message> implements IMessageSer
         MessageQuery query = new MessageQuery();
         query.setAccountId(accountId);
         query.setPageInfo(pageInfo);
+        query.setRead(isRead);
 
         PageHelper.startPage(query.getPageInfo().getCurrentPageNum(), query.getPageInfo().getPageSize());
 
@@ -210,5 +213,19 @@ public class MessageService extends IBaseService<Message> implements IMessageSer
         PageResult<AccountMessageRelationShip> pageResult = new PageResult<AccountMessageRelationShip>(retList.getPageNum(), retList.getTotal(), retList.getResult());
 
         return pageResult;
+    }
+
+    @Override
+    public  KeyValuePair<Boolean, String> deleteMessage(Integer accountId, List<Integer> messageIdList)
+    {
+        if(accountId == null || accountId==0)
+            return new KeyValuePair<Boolean, String>(false, ResultMessage.ACCOUNTIDCANNOTBENULL);
+
+        if(ListUtil.isNullOrEmpty(messageIdList))
+            return new KeyValuePair<Boolean, String>(false, ResultMessage.MESSAGEIDLISTCANNOTBENULL);
+
+        Integer primaryKey = messageMapper.deleteMessage(accountId, messageIdList);
+
+        return new KeyValuePair<Boolean, String>(true, ResultMessage.Success);
     }
 }

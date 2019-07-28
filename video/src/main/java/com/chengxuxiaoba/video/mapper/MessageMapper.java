@@ -17,11 +17,13 @@ public interface MessageMapper extends BaseMapper<Message> {
 
     Message getMessageByContent(String content);
 
-    Integer setRead(@Param("accountId")Integer accountId, @Param("messageId")Integer messageId);
+    Integer setRead(@Param("accountId")Integer accountId, @Param("messageIdList")List<Integer> messageIdList);
 
     Integer updateMessage(Message message);
 
     Page<AccountMessageRelationShip> getAccountMessageRelationShipList(MessageQuery query);
 
     Integer getUnReadCount(Integer accountId);
+
+    Integer deleteMessage(@Param("accountId")Integer accountId, @Param("messageIdList") List<Integer> messageIdList);
 }
