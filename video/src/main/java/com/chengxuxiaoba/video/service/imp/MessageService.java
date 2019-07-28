@@ -40,7 +40,7 @@ public class MessageService extends IBaseService<Message> implements IMessageSer
         if (primaryKey <= 0)
             return new KeyValuePair<Boolean, String>(false, ResultMessage.MessageCreateFail);
 
-        if(!ListUtil.isNullOrEmpty(accountList)) {
+        if (!ListUtil.isNullOrEmpty(accountList)) {
             Integer messageId = message.getId();
 
             Boolean broadcastFlag = broadcastMessage(messageId, accountList);
@@ -100,11 +100,13 @@ public class MessageService extends IBaseService<Message> implements IMessageSer
 
 
     @Override
-    public Boolean setRead(Integer accountId, List<Integer> messageIdList)
-    {
-        Integer primaryKey=messageMapper.setRead(accountId, messageIdList);
+    public Boolean setRead(Integer accountId, List<Integer> messageIdList) {
+        if (ListUtil.isNullOrEmpty(messageIdList))
+            return false;
 
-        return primaryKey>0;
+        Integer primaryKey = messageMapper.setRead(accountId, messageIdList);
+
+        return primaryKey > 0;
     }
 
 
@@ -167,7 +169,7 @@ public class MessageService extends IBaseService<Message> implements IMessageSer
 
     @Override
     public PageResult<Message> getMessageListByAccountId(Integer accountId, Boolean isRead, PageInfo pageInfo) {
-        PageResult<AccountMessageRelationShip> accountMessageRelationShip = getAccountMessageRelationShipListByAccountId(accountId, isRead,pageInfo);
+        PageResult<AccountMessageRelationShip> accountMessageRelationShip = getAccountMessageRelationShipListByAccountId(accountId, isRead, pageInfo);
 
         if (accountMessageRelationShip == null)
             return new PageResult<Message>(pageInfo.getCurrentPageNum(),
@@ -214,9 +216,8 @@ public class MessageService extends IBaseService<Message> implements IMessageSer
     }
 
     @Override
-    public  KeyValuePair<Boolean, String> deleteMessage(Integer accountId, List<Integer> messageIdList)
-    {
-        if(accountId == null || accountId==0)
+    public KeyValuePair<Boolean, String> deleteMessage(Integer accountId, List<Integer> messageIdList) {
+        if (accountId == null || accountId == 0)
             return new KeyValuePair<Boolean, String>(false, ResultMessage.ACCOUNTIDCANNOTBENULL);
 
         Integer primaryKey = messageMapper.deleteMessage(accountId, messageIdList);
