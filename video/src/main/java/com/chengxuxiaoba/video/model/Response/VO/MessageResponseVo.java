@@ -10,6 +10,8 @@ public class MessageResponseVo {
     private Integer category;
     private Date createDateTime;
 
+    private String categoryDesc;
+
     public Integer getId() {
         return id;
     }
@@ -56,5 +58,13 @@ public class MessageResponseVo {
 
     public void setCreateDateTime(Date createDateTime) {
         this.createDateTime = createDateTime;
+    }
+
+    public String getCategoryDesc() {
+        return categoryDesc;
+    }
+
+    public void setCategoryDesc(String categoryDesc) {
+        this.categoryDesc = categoryDesc;
     }
 }

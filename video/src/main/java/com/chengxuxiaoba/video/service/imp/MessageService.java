@@ -219,9 +219,6 @@ public class MessageService extends IBaseService<Message> implements IMessageSer
         if(accountId == null || accountId==0)
             return new KeyValuePair<Boolean, String>(false, ResultMessage.ACCOUNTIDCANNOTBENULL);
 
-        if(ListUtil.isNullOrEmpty(messageIdList))
-            return new KeyValuePair<Boolean, String>(false, ResultMessage.MESSAGEIDLISTCANNOTBENULL);
-
         Integer primaryKey = messageMapper.deleteMessage(accountId, messageIdList);
 
         return new KeyValuePair<Boolean, String>(true, ResultMessage.Success);

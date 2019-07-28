@@ -1,6 +1,7 @@
 package com.chengxuxiaoba.video.service.imp;
 
 import com.chengxuxiaoba.video.constant.CommonStatus;
+import com.chengxuxiaoba.video.constant.MessageCategory;
 import com.chengxuxiaoba.video.constant.RolePaymentTypeEnum;
 import com.chengxuxiaoba.video.model.Request.VO.*;
 import com.chengxuxiaoba.video.model.Response.VO.*;
@@ -519,6 +520,10 @@ public class VoService implements IVoService {
         MessageResponseVo messageResponseVo = new MessageResponseVo();
 
         BeanUtils.copyProperties(message, messageResponseVo);
+
+        MessageCategory messageCategory=MessageCategory.getEnum(message.getCategory());
+
+        messageResponseVo.setCategoryDesc(MessageCategory.getText(messageCategory));
 
         return messageResponseVo;
     }
