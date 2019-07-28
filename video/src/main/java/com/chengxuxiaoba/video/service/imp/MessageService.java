@@ -167,8 +167,6 @@ public class MessageService extends IBaseService<Message> implements IMessageSer
 
     @Override
     public PageResult<Message> getMessageListByAccountId(Integer accountId, Boolean isRead, PageInfo pageInfo) {
-        isRead=isRead==null?false:isRead;
-
         PageResult<AccountMessageRelationShip> accountMessageRelationShip = getAccountMessageRelationShipListByAccountId(accountId, isRead,pageInfo);
 
         if (accountMessageRelationShip == null)
