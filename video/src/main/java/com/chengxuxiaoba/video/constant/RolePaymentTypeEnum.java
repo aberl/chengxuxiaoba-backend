@@ -1,7 +1,7 @@
 package com.chengxuxiaoba.video.constant;
 
 public enum RolePaymentTypeEnum {
-    MONTH("month"),SEASON("season"),YEAR("year");
+    DAY("day"),MONTH("month"),SEASON("season"),YEAR("year");
 
     private final String value;
 
@@ -17,6 +17,8 @@ public enum RolePaymentTypeEnum {
         if(text == null || text.trim()=="")
             return  null;
 
+        if(text.trim().equalsIgnoreCase(RolePaymentTypeEnum.DAY.value))
+            return RolePaymentTypeEnum.DAY;
         if(text.trim().equalsIgnoreCase(RolePaymentTypeEnum.MONTH.value))
             return RolePaymentTypeEnum.MONTH;
         if(text.trim().equalsIgnoreCase(RolePaymentTypeEnum.SEASON.value))

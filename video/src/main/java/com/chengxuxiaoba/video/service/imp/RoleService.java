@@ -1,5 +1,6 @@
 package com.chengxuxiaoba.video.service.imp;
 
+import com.chengxuxiaoba.video.constant.CommonStatus;
 import com.chengxuxiaoba.video.constant.RolePaymentTypeEnum;
 import com.chengxuxiaoba.video.mapper.RoleMapper;
 import com.chengxuxiaoba.video.model.po.Permission;
@@ -57,8 +58,10 @@ public class RoleService implements IRoleService {
         List<Integer> _roleIdList = Arrays.asList(roleIdArray);
 
         rolePaymentList.forEach(rolePayment -> {
-            if (_roleIdList.contains(rolePayment.getRoleId())) {
-                _rolePaymentList.add(rolePayment);
+            if(rolePayment.getStatus() == CommonStatus.ACTIVE.getValue()) {
+                if (_roleIdList.contains(rolePayment.getRoleId())) {
+                    _rolePaymentList.add(rolePayment);
+                }
             }
         });
 
@@ -71,6 +74,10 @@ public class RoleService implements IRoleService {
             return null;
 
         Date restult=null;
+        if(rolePaymentTypeEnum == RolePaymentTypeEnum.MONTH)
+        {
+            restult = new Date();
+        }
 
         if(rolePaymentTypeEnum == RolePaymentTypeEnum.MONTH)
         {
