@@ -11,6 +11,7 @@ import com.chengxuxiaoba.video.model.Response.VO.UserResponseVo;
 import com.chengxuxiaoba.video.model.po.Account;
 import com.chengxuxiaoba.video.model.po.Role;
 import com.chengxuxiaoba.video.model.query.UserQuery;
+import com.chengxuxiaoba.video.service.IAuthenticationService;
 import com.chengxuxiaoba.video.service.IUserService;
 import com.chengxuxiaoba.video.service.IValidationService;
 import com.chengxuxiaoba.video.service.IVoService;
@@ -38,11 +39,11 @@ public class UserController extends BaseController {
     @Autowired
     private IVoService voService;
 
+    @Autowired
+    private IAuthenticationService authenticationService;
+
     @PostMapping("/account")
     public Result<Boolean> createAccount(@RequestBody RegisterRequestVo registerBody) {
-//        if (!registerBody.getPassword().equals(registerBody.getConfirmPassword()))
-//            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.PasswordConfirmWrong);
-
         Boolean isValid = validationService.verifyCode(registerBody.getMobilePhoneNo(), ValidationCodeCategory.register, registerBody.getValidationCode());
 
         if (!isValid)
@@ -73,7 +74,7 @@ public class UserController extends BaseController {
         RoleConstant role = RoleConstant.getEnum(accountRequestVo.getRole());
 
         if (role != null)
-            userService.updateAccountRoleRelationship(account.getId(),role);
+            userService.updateAccountRoleRelationship(account.getId(), role);
 
         userService.updateAccountVipTimeRange(accountRequestVo.getId(), accountRequestVo.getVipStartDate(), accountRequestVo.getVipEndDate());
 
@@ -100,7 +101,6 @@ public class UserController extends BaseController {
         if (!resultFlag)
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.Fail);
 
-
         validationService.invalidateCode(registerBody.getMobilePhoneNo(), ValidationCodeCategory.forgetPassword, registerBody.getValidationCode());
 
         return new Result<Boolean>(ResultCode.Success, true, ResultMessage.Success);
@@ -114,6 +114,9 @@ public class UserController extends BaseController {
             return new Result<UserResponseVo>(ResultCode.Error, null, ResultMessage.UserPWDIsNotMatch);
 
         UserResponseVo userResponseVo = voService.convertToUserResponseVo(account);
+
+        String token = authenticationService.generateToken(loginBody.getMobilePhoneNo());
+        userResponseVo.setToken(token);
 
         return new Result<UserResponseVo>(ResultCode.Success, userResponseVo, ResultMessage.Success);
     }

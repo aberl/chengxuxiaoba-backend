@@ -19,7 +19,7 @@ public interface AccountMapper extends  BaseMapper<Account>{
 
     Account getAccountByMobilePhone(String mobilePhone);
 
-    Integer modifyPasswordByMobilePhone(String mobilePhoneNo, String newPassword);
+    Integer modifyPasswordByMobilePhone(@Param("mobilePhoneNo") String mobilePhoneNo,@Param("newPassword")  String newPassword);
 
     Integer buildAccountRoleRelationship(@Param("accountId") Integer accountId,@Param("roleIdList") List<Integer> roleIdList);
 

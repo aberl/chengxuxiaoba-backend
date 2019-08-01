@@ -23,6 +23,8 @@ public class UserResponseVo {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Boolean isOverDue;
 
+    private String token;
+
     private Date createDateTime;
 
     public Integer getId() {
@@ -123,6 +125,14 @@ public class UserResponseVo {
 
     public void setOverDue(Boolean overDue) {
         isOverDue = overDue;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public void setVipEndDate(Date vipEndDate) {

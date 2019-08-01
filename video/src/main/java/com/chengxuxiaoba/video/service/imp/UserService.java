@@ -2,12 +2,14 @@ package com.chengxuxiaoba.video.service.imp;
 
 import com.chengxuxiaoba.video.constant.RoleConstant;
 import com.chengxuxiaoba.video.mapper.AccountMapper;
+import com.chengxuxiaoba.video.model.KeyValuePair;
 import com.chengxuxiaoba.video.model.PageInfo;
 import com.chengxuxiaoba.video.model.PageResult;
 import com.chengxuxiaoba.video.model.po.Account;
 import com.chengxuxiaoba.video.model.po.AccountRoleRelationShip;
 import com.chengxuxiaoba.video.model.po.AccountVipTimeRange;
 import com.chengxuxiaoba.video.model.query.UserQuery;
+import com.chengxuxiaoba.video.service.IAuthenticationService;
 import com.chengxuxiaoba.video.service.IBaseService;
 import com.chengxuxiaoba.video.service.IUserService;
 import com.chengxuxiaoba.video.util.ListUtil;
@@ -27,6 +29,9 @@ public class UserService extends IBaseService<Account> implements IUserService {
     @Autowired
     private AccountMapper accountMapper;
 
+    @Autowired
+    private IAuthenticationService authenticationService;
+
     @Override
     @Transactional
     public Boolean regier(String mobilePhoneNo, String password, RoleConstant... roles) {
@@ -35,11 +40,13 @@ public class UserService extends IBaseService<Account> implements IUserService {
         if (account != null)
             return false;
 
+        String cipherPassword = authenticationService.generateCipherPassWord(mobilePhoneNo, password);
+
         account = new Account();
         //随机生成6个字母当做用户名
         account.setName(StringUtil.randomGenerateLetterStr(6));
         account.setMobilePhoneNo(mobilePhoneNo);
-        account.setPassword(password);
+        account.setPassword(cipherPassword);
 
         accountMapper.insert(account);
 
@@ -52,9 +59,7 @@ public class UserService extends IBaseService<Account> implements IUserService {
                 if (role != null && !roleList.contains(role))
                     roleList.add(role.getValue());
             }
-        }
-        else
-        {
+        } else {
             roleList.add(RoleConstant.VISTOR.getValue());
         }
         accountMapper.buildAccountRoleRelationship(accountId, roleList);
@@ -73,8 +78,13 @@ public class UserService extends IBaseService<Account> implements IUserService {
         if (account == null)
             return null;
 
-        if (!account.getPassword().equals(password))
+        KeyValuePair<Boolean, String> validateResult = authenticationService.validatePassWord(mobilePhoneNo, password);
+
+        if (!validateResult.getKey())
             return null;
+
+        authenticationService.generateToken(mobilePhoneNo);
+
 
         return account;
     }
@@ -86,8 +96,7 @@ public class UserService extends IBaseService<Account> implements IUserService {
         if (account == null)
             return false;
 
-        //TODO encrypt password
-        String encryptPWD = password;
+        String encryptPWD = authenticationService.generateCipherPassWord(mobilePhoneNo,password);
 
         Integer primaryKey = accountMapper.modifyPasswordByMobilePhone(mobilePhoneNo, encryptPWD);
 
@@ -177,29 +186,27 @@ public class UserService extends IBaseService<Account> implements IUserService {
     }
 
     @Override
-    public Boolean updateAccountVipTimeRange(Integer accountId, Date startDateTime, Date endDateTime)
-    {
-        if(startDateTime == null || endDateTime == null)
+    public Boolean updateAccountVipTimeRange(Integer accountId, Date startDateTime, Date endDateTime) {
+        if (startDateTime == null || endDateTime == null)
             return false;
 
-        if(startDateTime.compareTo(endDateTime) >0)
+        if (startDateTime.compareTo(endDateTime) > 0)
             return false;
 
-        if(accountId == null || accountId==0)
+        if (accountId == null || accountId == 0)
             return false;
 
         AccountVipTimeRange vipTimeRange = getVipTimeRange(accountId);
-        if(vipTimeRange == null)
-            accountMapper.buildAccountVipTimeRange(accountId, startDateTime,endDateTime);
+        if (vipTimeRange == null)
+            accountMapper.buildAccountVipTimeRange(accountId, startDateTime, endDateTime);
         else
-            accountMapper.updateAccountVipTimeRange(accountId, startDateTime,endDateTime,1);
+            accountMapper.updateAccountVipTimeRange(accountId, startDateTime, endDateTime, 1);
 
         return true;
     }
 
     @Override
-    public AccountVipTimeRange getVipTimeRange(Integer accountId)
-    {
+    public AccountVipTimeRange getVipTimeRange(Integer accountId) {
         return accountMapper.getAccountVipTimeRange(accountId);
     }
 

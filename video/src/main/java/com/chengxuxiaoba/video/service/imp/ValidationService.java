@@ -96,6 +96,8 @@ public class ValidationService implements IValidationService {
         codeModel.setValidationCode(code);
         validationCodeMapper.insert(codeModel);
 
+        System.out.println(codeModel.getCreateTime());
+
         //TODO send code to mobile phone
         return true;
     }

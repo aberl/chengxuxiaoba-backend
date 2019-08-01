@@ -111,7 +111,7 @@
         DELETE FROM accountmessage_relationship
         WHERE accountId = #{accountId}
         <if test="messageIdList !=null and messageIdList.size() != 0">
-            messageId in
+            and messageId in
             <foreach collection="messageIdList" index="index" item="messageId" open="("
                      separator="," close=")">
                 #{messageId}
