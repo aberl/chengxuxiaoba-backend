@@ -6,6 +6,7 @@ import com.chengxuxiaoba.video.model.Response.VO.EvaluateResponseVo;
 import com.chengxuxiaoba.video.model.Response.VO.MessageResponseVo;
 import com.chengxuxiaoba.video.model.po.Evaluate;
 import com.chengxuxiaoba.video.model.po.Message;
+import com.chengxuxiaoba.video.service.IAuthenticationService;
 import com.chengxuxiaoba.video.service.IMessageService;
 import com.chengxuxiaoba.video.service.IVoService;
 import org.apache.ibatis.annotations.Delete;
@@ -22,6 +23,10 @@ public class MessageController extends BaseController{
 
     @Autowired
     private IMessageService messageService;
+
+    @Autowired
+    private IAuthenticationService authenticationService;
+
 
     @PostMapping("/messages")
     public Result<Boolean> createMessage(@RequestBody MessageRequestVo requestBody) {
@@ -40,13 +45,16 @@ public class MessageController extends BaseController{
         return new Result<Boolean>(ResultCode.Success, result.getKey(), result.getValue());
     }
 
-    @GetMapping("/users/{accountId}/messages")
-    public Result<PageResult<MessageResponseVo>> getMessageListByAccountId(@PathVariable("accountId") Integer accountId,
-                                                                           @RequestParam(name = "isread", required = false) Boolean isRead,
+    @GetMapping("/messages")
+    public Result<PageResult<MessageResponseVo>> getMessageListByAccountId(@RequestParam(name = "isread", required = false) Boolean isRead,
                                                                         @RequestParam("pagenum") Integer pageNum,
                                                                         @RequestParam(name = "pagesize", required = false) Integer pageSize,
                                                                         @RequestParam(name = "sort", required = false) String sort)
     {
+        CurrentLoginUserModel currentLoginUserModel = authenticationService.getCurrentLoginUserModelFromRequest();
+
+        Integer accountId = currentLoginUserModel.getUserId();
+
         if (accountId == null || accountId == 0)
             return new Result<PageResult<MessageResponseVo>>(ResultCode.Error, null, ResultMessage.ParameterError);
 
@@ -61,8 +69,12 @@ public class MessageController extends BaseController{
         return new Result<PageResult<MessageResponseVo>>(ResultCode.Success, result, ResultMessage.Success);
     }
 
-    @GetMapping("/users/{accountId}/messages/{id}")
-    public Result<MessageResponseVo> getMessage(@PathVariable("accountId") Integer accountId, @PathVariable("id") Integer id) {
+    @GetMapping("/messages/{id}")
+    public Result<MessageResponseVo> getMessage(@PathVariable("id") Integer id) {
+        CurrentLoginUserModel currentLoginUserModel = authenticationService.getCurrentLoginUserModelFromRequest();
+
+        Integer accountId = currentLoginUserModel.getUserId();
+
         if((accountId ==null || accountId==0)|| (id == null || id == 0))
             return new Result<MessageResponseVo>(ResultCode.Error, null, ResultMessage.ParameterError);
 
@@ -78,9 +90,13 @@ public class MessageController extends BaseController{
         return new Result<MessageResponseVo>(ResultCode.Success, messageResponseVo, ResultMessage.Success);
     }
 
-    @GetMapping("/users/{accountId}/messages/unread/count")
-    public Result<Integer> getMessageUnReadCountByAccountId(@PathVariable("accountId") Integer accountId)
+    @GetMapping("/messages/unread/count")
+    public Result<Integer> getMessageUnReadCountByAccountId()
     {
+        CurrentLoginUserModel currentLoginUserModel = authenticationService.getCurrentLoginUserModelFromRequest();
+
+        Integer accountId = currentLoginUserModel.getUserId();
+
         if (accountId == null || accountId == 0)
             return new Result<Integer>(ResultCode.Error, null, ResultMessage.ParameterError);
 
@@ -91,7 +107,11 @@ public class MessageController extends BaseController{
 
     @DeleteMapping("/messages")
     public Result<Boolean> deleteMessage(@RequestBody MessageRequestVo requestBody) {
-        KeyValuePair<Boolean, String> result= messageService.deleteMessage(requestBody.getAccountId(), requestBody.getMessageIdList());
+        CurrentLoginUserModel currentLoginUserModel = authenticationService.getCurrentLoginUserModelFromRequest();
+
+        Integer accountId = currentLoginUserModel.getUserId();
+
+        KeyValuePair<Boolean, String> result= messageService.deleteMessage(accountId, requestBody.getMessageIdList());
 
         if(!result.getKey())
             return new Result<Boolean>(ResultCode.Error, result.getKey(),result.getValue());
@@ -101,7 +121,11 @@ public class MessageController extends BaseController{
 
     @PutMapping("/messages")
     public Result<Boolean> readMessage(@RequestBody MessageRequestVo requestBody) {
-        Boolean flag= messageService.setRead(requestBody.getAccountId(), requestBody.getMessageIdList());
+        CurrentLoginUserModel currentLoginUserModel = authenticationService.getCurrentLoginUserModelFromRequest();
+
+        Integer accountId = currentLoginUserModel.getUserId();
+
+        Boolean flag= messageService.setRead(accountId, requestBody.getMessageIdList());
 
         if(!flag)
             return new Result<Boolean>(ResultCode.Error, flag, ResultMessage.Fail);
