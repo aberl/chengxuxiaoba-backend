@@ -74,11 +74,13 @@ public class IssueController extends BaseController {
         return new Result<PageResult<IssueResponseVo>>(ResultCode.Success, result, ResultMessage.Success);
     }
 
-    @GetMapping("/users/{userId}/issues")
-    public Result<PageResult<IssueResponseVo>> getIssueListByUserId(@PathVariable("userId") Integer userId,
-                                                                    @RequestParam("pagenum") Integer pageNum,
+    @GetMapping("/issues")
+    public Result<PageResult<IssueResponseVo>> getIssueListByUserId(@RequestParam("pagenum") Integer pageNum,
                                                                     @RequestParam(name = "pagesize", required = false) Integer pageSize,
                                                                     @RequestParam(name = "sort", required = false) String sort) {
+        CurrentLoginUserModel currentLoginUserModel = authenticationService.getCurrentLoginUserModelFromRequest();
+
+        Integer userId = currentLoginUserModel.getUserId();
         if (userId == null || userId == 0)
             return new Result<PageResult<IssueResponseVo>>(ResultCode.Error, null, ResultMessage.ParameterError);
 

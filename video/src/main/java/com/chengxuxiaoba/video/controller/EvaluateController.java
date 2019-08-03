@@ -102,11 +102,14 @@ public class EvaluateController extends BaseController {
         return new Result<PageResult<EvaluateResponseVo>>(ResultCode.Success, result, ResultMessage.Success);
     }
 
-    @GetMapping("/users/{accountId}/evaluates")
-    public Result<PageResult<EvaluateResponseVo>> getEvaluateByAccountId(@PathVariable("accountId") Integer accountId,
-                                                                         @RequestParam("pagenum") Integer pageNum,
+    @GetMapping("/evaluates")
+    public Result<PageResult<EvaluateResponseVo>> getEvaluateByAccountId(@RequestParam("pagenum") Integer pageNum,
                                                                          @RequestParam(name = "pagesize", required = false) Integer pageSize,
                                                                          @RequestParam(name = "sort", required = false) String sort) {
+        CurrentLoginUserModel currentLoginUserModel= authenticationService.getCurrentLoginUserModelFromRequest();
+
+        Integer accountId = currentLoginUserModel.getUserId();
+
         if (accountId == null || accountId == 0)
             return new Result<PageResult<EvaluateResponseVo>>(ResultCode.Error, null, ResultMessage.ParameterError);
 
