@@ -1,6 +1,7 @@
 package com.chengxuxiaoba.video.service.imp;
 
 import com.chengxuxiaoba.video.jwt.JWTTokenFactory;
+import com.chengxuxiaoba.video.model.CurrentLoginUserModel;
 import com.chengxuxiaoba.video.model.JWTToken;
 import com.chengxuxiaoba.video.model.KeyValuePair;
 import com.chengxuxiaoba.video.model.Response.VO.UserResponseVo;
@@ -10,11 +11,17 @@ import com.chengxuxiaoba.video.service.IAuthenticationService;
 import com.chengxuxiaoba.video.service.IUserService;
 import com.chengxuxiaoba.video.service.IVoService;
 import com.chengxuxiaoba.video.util.CipherUtil;
+import com.chengxuxiaoba.video.util.HttpServletRequestUtil;
+import com.chengxuxiaoba.video.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Service
 public class AuthenticationService implements IAuthenticationService {
+    @Autowired
+    private JWTTokenFactory jwtTokenFactory;
 
     @Autowired
     private IUserService userService;
@@ -65,15 +72,69 @@ public class AuthenticationService implements IAuthenticationService {
         jwtUserInfo.setStatus(String.format("%s", userResponseVo.getStatus()));
         jwtUserInfo.setName(userResponseVo.getName());
         jwtUserInfo.setRole(userResponseVo.getRole());
+        jwtUserInfo.setMobilePhone(userResponseVo.getMobilePhoneNo());
+        jwtUserInfo.setIsOverDue(userResponseVo.getOverDue());
 
-        String tokenStr = JWTTokenFactory.getInstance().generateTokenString(jwtUserInfo);
+        String tokenStr = jwtTokenFactory.generateTokenString(jwtUserInfo);
 
         return tokenStr;
     }
 
     @Override
+    public CurrentLoginUserModel validateToken(String token) {
+        try {
+            if (StringUtil.isNullOrEmpty(token))
+                return null;
+
+            JWTToken jwtToken = jwtTokenFactory.refreshJWTToken(token);
+            if (jwtToken == null)
+                return null;
+            CurrentLoginUserModel currentLoginUserModel = CurrentLoginUserModel.builder()
+                    .userId(jwtToken.getUserId())
+                    .isOverDue(jwtToken.getIsOverDue())
+                    .mobilePhone(jwtToken.getMobilePhone())
+                    .name(jwtToken.getName())
+                    .role(jwtToken.getRole())
+                    .status(jwtToken.getStatus())
+                    .wechat_account(jwtToken.getWechat_account())
+                    .build();
+
+            return currentLoginUserModel;
+
+        } catch (Exception ex) {
+            //TODO log
+            return null;
+        }
+    }
+
+    @Override
     public KeyValuePair<Boolean, String> validateAuthorization(String token) {
         return null;
+    }
+
+    @Override
+    public void setCurrentLoginUserModelInRequest(HttpServletRequest request) {
+        request = request == null ? HttpServletRequestUtil.getHttpServletRequest() : request;
+
+        String authorizationToken = request.getHeader("AuthorizationToken");
+
+        if (!StringUtil.isNullOrEmpty(authorizationToken)) {
+            CurrentLoginUserModel loginUserModel = validateToken(authorizationToken);
+
+            request.setAttribute("CurrentLoginUserModel", loginUserModel);
+        }
+    }
+
+    @Override
+    public CurrentLoginUserModel getCurrentLoginUserModelFromRequest() {
+        try {
+            CurrentLoginUserModel currentLoginUserModel = HttpServletRequestUtil.getInstance("AuthorizationToken", CurrentLoginUserModel.class);
+
+            return currentLoginUserModel;
+        } catch (Exception ex) {
+            //TODO log
+            return null;
+        }
     }
 
     private String generateCipherTextByStrategy(String mobilePhone, String password) {

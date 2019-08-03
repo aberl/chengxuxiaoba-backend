@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class JWTToken {
+public class CurrentLoginUserModel {
     private String userId;
     private String name;
     private String wechat_account;

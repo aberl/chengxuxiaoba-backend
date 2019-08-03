@@ -21,4 +21,18 @@ public class HttpServletRequestUtil {
 			return null;
 		}
 	}
+
+	public static <T> T getInstance(String key, Class<T> clazz)
+	{
+		HttpServletRequest request=getHttpServletRequest();
+
+		Object instanceObj = request.getAttribute(key);
+
+		if(instanceObj == null)
+			return null;
+
+		T instance = (T)instanceObj;
+
+		return instance;
+	}
 }

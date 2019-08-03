@@ -8,8 +8,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -17,47 +17,30 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.Date;
 
+@Service
 public class JWTTokenFactory {
-    @Autowired
-    private Environment env;
 
-    private static JWTTokenFactory instance;
-    private long expire_time = 1800000;//Long.parseLong(env.getProperty("token-expire-time", "1800000"));
+    @Value("${jwtToken.token-expire-time}")
+    private String expire_time;
 
-    private String encrypt_key = "vtd system encryption key";// env.getProperty("jwt-encrypt-key");
+    @Value("${jwtToken.encrypt-key}")
+    private String encrypt_key ;
 
     private Claims claim;
 
-    public static JWTTokenFactory getInstance() {
-        if (instance == null)
-            instance = new JWTTokenFactory();
-        return instance;
-    }
+//    public static JWTTokenFactory getInstance() {
+//        if (instance == null)
+//            instance = new JWTTokenFactory();
+//        return instance;
+//    }
 
-    public static void main(String[] args) {
-        JWTToken token = new JWTToken();
-        token.setStatus("1");
-        token.setRole("admin");
-        token.setName("lucy");
-        token.setUserId("as");
-        token.setWechat_account("qwert");
-
-        String tokenStr = JWTTokenFactory.getInstance().generateTokenString(token);
-
-        System.out.println(tokenStr);
-
-        JWTToken jwtUserInfo = JWTTokenFactory.getInstance().refreshJWTToken(tokenStr);
-
-        System.out.println(jwtUserInfo);
-    }
-
-    private JWTTokenFactory() {
+    private JWTTokenFactory(){
     }
 
     public String generateTokenString(JWTToken token)
     {
-        String sub = JWTTokenFactory.getInstance().generateSubject(token);
-        String tokenStr = JWTTokenFactory.getInstance().generateJWTToken(sub);
+        String sub = generateSubject(token);
+        String tokenStr = generateJWTToken(sub);
 
         return tokenStr;
     }
@@ -87,25 +70,12 @@ public class JWTTokenFactory {
     private String generateSubject(JWTToken token) {
 
         try {
-
-            JWTToken jwtUserInfo = new JWTToken();
-            jwtUserInfo.setName(token.getName());
-            jwtUserInfo.setRole(token.getRole());
-            jwtUserInfo.setStatus(token.getStatus());
-            jwtUserInfo.setUserId(token.getUserId());
-            jwtUserInfo.setWechat_account(token.getWechat_account());
+            if(token == null)
+                return null;
 
             ObjectMapper mapper = new ObjectMapper();
 
-//            ObjectNode node = mapper.createObjectNode();
-//            node.put(USER_ID, token.getUserId());
-//            node.put(NAME, token.getName());
-//            node.put(WECHAT_ACCOUNT, token.getWechat_account());
-//            node.put(STATUS, token.getStatus());
-//            node.put(ROLE, token.getRole());
-
-//            String result = mapper.writeValueAsString(node);
-            String result = mapper.writeValueAsString(jwtUserInfo);
+            String result = mapper.writeValueAsString(token);
             return result;
         } catch (Exception ex) {
             //todo log
@@ -114,6 +84,7 @@ public class JWTTokenFactory {
     }
 
     private SecretKey generalKey() {
+        encrypt_key = encrypt_key == null ? "chengxuxiaoba-jwt-key":encrypt_key;
         byte[] encodedKey = Base64.getEncoder().encode(encrypt_key.getBytes());
         SecretKey key = new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES/GCM/NoPadding");
         return key;

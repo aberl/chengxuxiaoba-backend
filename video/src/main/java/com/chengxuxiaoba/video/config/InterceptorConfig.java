@@ -14,11 +14,11 @@ public class InterceptorConfig extends WebMvcConfigurationSupport {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authenticationInterceptor())
-                .addPathPatterns("/api/**");
+                .addPathPatterns("/**");
 
-        List<String> excludePathList=new ArrayList<>();
-        excludePathList.add("/api/");
-        registry.addInterceptor(authenticationInterceptor()).excludePathPatterns();
+//        List<String> excludePathList=new ArrayList<>();
+//        excludePathList.add("/api/");
+//        registry.addInterceptor(authenticationInterceptor()).excludePathPatterns();
     }
     @Bean
     public AuthorizationInterceptor authenticationInterceptor() {
