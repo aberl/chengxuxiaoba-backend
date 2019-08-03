@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CurrentLoginUserModel {
-    private String userId;
+    private Integer userId;
     private String name;
     private String wechat_account;
-    private String status;
-    private String role;
+    private Integer status;
+    private Integer role;
     private String mobilePhone;
     private Boolean isOverDue;
 }

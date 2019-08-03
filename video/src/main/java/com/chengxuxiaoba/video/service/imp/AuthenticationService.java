@@ -90,12 +90,12 @@ public class AuthenticationService implements IAuthenticationService {
             if (jwtToken == null)
                 return null;
             CurrentLoginUserModel currentLoginUserModel = CurrentLoginUserModel.builder()
-                    .userId(jwtToken.getUserId())
+                    .userId(Integer.valueOf(jwtToken.getUserId()))
                     .isOverDue(jwtToken.getIsOverDue())
                     .mobilePhone(jwtToken.getMobilePhone())
                     .name(jwtToken.getName())
-                    .role(jwtToken.getRole())
-                    .status(jwtToken.getStatus())
+                    .role(Integer.valueOf(jwtToken.getRole()))
+                    .status(Integer.valueOf(jwtToken.getStatus()))
                     .wechat_account(jwtToken.getWechat_account())
                     .build();
 
@@ -128,7 +128,7 @@ public class AuthenticationService implements IAuthenticationService {
     @Override
     public CurrentLoginUserModel getCurrentLoginUserModelFromRequest() {
         try {
-            CurrentLoginUserModel currentLoginUserModel = HttpServletRequestUtil.getInstance("AuthorizationToken", CurrentLoginUserModel.class);
+            CurrentLoginUserModel currentLoginUserModel = HttpServletRequestUtil.getInstance("CurrentLoginUserModel", CurrentLoginUserModel.class);
 
             return currentLoginUserModel;
         } catch (Exception ex) {

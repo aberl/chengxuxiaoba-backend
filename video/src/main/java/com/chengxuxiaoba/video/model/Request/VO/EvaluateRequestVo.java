@@ -4,7 +4,6 @@ public class EvaluateRequestVo {
     private Integer videoId;
     private String content;
     private Integer stars;
-    private Integer accountId;
 
     public Integer getVideoId() {
         return videoId;
@@ -28,13 +27,5 @@ public class EvaluateRequestVo {
 
     public void setStars(Integer stars) {
         this.stars = stars;
-    }
-
-    public Integer getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(Integer accountId) {
-        this.accountId = accountId;
     }
 }

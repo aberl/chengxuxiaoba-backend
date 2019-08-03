@@ -11,10 +11,7 @@ import com.chengxuxiaoba.video.model.po.Evaluate;
 import com.chengxuxiaoba.video.model.po.Issue;
 import com.chengxuxiaoba.video.model.po.Video;
 import com.chengxuxiaoba.video.model.query.EvaluateQuery;
-import com.chengxuxiaoba.video.service.IEvaluateService;
-import com.chengxuxiaoba.video.service.IUserService;
-import com.chengxuxiaoba.video.service.IVideoService;
-import com.chengxuxiaoba.video.service.IVoService;
+import com.chengxuxiaoba.video.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,25 +32,30 @@ public class EvaluateController extends BaseController {
     @Autowired
     private IEvaluateService evaluatevoService;
 
+    @Autowired
+    private IAuthenticationService authenticationService;
+
     @PostMapping("/videos/evaluates")
     public Result<Boolean> createEvaluate(@RequestBody EvaluateRequestVo requestBody) {
+        CurrentLoginUserModel currentLoginUserModel= authenticationService.getCurrentLoginUserModelFromRequest();
+
         Video video = videoService.getSingle(requestBody.getVideoId());
         if (video == null)
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.VideoIsNotExist);
 
-        Account account = userService.getUser(requestBody.getAccountId());
+        Account account = userService.getUser(currentLoginUserModel.getUserId());
         if (account == null)
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.UserIsNotExist);
 
         EvaluateQuery evaluateQuery = new EvaluateQuery();
         evaluateQuery.setVideoId(requestBody.getVideoId());
-        evaluateQuery.setAccountId(requestBody.getAccountId());
+        evaluateQuery.setAccountId(currentLoginUserModel.getUserId());
 
         if (evaluatevoService.isExist(evaluateQuery))
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.CannotEvluateOneVideoMoreTime);
 
         Evaluate evaluate = voService.convertToEvalueate(requestBody);
-
+        evaluate.setAccountId(currentLoginUserModel.getUserId());
         Boolean flag = evaluatevoService.createNewEvaluate(evaluate);
 
         if (!flag)
