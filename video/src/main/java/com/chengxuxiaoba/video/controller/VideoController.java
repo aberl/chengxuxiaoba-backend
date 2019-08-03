@@ -8,6 +8,7 @@ import com.chengxuxiaoba.video.model.Response.VO.VideoWatchRecordCourseModuleSta
 import com.chengxuxiaoba.video.model.po.Video;
 import com.chengxuxiaoba.video.model.po.VideoWatchRecord;
 import com.chengxuxiaoba.video.model.po.VideoWatchRecordCourseModuleStatistic;
+import com.chengxuxiaoba.video.service.IAuthenticationService;
 import com.chengxuxiaoba.video.service.IVideoService;
 import com.chengxuxiaoba.video.service.IVoService;
 import com.chengxuxiaoba.video.util.ListUtil;
@@ -25,7 +26,9 @@ public class VideoController extends BaseController {
 
     @Autowired
     private IVoService voService;
-    private Result<Boolean> booleanResult;
+
+    @Autowired
+    private IAuthenticationService authenticationService;
 
     @PostMapping("/videos")
     public Result<Boolean> createVideo(@RequestBody VideoRequestVo requestBody) throws IOException {
@@ -47,7 +50,11 @@ public class VideoController extends BaseController {
         if (requestBody.getId() == null || requestBody.getId() == 0)
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.ParameterError);
 
-        if (requestBody.getWatchAccountId() == null || requestBody.getWatchAccountId() == 0)
+        CurrentLoginUserModel currentLoginUserModel = authenticationService.getCurrentLoginUserModelFromRequest();
+
+        Integer accountId = currentLoginUserModel.getUserId();
+
+        if (accountId == null || accountId == 0)
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.ParameterError);
 
         Video video = videoService.getSingle(requestBody.getId());
@@ -55,7 +62,7 @@ public class VideoController extends BaseController {
 
         video.setViewCount(viewCount + 1);
 
-        videoService.recordVideoWatching(requestBody.getWatchAccountId(), video.getCourseModuleId(), requestBody.getId());
+        videoService.recordVideoWatching(accountId, video.getCourseModuleId(), requestBody.getId());
 
         Boolean flag = videoService.uploadVideo(video);
 
@@ -76,7 +83,7 @@ public class VideoController extends BaseController {
         Boolean flag = videoService.uploadVideo(video);
 
         if (!flag)
-            return booleanResult;
+            return new Result<Boolean>(ResultCode.Error, flag, ResultMessage.Fail);
 
         return new Result<Boolean>(ResultCode.Success, flag, ResultMessage.Success);
     }
@@ -108,20 +115,28 @@ public class VideoController extends BaseController {
         return new Result<PageResult<VideoResponseVo>>(ResultCode.Success, result, ResultMessage.Success);
     }
 
-    @GetMapping("/videos/recordstatistic/{accountid}")
-    public Result<List<VideoWatchRecordCourseModuleStatisticResponseVo>> getWatchingRecordStatistic(@PathVariable("accountid") Integer accountid) {
+    @GetMapping("/videos/recordstatistic")
+    public Result<List<VideoWatchRecordCourseModuleStatisticResponseVo>> getWatchingRecordStatistic() {
 
-        List<VideoWatchRecordCourseModuleStatistic> recordStatisticList = videoService.getVideoWatchRecordCourseModuleStatistic(accountid);
+        CurrentLoginUserModel currentLoginUserModel = authenticationService.getCurrentLoginUserModelFromRequest();
+
+        Integer accountId = currentLoginUserModel.getUserId();
+
+        List<VideoWatchRecordCourseModuleStatistic> recordStatisticList = videoService.getVideoWatchRecordCourseModuleStatistic(accountId);
 
         List<VideoWatchRecordCourseModuleStatisticResponseVo> responseVoResult = voService.convertToVideoWatchRecordCourseModuleStatisticResponseVo(recordStatisticList);
 
         return new Result<List<VideoWatchRecordCourseModuleStatisticResponseVo>>(ResultCode.Success, responseVoResult, ResultMessage.Success);
     }
 
-    @GetMapping("/videos/record/{accountid}/{coursemoduleid}")
-    public Result<List<VideoResponseVo>> getWatchingRecordList(@PathVariable("accountid") Integer accountid, @PathVariable("coursemoduleid") Integer coursemoduleid) {
+    @GetMapping("/videos/record/{coursemoduleid}")
+    public Result<List<VideoResponseVo>> getWatchingRecordList(@PathVariable("coursemoduleid") Integer coursemoduleid) {
 
-        List<Video> recordList = videoService.getVideoListHasBeenWatch(accountid, coursemoduleid);
+        CurrentLoginUserModel currentLoginUserModel = authenticationService.getCurrentLoginUserModelFromRequest();
+
+        Integer accountId = currentLoginUserModel.getUserId();
+
+        List<Video> recordList = videoService.getVideoListHasBeenWatch(accountId, coursemoduleid);
 
         if (ListUtil.isNullOrEmpty(recordList))
             return new Result<List<VideoResponseVo>>(ResultCode.Success, null, ResultMessage.Success);
