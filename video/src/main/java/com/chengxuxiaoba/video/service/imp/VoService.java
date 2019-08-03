@@ -564,7 +564,11 @@ public class VoService implements IVoService {
 
         BeanUtils.copyProperties(uploadFile, uploadFileResponseVo);
 
-        String _accessURL = String.format("%s/%s/%s", uploadFileService.getAccessHostName(), uploadFile.getPurpose(), uploadFile.getName());
+        String suffixName = FileUtil.getSuffixName(uploadFile.getOriginName());
+
+        String name =uploadFile.getName().contains(".")?uploadFile.getName(): String.format("%s.%s", uploadFile.getName(),suffixName);
+
+        String _accessURL = String.format("%s/%s/%s", uploadFileService.getAccessHostName(), uploadFile.getPurpose(), name);
         uploadFileResponseVo.setUrl(_accessURL);
 
         return uploadFileResponseVo;

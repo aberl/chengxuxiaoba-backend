@@ -40,11 +40,11 @@ public class UploadFileService implements IUploadFileService {
 
         Long size = multipartFile.getSize();
 
-        String name = generateFileName(suffixName);
+        String name = UUID.randomUUID().toString();// generateFileName(suffixName);
 
         String filePath = generateFilePath(purpose);
 
-        KeyValuePair<Boolean, String> kvp = FileHandler.uploadFile(multipartFile, filePath, name);
+        KeyValuePair<Boolean, String> kvp = FileHandler.uploadFile(multipartFile, filePath, String.format("%s.%s", name, suffixName));
         if (!kvp.getKey())
             return null;
 
