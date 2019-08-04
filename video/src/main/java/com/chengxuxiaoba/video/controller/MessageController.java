@@ -1,5 +1,6 @@
 package com.chengxuxiaoba.video.controller;
 
+import com.chengxuxiaoba.video.annotation.AuthorizationValidation;
 import com.chengxuxiaoba.video.model.*;
 import com.chengxuxiaoba.video.model.Request.VO.MessageRequestVo;
 import com.chengxuxiaoba.video.model.Response.VO.EvaluateResponseVo;
@@ -46,6 +47,7 @@ public class MessageController extends BaseController{
     }
 
     @GetMapping("/messages")
+    @AuthorizationValidation
     public Result<PageResult<MessageResponseVo>> getMessageListByAccountId(@RequestParam(name = "isread", required = false) Boolean isRead,
                                                                         @RequestParam("pagenum") Integer pageNum,
                                                                         @RequestParam(name = "pagesize", required = false) Integer pageSize,

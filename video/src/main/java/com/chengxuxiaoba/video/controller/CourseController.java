@@ -1,5 +1,6 @@
 package com.chengxuxiaoba.video.controller;
 
+import com.chengxuxiaoba.video.annotation.AuthorizationValidation;
 import com.chengxuxiaoba.video.model.Request.VO.CourseModuleRequestVo;
 import com.chengxuxiaoba.video.model.Request.VO.CourseRequestVo;
 import com.chengxuxiaoba.video.model.Response.VO.CourseModuleResponseVo;
@@ -11,11 +12,9 @@ import com.chengxuxiaoba.video.model.po.Course;
 import com.chengxuxiaoba.video.model.po.CourseModule;
 import com.chengxuxiaoba.video.service.ICourseService;
 import com.chengxuxiaoba.video.service.IVoService;
-import com.chengxuxiaoba.video.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -28,6 +27,7 @@ public class CourseController {
     private ICourseService courseService;
 
     @PostMapping("/courses")
+    @AuthorizationValidation()
     public Result<Boolean> createCourse(@RequestBody CourseRequestVo courseRequestVo) {
         Course course = voService.convertToCourse(courseRequestVo);
 

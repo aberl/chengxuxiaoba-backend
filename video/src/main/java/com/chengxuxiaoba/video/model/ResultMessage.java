@@ -29,4 +29,5 @@ public class ResultMessage {
     public static String MaterialIsNotExist = "材料不存在";
     public static String MESSAGEIDLISTCANNOTBENULL = "消息id集合不能为空";
     public static String ACCOUNTIDCANNOTBENULL = "用户id不能为空";
+    public static String NOAUTHORIZATION = "沒有权限";
 }

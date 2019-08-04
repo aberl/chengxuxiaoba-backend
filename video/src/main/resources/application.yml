@@ -75,21 +75,11 @@ message:
     vipmemberexpire: 尊敬的%s会员, 您的%s会员将于%s到期，到期后您将不再享受%s会员的福利，您可以选择延期，具体福利请查看会员手册， 祝您学习愉快
 
 authorization:
-  urls:
+  excludeurls:
+    - /users/token
+    - /users/password
+    - /users/account
 
 jwtToken:
     token-expire-time: 1800000
     encrypt-key: chengxuxiaoba-jwt-key
-
-person:
-  lastName: hello
-  age: 18
-  boss: false
-  birth: 2017/12/12
-  maps: {k1: v1,k2: 12}
-  lists:
-    - lisi
-    - zhaoliu
-  dog:
-    name: 小狗
-    age: 12
