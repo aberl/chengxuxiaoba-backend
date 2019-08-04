@@ -1,5 +1,6 @@
 package com.chengxuxiaoba.video.controller;
 
+import com.chengxuxiaoba.video.annotation.AuthorizationValidation;
 import com.chengxuxiaoba.video.model.Request.VO.MaterialRequestVo;
 import com.chengxuxiaoba.video.model.Response.VO.MaterialResponseVo;
 import com.chengxuxiaoba.video.model.Result;
@@ -23,6 +24,7 @@ public class MaterialController {
     private IVoService voService;
 
     @PostMapping("/material")
+    @AuthorizationValidation()
     public Result<Boolean> createMaterial(@RequestBody MaterialRequestVo materialRequestVo) {
         Material material = voService.convertToMaterial(materialRequestVo);
 
@@ -35,6 +37,7 @@ public class MaterialController {
     }
 
     @PutMapping("/material")
+    @AuthorizationValidation()
     public Result<Boolean> updateMaterial(@RequestBody MaterialRequestVo materialRequestVo) {
         Material material =materialService.getMaterial(materialRequestVo.getId());
 
@@ -49,6 +52,7 @@ public class MaterialController {
     }
 
     @PutMapping("/material/inactive")
+    @AuthorizationValidation()
     public Result<Boolean> inactiveMaterial(@RequestBody MaterialRequestVo materialRequestVo) {
         Boolean flag = materialService.inactiveMaterial(materialRequestVo.getId());
 

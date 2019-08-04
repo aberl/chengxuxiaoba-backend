@@ -1,5 +1,6 @@
 package com.chengxuxiaoba.video.controller;
 
+import com.chengxuxiaoba.video.annotation.AuthorizationValidation;
 import com.chengxuxiaoba.video.handler.Handler;
 import com.chengxuxiaoba.video.model.*;
 import com.chengxuxiaoba.video.model.Request.VO.VideoRequestVo;
@@ -31,6 +32,7 @@ public class VideoController extends BaseController {
     private IAuthenticationService authenticationService;
 
     @PostMapping("/videos")
+    @AuthorizationValidation()
     public Result<Boolean> createVideo(@RequestBody VideoRequestVo requestBody) throws IOException {
         if (videoService.getSingle(requestBody.getCourseModuleId(), requestBody.getName()) != null)
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.SameVideoNameInCurrentCourseModule);
@@ -46,6 +48,7 @@ public class VideoController extends BaseController {
     }
 
     @PostMapping("/videos/record")
+    @AuthorizationValidation()
     public Result<Boolean> watchVideo(@RequestBody VideoRequestVo requestBody) throws IOException {
         if (requestBody.getId() == null || requestBody.getId() == 0)
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.ParameterError);
@@ -73,6 +76,7 @@ public class VideoController extends BaseController {
     }
 
     @PutMapping("/videos")
+    @AuthorizationValidation()
     public Result<Boolean> updateVideo(@RequestBody VideoRequestVo requestBody) throws IOException {
         Video video = videoService.getSingle(requestBody.getId());
         if (video == null)

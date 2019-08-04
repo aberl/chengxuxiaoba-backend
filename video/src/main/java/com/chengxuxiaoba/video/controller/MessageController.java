@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @RestController
+@AuthorizationValidation
 public class MessageController extends BaseController{
     @Autowired
     private IVoService voService;
@@ -47,7 +48,6 @@ public class MessageController extends BaseController{
     }
 
     @GetMapping("/messages")
-    @AuthorizationValidation
     public Result<PageResult<MessageResponseVo>> getMessageListByAccountId(@RequestParam(name = "isread", required = false) Boolean isRead,
                                                                         @RequestParam("pagenum") Integer pageNum,
                                                                         @RequestParam(name = "pagesize", required = false) Integer pageSize,
@@ -55,14 +55,9 @@ public class MessageController extends BaseController{
     {
         CurrentLoginUserModel currentLoginUserModel = authenticationService.getCurrentLoginUserModelFromRequest();
 
-        Integer accountId = currentLoginUserModel.getUserId();
-
-        if (accountId == null || accountId == 0)
-            return new Result<PageResult<MessageResponseVo>>(ResultCode.Error, null, ResultMessage.ParameterError);
-
         PageInfo pageInfo = super.generatePageInfo(pageNum, pageSize, sort);
 
-        PageResult<Message> pageData = messageService.getMessageListByAccountId(accountId, isRead, pageInfo);
+        PageResult<Message> pageData = messageService.getMessageListByAccountId(currentLoginUserModel.getUserId(), isRead, pageInfo);
 
         List<MessageResponseVo> resultList = voService.convertToMessageResponseVo(pageData.getData());
 
@@ -75,9 +70,7 @@ public class MessageController extends BaseController{
     public Result<MessageResponseVo> getMessage(@PathVariable("id") Integer id) {
         CurrentLoginUserModel currentLoginUserModel = authenticationService.getCurrentLoginUserModelFromRequest();
 
-        Integer accountId = currentLoginUserModel.getUserId();
-
-        if((accountId ==null || accountId==0)|| (id == null || id == 0))
+        if(id == null || id == 0)
             return new Result<MessageResponseVo>(ResultCode.Error, null, ResultMessage.ParameterError);
 
         Message message = messageService.getMessage(id);
@@ -85,7 +78,7 @@ public class MessageController extends BaseController{
         if(message == null)
             return new Result<MessageResponseVo>(ResultCode.Error, null, ResultMessage.MessageIsNotExist);
 
-        messageService.setRead(accountId, Arrays.asList(id));
+        messageService.setRead(currentLoginUserModel.getUserId(), Arrays.asList(id));
 
         MessageResponseVo messageResponseVo = voService.convertToMessageResponseVo(message);
 
@@ -97,12 +90,7 @@ public class MessageController extends BaseController{
     {
         CurrentLoginUserModel currentLoginUserModel = authenticationService.getCurrentLoginUserModelFromRequest();
 
-        Integer accountId = currentLoginUserModel.getUserId();
-
-        if (accountId == null || accountId == 0)
-            return new Result<Integer>(ResultCode.Error, null, ResultMessage.ParameterError);
-
-        Integer unreadCount = messageService.getUnReadCount(accountId);
+        Integer unreadCount = messageService.getUnReadCount(currentLoginUserModel.getUserId());
 
         return new Result<Integer>(ResultCode.Success, unreadCount, ResultMessage.Success);
     }
@@ -111,9 +99,7 @@ public class MessageController extends BaseController{
     public Result<Boolean> deleteMessage(@RequestBody MessageRequestVo requestBody) {
         CurrentLoginUserModel currentLoginUserModel = authenticationService.getCurrentLoginUserModelFromRequest();
 
-        Integer accountId = currentLoginUserModel.getUserId();
-
-        KeyValuePair<Boolean, String> result= messageService.deleteMessage(accountId, requestBody.getMessageIdList());
+        KeyValuePair<Boolean, String> result= messageService.deleteMessage(currentLoginUserModel.getUserId(), requestBody.getMessageIdList());
 
         if(!result.getKey())
             return new Result<Boolean>(ResultCode.Error, result.getKey(),result.getValue());
@@ -125,9 +111,7 @@ public class MessageController extends BaseController{
     public Result<Boolean> readMessage(@RequestBody MessageRequestVo requestBody) {
         CurrentLoginUserModel currentLoginUserModel = authenticationService.getCurrentLoginUserModelFromRequest();
 
-        Integer accountId = currentLoginUserModel.getUserId();
-
-        Boolean flag= messageService.setRead(accountId, requestBody.getMessageIdList());
+        Boolean flag= messageService.setRead(currentLoginUserModel.getUserId(), requestBody.getMessageIdList());
 
         if(!flag)
             return new Result<Boolean>(ResultCode.Error, flag, ResultMessage.Fail);

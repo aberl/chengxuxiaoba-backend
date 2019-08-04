@@ -1,5 +1,6 @@
 package com.chengxuxiaoba.video.controller;
 
+import com.chengxuxiaoba.video.annotation.AuthorizationValidation;
 import com.chengxuxiaoba.video.constant.CommonStatus;
 import com.chengxuxiaoba.video.handler.Handler;
 import com.chengxuxiaoba.video.model.*;
@@ -36,6 +37,7 @@ public class EvaluateController extends BaseController {
     private IAuthenticationService authenticationService;
 
     @PostMapping("/videos/evaluates")
+    @AuthorizationValidation()
     public Result<Boolean> createEvaluate(@RequestBody EvaluateRequestVo requestBody) {
         CurrentLoginUserModel currentLoginUserModel= authenticationService.getCurrentLoginUserModelFromRequest();
 
@@ -103,19 +105,15 @@ public class EvaluateController extends BaseController {
     }
 
     @GetMapping("/evaluates")
+    @AuthorizationValidation()
     public Result<PageResult<EvaluateResponseVo>> getEvaluateByAccountId(@RequestParam("pagenum") Integer pageNum,
                                                                          @RequestParam(name = "pagesize", required = false) Integer pageSize,
                                                                          @RequestParam(name = "sort", required = false) String sort) {
         CurrentLoginUserModel currentLoginUserModel= authenticationService.getCurrentLoginUserModelFromRequest();
 
-        Integer accountId = currentLoginUserModel.getUserId();
-
-        if (accountId == null || accountId == 0)
-            return new Result<PageResult<EvaluateResponseVo>>(ResultCode.Error, null, ResultMessage.ParameterError);
-
         PageInfo pageInfo = super.generatePageInfo(pageNum, pageSize, sort);
 
-        PageResult<Evaluate> pageData = evaluatevoService.getEvaluateListByAccountId(accountId, pageInfo);
+        PageResult<Evaluate> pageData = evaluatevoService.getEvaluateListByAccountId(currentLoginUserModel.getUserId(), pageInfo);
 
         List<EvaluateResponseVo> resultList = voService.convertToEvaluateResponseVo(pageData.getData());
 

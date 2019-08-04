@@ -1,5 +1,6 @@
 package com.chengxuxiaoba.video.controller;
 
+import com.chengxuxiaoba.video.annotation.AuthorizationValidation;
 import com.chengxuxiaoba.video.constant.CommonStatus;
 import com.chengxuxiaoba.video.constant.FilePurpose;
 import com.chengxuxiaoba.video.model.Request.VO.UploadFileRequestVo;
@@ -21,6 +22,7 @@ import java.util.Date;
 
 @RestController
 @RequestMapping(value = "/uploadfile")
+@AuthorizationValidation()
 public class FileController {
     //upload images
     //upload video

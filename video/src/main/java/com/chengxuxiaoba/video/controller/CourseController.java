@@ -41,6 +41,7 @@ public class CourseController {
     }
 
     @PutMapping("/courses")
+    @AuthorizationValidation()
     public Result<Boolean> updateCourse(@RequestBody CourseRequestVo courseRequestVo) {
         Course course = voService.convertToCourse(courseRequestVo);
 
@@ -56,6 +57,7 @@ public class CourseController {
     }
 
     @PostMapping("/courses/module")
+    @AuthorizationValidation()
     public Result<Boolean> createCourseModule(@RequestBody CourseModuleRequestVo courseModuleRequestVo) {
         CourseModule courseModule = voService.convertToCourseModule(courseModuleRequestVo);
 
@@ -79,6 +81,7 @@ public class CourseController {
 
 
     @PutMapping("/courses/module")
+    @AuthorizationValidation()
     public Result<Boolean> updateCourseModule(@RequestBody CourseModuleRequestVo courseModuleRequestVo) {
         CourseModule courseModule = voService.convertToCourseModule(courseModuleRequestVo);
 

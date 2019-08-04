@@ -1,5 +1,6 @@
 package com.chengxuxiaoba.video.controller;
 
+import com.chengxuxiaoba.video.annotation.AuthorizationValidation;
 import com.chengxuxiaoba.video.constant.CommonStatus;
 import com.chengxuxiaoba.video.constant.RoleConstant;
 import com.chengxuxiaoba.video.constant.ValidationCodeCategory;
@@ -62,6 +63,7 @@ public class UserController extends BaseController {
     }
 
     @PutMapping("/account")
+    @AuthorizationValidation(role = RoleConstant.ADMIN)
     public Result<Boolean> updateAccount(@RequestBody AccountRequestVo accountRequestVo) {
 
         Account account = voService.convertToUser(accountRequestVo);
@@ -122,6 +124,7 @@ public class UserController extends BaseController {
     }
 
     @GetMapping("")
+    @AuthorizationValidation(role = RoleConstant.ADMIN)
     public Result<PageResult<UserResponseVo>> getUserInfoList(@RequestParam(value = "query", required = false) String query, @RequestParam("pagenum") Integer pageNum,
                                                               @RequestParam(name = "pagesize", required = false) Integer pageSize,
                                                               @RequestParam(name = "sort", required = false) String sort) {
@@ -144,6 +147,7 @@ public class UserController extends BaseController {
     }
 
     @GetMapping("/{id}")
+    @AuthorizationValidation(role = RoleConstant.ADMIN)
     public Result<UserResponseVo> getUserInfo(@PathVariable("id") Integer userId) {
         Account account = userService.getUser(userId);
 
@@ -156,6 +160,7 @@ public class UserController extends BaseController {
     }
 
     @GetMapping("/mobilephoneno/{mobilephoneno}")
+    @AuthorizationValidation(role = RoleConstant.ADMIN)
     public Result<UserResponseVo> getUserInfoByMobilePhoneNo(@PathVariable("mobilephoneno") String mobilephoneno) {
         Account account = userService.getUserByMobilePhone(mobilephoneno);
 
@@ -169,24 +174,25 @@ public class UserController extends BaseController {
 
 
     @PutMapping("/updaterole")
+    @AuthorizationValidation
     public Result<Boolean> updateAccountRoleRelationShip(@RequestBody AccountRequestVo accountRequestVo) {
         if (accountRequestVo == null)
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.DataIsNULL);
 
         if (accountRequestVo.getRole() == null)
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.DataIsNULL);
+        CurrentLoginUserModel currentLoginUserModel = authenticationService.getCurrentLoginUserModelFromRequest();
 
-        Account account = userService.getUser(accountRequestVo.getId());
+        Account account = userService.getUser(currentLoginUserModel.getUserId());
         if (account == null)
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.UserIsNotExist);
 
         RoleConstant role = RoleConstant.getEnum(accountRequestVo.getRole());
 
-        Boolean flag = userService.updateAccountRoleRelationship(accountRequestVo.getId(), role);
+        Boolean flag = userService.updateAccountRoleRelationship(currentLoginUserModel.getUserId(), role);
 
 
         return new Result<Boolean>(ResultCode.Success, flag, ResultMessage.Success);
-
     }
 
 }

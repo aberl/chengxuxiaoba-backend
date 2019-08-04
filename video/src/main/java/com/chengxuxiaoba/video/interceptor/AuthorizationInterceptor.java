@@ -1,8 +1,10 @@
 package com.chengxuxiaoba.video.interceptor;
 
 import com.chengxuxiaoba.video.annotation.AuthorizationValidation;
+import com.chengxuxiaoba.video.constant.RoleConstant;
 import com.chengxuxiaoba.video.exception.AuthorizationValidationException;
 import com.chengxuxiaoba.video.model.CurrentLoginUserModel;
+import com.chengxuxiaoba.video.model.po.Role;
 import com.chengxuxiaoba.video.service.imp.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -20,34 +22,55 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        if(hasAuthorizationValidation(handler)) {
-            validateAuthorization();
+        AuthorizationValidation authorizationValidation = hasAuthorizationValidation(handler);
+        if (authorizationValidation != null) {
+            RoleConstant role = authorizationValidation.role();
+
+            authenticationService.setCurrentLoginUserModelInRequest(request);
+
+            validateAuthorization(role);
         }
-        authenticationService.setCurrentLoginUserModelInRequest(request);
 
         return true;
     }
 
-    private void validateAuthorization() throws Exception {
-        CurrentLoginUserModel currentLoginUserModel= authenticationService.getCurrentLoginUserModelFromRequest();
+    private void validateAuthorization(RoleConstant role) throws Exception {
+        CurrentLoginUserModel currentLoginUserModel = authenticationService.getCurrentLoginUserModelFromRequest();
 
-        if(currentLoginUserModel == null)
+        if (currentLoginUserModel == null)
             throw new AuthorizationValidationException();
+
+        if (role != null) {
+            Integer _role = currentLoginUserModel.getRole();
+
+            if (role == RoleConstant.ADMIN) {
+                if (_role != role.getValue())
+                    throw new AuthorizationValidationException();
+
+            }
+
+        }
     }
 
-    private Boolean hasAuthorizationValidation(Object handler) {
+    private RoleConstant getRole(AuthorizationValidation authorizationValidation) {
+        if (authorizationValidation == null)
+            return null;
+
+        return authorizationValidation.role();
+    }
+
+    private AuthorizationValidation hasAuthorizationValidation(Object handler) {
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
 
             AuthorizationValidation av = handlerMethod.getMethod().getAnnotation(AuthorizationValidation.class);
-            if(av == null)
-            {
+
+            if (av == null) {
                 av = handlerMethod.getMethod().getDeclaringClass().getAnnotation(AuthorizationValidation.class);
             }
 
-            if(av == null)
-                return false;
+            return av;
         }
-        return true;
+        return null;
     }
 }

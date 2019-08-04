@@ -1,5 +1,6 @@
 package com.chengxuxiaoba.video.controller;
 
+import com.chengxuxiaoba.video.annotation.AuthorizationValidation;
 import com.chengxuxiaoba.video.constant.CommonStatus;
 import com.chengxuxiaoba.video.model.*;
 import com.chengxuxiaoba.video.model.Request.VO.AnswerRequestVo;
@@ -31,6 +32,7 @@ public class IssueController extends BaseController {
     private IAuthenticationService authenticationService;
 
     @PostMapping("/videos/issues")
+    @AuthorizationValidation()
     public Result<Boolean> createIssue(@RequestBody IssueRequestVo requestBody) throws IOException {
         CurrentLoginUserModel currentLoginUserModel = authenticationService.getCurrentLoginUserModelFromRequest();
 
@@ -75,19 +77,15 @@ public class IssueController extends BaseController {
     }
 
     @GetMapping("/issues")
+    @AuthorizationValidation()
     public Result<PageResult<IssueResponseVo>> getIssueListByUserId(@RequestParam("pagenum") Integer pageNum,
                                                                     @RequestParam(name = "pagesize", required = false) Integer pageSize,
                                                                     @RequestParam(name = "sort", required = false) String sort) {
         CurrentLoginUserModel currentLoginUserModel = authenticationService.getCurrentLoginUserModelFromRequest();
 
-        Integer userId = currentLoginUserModel.getUserId();
-        if (userId == null || userId == 0)
-            return new Result<PageResult<IssueResponseVo>>(ResultCode.Error, null, ResultMessage.ParameterError);
-
-
         PageInfo pageInfo = super.generatePageInfo(pageNum, pageSize, sort);
 
-        PageResult<Issue> pageData = issueService.getIssueListByAccountId(userId, pageInfo);
+        PageResult<Issue> pageData = issueService.getIssueListByAccountId(currentLoginUserModel.getUserId(), pageInfo);
 
         List<IssueResponseVo> resultList = voService.convertIssueResponseVo(pageData.getData());
 
@@ -97,6 +95,7 @@ public class IssueController extends BaseController {
     }
 
     @PostMapping("/answer")
+    @AuthorizationValidation()
     public Result<Boolean> answerIssue(@RequestBody AnswerRequestVo requestBody) throws IOException {
         CurrentLoginUserModel currentLoginUserModel = authenticationService.getCurrentLoginUserModelFromRequest();
 
@@ -112,7 +111,6 @@ public class IssueController extends BaseController {
     public Result<List<AnswerResponseVo>> getAnswerListByIssueId(@PathVariable("issueId") Integer issueId) {
         if (issueId == null || issueId == 0)
             return new Result<List<AnswerResponseVo>>(ResultCode.Error, null, ResultMessage.ParameterError);
-
 
         List<Answer> answerList = issueService.getAnswerListByIssueId(issueId);
 
