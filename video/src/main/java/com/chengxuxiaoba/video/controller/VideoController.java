@@ -120,13 +120,13 @@ public class VideoController extends BaseController {
     }
 
     @GetMapping("/videos/recordstatistic")
+    @AuthorizationValidation()
     public Result<List<VideoWatchRecordCourseModuleStatisticResponseVo>> getWatchingRecordStatistic() {
 
         CurrentLoginUserModel currentLoginUserModel = authenticationService.getCurrentLoginUserModelFromRequest();
 
-        Integer accountId = currentLoginUserModel.getUserId();
-
-        List<VideoWatchRecordCourseModuleStatistic> recordStatisticList = videoService.getVideoWatchRecordCourseModuleStatistic(accountId);
+        List<VideoWatchRecordCourseModuleStatistic> recordStatisticList = videoService
+                .getVideoWatchRecordCourseModuleStatistic(currentLoginUserModel.getUserId());
 
         List<VideoWatchRecordCourseModuleStatisticResponseVo> responseVoResult = voService.convertToVideoWatchRecordCourseModuleStatisticResponseVo(recordStatisticList);
 
@@ -134,13 +134,12 @@ public class VideoController extends BaseController {
     }
 
     @GetMapping("/videos/record/{coursemoduleid}")
+    @AuthorizationValidation()
     public Result<List<VideoResponseVo>> getWatchingRecordList(@PathVariable("coursemoduleid") Integer coursemoduleid) {
 
         CurrentLoginUserModel currentLoginUserModel = authenticationService.getCurrentLoginUserModelFromRequest();
 
-        Integer accountId = currentLoginUserModel.getUserId();
-
-        List<Video> recordList = videoService.getVideoListHasBeenWatch(accountId, coursemoduleid);
+        List<Video> recordList = videoService.getVideoListHasBeenWatch(currentLoginUserModel.getUserId(), coursemoduleid);
 
         if (ListUtil.isNullOrEmpty(recordList))
             return new Result<List<VideoResponseVo>>(ResultCode.Success, null, ResultMessage.Success);

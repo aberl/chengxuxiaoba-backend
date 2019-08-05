@@ -160,7 +160,6 @@ public class UserController extends BaseController {
     }
 
     @GetMapping("/mobilephoneno/{mobilephoneno}")
-    @AuthorizationValidation(role = RoleConstant.ADMIN)
     public Result<UserResponseVo> getUserInfoByMobilePhoneNo(@PathVariable("mobilephoneno") String mobilephoneno) {
         Account account = userService.getUserByMobilePhone(mobilephoneno);
 
@@ -168,6 +167,9 @@ public class UserController extends BaseController {
             return new Result<UserResponseVo>(ResultCode.Error, null, ResultMessage.UserIsNotExist);
 
         UserResponseVo userResponseVo = voService.convertToUserResponseVo(account);
+
+        String token = authenticationService.generateToken(mobilephoneno);
+        userResponseVo.setToken(token);
 
         return new Result<UserResponseVo>(ResultCode.Success, userResponseVo, ResultMessage.Success);
     }
