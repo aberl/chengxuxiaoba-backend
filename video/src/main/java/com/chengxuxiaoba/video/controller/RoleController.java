@@ -1,5 +1,6 @@
 package com.chengxuxiaoba.video.controller;
 
+import com.chengxuxiaoba.video.annotation.AuthorizationValidation;
 import com.chengxuxiaoba.video.constant.RoleConstant;
 import com.chengxuxiaoba.video.model.Response.VO.RolePaymentResponseVo;
 import com.chengxuxiaoba.video.model.Response.VO.RoleResponseVo;
@@ -28,12 +29,14 @@ public class RoleController {
     private IRoleService roleService;
 
     @GetMapping("/roles")
+    @AuthorizationValidation
     public Result<Map<Integer, String>> getRoleList() {
         Map<Integer, String> ret = RoleConstant.getAllMap();
         return new Result<Map<Integer, String>>(ResultCode.Success, ret, ResultMessage.Success);
     }
 
     @GetMapping("/{id}")
+    @AuthorizationValidation
     public Result<RoleResponseVo> getRole(@PathVariable("id") Integer roleId) {
         Role role = roleService.getRole(roleId);
 
@@ -43,6 +46,7 @@ public class RoleController {
     }
 
     @GetMapping("/{id}/rolepaymentlist")
+    @AuthorizationValidation
     public Result<List<RolePaymentResponseVo>> getRolePaymentList(@PathVariable("id") Integer roleId) {
         List<RolePayment> _rolePaymentList = roleService.getRolePaymentList(roleId);
 

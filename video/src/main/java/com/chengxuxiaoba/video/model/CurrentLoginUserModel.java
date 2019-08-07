@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -17,4 +19,6 @@ public class CurrentLoginUserModel {
     private Integer role;
     private String mobilePhone;
     private Boolean isOverDue;
+
+    private Map<String,Boolean> permissions;
 }

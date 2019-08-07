@@ -44,22 +44,28 @@ public class UserController extends BaseController {
     private IAuthenticationService authenticationService;
 
     @PostMapping("/account")
-    public Result<Boolean> createAccount(@RequestBody RegisterRequestVo registerBody) {
+    public Result<UserResponseVo> createAccount(@RequestBody RegisterRequestVo registerBody) {
         Boolean isValid = validationService.verifyCode(registerBody.getMobilePhoneNo(), ValidationCodeCategory.register, registerBody.getValidationCode());
 
         if (!isValid)
-            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.ValidationCodeIsIlegal);
+            return new Result<UserResponseVo>(ResultCode.Error, null, ResultMessage.ValidationCodeIsIlegal);
 
-        RoleConstant[] roles = userService.convertToRoleArray(registerBody.getRoleIdList());
-        ;
-        Boolean flag = userService.regier(registerBody.getMobilePhoneNo(), registerBody.getPassword(), roles);
+        //default role is vistor
+        Boolean flag = userService.regier(registerBody.getMobilePhoneNo(), registerBody.getPassword(), RoleConstant.VISTOR);
 
         if (!flag)
-            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.MobilePhoneNoIsExist);
+            return new Result<UserResponseVo>(ResultCode.Error, null, ResultMessage.MobilePhoneNoIsExist);
 
         validationService.invalidateCode(registerBody.getMobilePhoneNo(), ValidationCodeCategory.register, registerBody.getValidationCode());
 
-        return new Result<Boolean>(ResultCode.Success, true, ResultMessage.Success);
+        Account account = userService.getUserByMobilePhone(registerBody.getMobilePhoneNo());
+
+        UserResponseVo userResponseVo = voService.convertToUserResponseVo(account);
+
+        String token = authenticationService.generateToken(registerBody.getMobilePhoneNo());
+        userResponseVo.setToken(token);
+
+        return new Result<UserResponseVo>(ResultCode.Success, userResponseVo, ResultMessage.Success);
     }
 
     @PutMapping("/account")

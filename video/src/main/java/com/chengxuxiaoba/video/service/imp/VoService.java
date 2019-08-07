@@ -64,7 +64,7 @@ public class VoService implements IVoService {
 
                 Integer diffDays = DateUtil.differentDays(new Date(), accountVipTimeRange.getEndDate());
 
-                userResponseVo.setOverDue(diffDays > 0);
+                userResponseVo.setIsOverDue(diffDays > 0);
             }
         }
         return userResponseVo;
@@ -86,7 +86,19 @@ public class VoService implements IVoService {
         }).collect(Collectors.toList());
 
         if (!ListUtil.isNullOrEmpty(accountRoleRelationShipList)) {
+            List<Permission> permissionList = roleService.getPermissionListByRoleId(accountRoleRelationShipList.get(0).getRoleId());
             userResponseVo.setRole(accountRoleRelationShipList.get(0).getRoleId().toString());
+
+            if(!ListUtil.isNullOrEmpty(permissionList))
+            {
+                userResponseVo.setPermissions(new HashMap<>());
+                permissionList.forEach(permission -> {
+                    if(permission.getStatus() == CommonStatus.ACTIVE.getValue())
+                    {
+                        userResponseVo.getPermissions().put(permission.getName(), true);
+                    }
+                });
+            }
         }
 
         return userResponseVo;

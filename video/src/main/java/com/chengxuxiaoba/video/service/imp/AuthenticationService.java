@@ -73,7 +73,8 @@ public class AuthenticationService implements IAuthenticationService {
         jwtUserInfo.setName(userResponseVo.getName());
         jwtUserInfo.setRole(userResponseVo.getRole());
         jwtUserInfo.setMobilePhone(userResponseVo.getMobilePhoneNo());
-        jwtUserInfo.setIsOverDue(userResponseVo.getOverDue());
+        jwtUserInfo.setIsOverDue(userResponseVo.getIsOverDue());
+        jwtUserInfo.setPermissions(userResponseVo.getPermissions());
 
         String tokenStr = jwtTokenFactory.generateTokenString(jwtUserInfo);
 
@@ -97,6 +98,7 @@ public class AuthenticationService implements IAuthenticationService {
                     .role(Integer.valueOf(jwtToken.getRole()))
                     .status(Integer.valueOf(jwtToken.getStatus()))
                     .wechat_account(jwtToken.getWechat_account())
+                    .permissions(jwtToken.getPermissions())
                     .build();
 
             return currentLoginUserModel;

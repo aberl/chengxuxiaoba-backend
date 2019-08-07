@@ -1,11 +1,18 @@
 package com.chengxuxiaoba.video.model.Response.VO;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.Map;
-import java.util.List;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserResponseVo {
     private Integer id;
     private String name;
@@ -25,117 +32,7 @@ public class UserResponseVo {
 
     private String token;
 
+    private Map<String,Boolean> permissions;
+
     private Date createDateTime;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getHeaderImg() {
-        return headerImg;
-    }
-
-    public void setHeaderImg(String headerImg) {
-        this.headerImg = headerImg;
-    }
-
-    public String getMobilePhoneNo() {
-        return mobilePhoneNo;
-    }
-
-    public void setMobilePhoneNo(String mobilePhoneNo) {
-        this.mobilePhoneNo = mobilePhoneNo;
-    }
-
-    public String getWechatAccount() {
-        return wechatAccount;
-    }
-
-    public void setWechatAccount(String wechatAccount) {
-        this.wechatAccount = wechatAccount;
-    }
-
-    public String getWechatHeaderImg() {
-        return wechatHeaderImg;
-    }
-
-    public void setWechatHeaderImg(String wechatHeaderImg) {
-        this.wechatHeaderImg = wechatHeaderImg;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public String getStatusDesc() {
-        return statusDesc;
-    }
-
-    public void setStatusDesc(String statusDesc) {
-        this.statusDesc = statusDesc;
-    }
-
-    public Date getCreateDateTime() {
-        return createDateTime;
-    }
-
-    public void setCreateDateTime(Date createDateTime) {
-        this.createDateTime = createDateTime;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public Date getVipStartDate() {
-        return vipStartDate;
-    }
-
-    public void setVipStartDate(Date vipStartDate) {
-        this.vipStartDate = vipStartDate;
-    }
-
-    public Date getVipEndDate() {
-        return vipEndDate;
-    }
-
-    public Boolean getOverDue() {
-        return isOverDue;
-    }
-
-    public void setOverDue(Boolean overDue) {
-        isOverDue = overDue;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public void setVipEndDate(Date vipEndDate) {
-        this.vipEndDate = vipEndDate;
-    }
 }
