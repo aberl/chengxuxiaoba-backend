@@ -83,3 +83,10 @@ authorization:
 jwtToken:
     token-expire-time: 1800000
     encrypt-key: chengxuxiaoba-jwt-key
+
+ali:
+  accessKey:
+    RAM:
+      accesskeyid: LTAI4FwSm1WwZ4ZoHca2BcAB
+      AccessKeySecret: fe8ZZgw03v0YLZ1iddsHkY05jaf3Tw
+      normalRoleArn: acs:ram::1165752204112719:role/chengxuxiaoba-user
