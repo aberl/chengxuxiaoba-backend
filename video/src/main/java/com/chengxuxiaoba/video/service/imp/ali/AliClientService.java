@@ -3,11 +3,15 @@ package com.chengxuxiaoba.video.service.imp.ali;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.profile.DefaultProfile;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AliClientService {
+
+    @Autowired
+    private CredentialService credentialService;
     /**
      * initialize client by accesskey
      * @param accessKeyId
