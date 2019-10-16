@@ -16,9 +16,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class VideoService {
+public class AliVideoService {
     @Autowired
-    private CredentialService credentialService;
+    private AliCredentialService credentialService;
 
     @Autowired
     private AliClientService aliClientService;
@@ -31,7 +31,7 @@ public class VideoService {
     }
 
     /*获取播放凭证函数*/
-    public GetVideoPlayAuthResponse getVideoPlayAuth(DefaultAcsClient client, String videoId) throws Exception {
+    private GetVideoPlayAuthResponse getVideoPlayAuth(DefaultAcsClient client, String videoId) throws Exception {
         GetVideoPlayAuthRequest request = new GetVideoPlayAuthRequest();
         request.setVideoId(videoId);
         return client.getAcsResponse(request);

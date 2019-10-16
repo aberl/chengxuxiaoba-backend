@@ -8,7 +8,7 @@ import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UploadService {
+public class ALiUploadService {
 
     @Autowired
     private AliClientService aliClientService;

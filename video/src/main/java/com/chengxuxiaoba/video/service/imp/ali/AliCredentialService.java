@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CredentialService {
+public class AliCredentialService {
 
     @Autowired
-    private RoleService roleService;
+    private AliRoleService roleService;
 
     @Value("${ali.accessKey.RAM.accesskeyid}")
     private String STS_AccessKeyId;

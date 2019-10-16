@@ -11,7 +11,7 @@ import com.aliyuncs.profile.IClientProfile;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RoleService {
+public class AliRoleService {
     // 目前只有"cn-hangzhou"这个region可用，不要使用填写其他region的值
     public static final String REGION_CN_HANGZHOU = "cn-hangzhou";
     // 当前 STS API 版本

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class AliClientService {
 
     @Autowired
-    private CredentialService credentialService;
+    private AliCredentialService credentialService;
     /**
      * initialize client by accesskey
      * @param accessKeyId
