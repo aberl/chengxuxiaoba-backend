@@ -5,11 +5,14 @@ import com.chengxuxiaoba.video.constant.MessageCategory;
 import com.chengxuxiaoba.video.constant.RolePaymentTypeEnum;
 import com.chengxuxiaoba.video.model.Request.VO.*;
 import com.chengxuxiaoba.video.model.Response.VO.*;
+import com.chengxuxiaoba.video.model.ali.VideoPlayAuth;
+import com.chengxuxiaoba.video.model.ali.VideoPlayInfo;
 import com.chengxuxiaoba.video.model.po.*;
 import com.chengxuxiaoba.video.service.ICourseService;
 import com.chengxuxiaoba.video.service.IIssueService;
 import com.chengxuxiaoba.video.service.IRoleService;
 import com.chengxuxiaoba.video.service.IVoService;
+import com.chengxuxiaoba.video.service.imp.ali.AliVideoService;
 import com.chengxuxiaoba.video.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,6 +40,9 @@ public class VoService implements IVoService {
 
     @Autowired
     private ICourseService courseService;
+
+    @Autowired
+    private AliVideoService aliVideoService;
 
     @Override
     public Account convertToUser(AccountRequestVo accountRequestVo) {
@@ -264,25 +270,31 @@ public class VoService implements IVoService {
         videoResponseVo.setStatusDesc(CommonStatus.getEnum(videoResponseVo.getStatus()).toString());
 
         List<String> attachmentList = JSONUtil.convertToList(video.getAttachments());
-        attachmentList.add(video.getFile());
 
-        if (ListUtil.isNullOrEmpty(attachmentList))
-            return videoResponseVo;
+        if (ListUtil.isNotNullOrEmpty(attachmentList)) {
+            List<UploadFile> uploadFileList = uploadFileService.getUploadFileByNameList(attachmentList);
+            videoResponseVo.setAttachmentList(new ArrayList<UploadFileResponseVo>());
+            for (UploadFile file : uploadFileList) {
+                uploadFileService.setFileNameAsOriginName(file);
+                if (file.getName().equalsIgnoreCase(video.getFile())) {
+                    videoResponseVo.setVideo(convertToUploadFileResponseVo(file));
+                    continue;
+                }
 
-        List<UploadFile> uploadFileList = uploadFileService.getUploadFileByNameList(attachmentList);
-
-        if (ListUtil.isNullOrEmpty(uploadFileList))
-            return videoResponseVo;
-
-        videoResponseVo.setAttachmentList(new ArrayList<UploadFileResponseVo>());
-        for (UploadFile file : uploadFileList) {
-            uploadFileService.setFileNameAsOriginName(file);
-            if (file.getName().equalsIgnoreCase(video.getFile())) {
-                videoResponseVo.setVideo(convertToUploadFileResponseVo(file));
-                continue;
+                videoResponseVo.getAttachmentList().add(convertToUploadFileResponseVo(file));
             }
+        }
 
-            videoResponseVo.getAttachmentList().add(convertToUploadFileResponseVo(file));
+        if(StringUtil.isNotNullOrEmpty(video.getFile()))
+        {
+            UploadFile videoFile = uploadFileService.getUploadFileByName(video.getFile());
+            uploadFileService.setFileNameAsOriginName(videoFile);
+            videoResponseVo.setVideo(convertToUploadFileResponseVo(videoFile));
+        }
+
+        if(StringUtil.isNotNullOrEmpty(video.getAliVideoId()))
+        {
+
         }
 
         return videoResponseVo;
@@ -766,5 +778,34 @@ public class VoService implements IVoService {
         }
 
         return materialResponseVoList;
+    }
+
+    @Override
+    public AliVideoInfoResponseVo getAliVideoInfo(Integer userId, String aliVideoId)
+    {
+        if(userId == null || userId==0 || StringUtil.isNullOrEmpty(aliVideoId))
+        {
+            return null;
+        }
+        AliVideoInfoResponseVo aliVideoInfoResponseVo=AliVideoInfoResponseVo.builder()
+                .videoId(aliVideoId).build();
+
+        String userIdStr = "userId_"+userId;
+        VideoPlayAuth videoPlayAuth = aliVideoService.getVideoPlayAuth(userIdStr, aliVideoId);
+        VideoPlayInfo videoPlayInfo = aliVideoService.getVideoPlayInfo(userIdStr, aliVideoId);
+
+        if(videoPlayAuth != null)
+        {
+            aliVideoInfoResponseVo.setMetaTitle(videoPlayAuth.getMetaTitle());
+            aliVideoInfoResponseVo.setPlayAuth(videoPlayAuth.getPlayAuth());
+        }
+
+        if(videoPlayInfo != null)
+        {
+            aliVideoInfoResponseVo.setBaseTitle(videoPlayInfo.getBaseTitle());
+            aliVideoInfoResponseVo.setPlayURL(videoPlayInfo.getPlayURL());
+        }
+
+        return aliVideoInfoResponseVo;
     }
 }

@@ -1,4 +1,4 @@
-package com.chengxuxiaoba.video.model.ali;
+package com.chengxuxiaoba.video.model.Response.VO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class VideoPlayAuth {
+public class AliVideoInfoResponseVo {
     private String videoId;
+    private String playURL;
+    private String baseTitle;
     private String playAuth;
     private String metaTitle;
 }

@@ -20,6 +20,9 @@ public class StringUtil {
 
         return false;
     }
+    public static Boolean isNotNullOrEmpty(String str) {
+        return !isNullOrEmpty(str);
+    }
 
     /**
      * 随机生成指定位数的数字字符串

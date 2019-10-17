@@ -77,6 +77,7 @@ public class AliVideoService {
             GetVideoPlayAuthResponse response = getVideoPlayAuth(client, videoId);
 
             VideoPlayAuth videoPlayAuth = VideoPlayAuth.builder()
+                    .videoId(videoId)
                     .metaTitle(response.getVideoMeta().getTitle())
                     .playAuth(response.getPlayAuth())
                     .build();

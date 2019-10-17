@@ -1,6 +1,7 @@
 package com.chengxuxiaoba.video.ali;
 
 import com.chengxuxiaoba.video.model.ali.VideoPlayAuth;
+import com.chengxuxiaoba.video.model.ali.VideoPlayInfo;
 import com.chengxuxiaoba.video.service.imp.ali.AliVideoService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +18,7 @@ public class VideoServiceTest {
 
     private String videoId="b6f0f5b2f66b4076bfb30978d8ae075c";
 
-    private String userId="userid1";
+    private String userId="userId_6";
 
     @Test
     public void getVideoPlayAuthTest()
@@ -25,5 +26,9 @@ public class VideoServiceTest {
         VideoPlayAuth videoPlayAuth=videoService.getVideoPlayAuth(userId, videoId);
 
         System.out.println(videoPlayAuth);
+
+        VideoPlayInfo videoPlayInfo = videoService.getVideoPlayInfo(userId, videoId);
+
+        System.out.println(videoPlayInfo);
     }
 }

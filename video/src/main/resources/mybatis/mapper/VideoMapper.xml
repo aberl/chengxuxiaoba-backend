@@ -61,6 +61,7 @@
             <if test="viewCount != null">viewCount=#{viewCount},</if>
             <if test="praiseCount != null">praiseCount=#{praiseCount},</if>
             <if test="status != null">status=#{status},</if>
+            <if test="aliVideoId != null">aliVideoId=#{aliVideoId},</if>
         </trim>
         WHERE id=#{id}
     </update>

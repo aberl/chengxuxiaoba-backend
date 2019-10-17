@@ -13,4 +13,9 @@ public class ListUtil {
 
         return false;
     }
+
+    public static Boolean isNotNullOrEmpty(List list)
+    {
+        return !isNullOrEmpty(list);
+    }
 }

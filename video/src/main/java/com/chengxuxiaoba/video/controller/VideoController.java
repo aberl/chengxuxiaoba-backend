@@ -4,6 +4,7 @@ import com.chengxuxiaoba.video.annotation.AuthorizationValidation;
 import com.chengxuxiaoba.video.handler.Handler;
 import com.chengxuxiaoba.video.model.*;
 import com.chengxuxiaoba.video.model.Request.VO.VideoRequestVo;
+import com.chengxuxiaoba.video.model.Response.VO.AliVideoInfoResponseVo;
 import com.chengxuxiaoba.video.model.Response.VO.VideoResponseVo;
 import com.chengxuxiaoba.video.model.Response.VO.VideoWatchRecordCourseModuleStatisticResponseVo;
 import com.chengxuxiaoba.video.model.po.Video;
@@ -93,9 +94,16 @@ public class VideoController extends BaseController {
     }
 
     @GetMapping("/videos/{id}")
+    @AuthorizationValidation()
     public Result<VideoResponseVo> getVideo(@PathVariable("id") Integer id) {
         Video video = videoService.getSingle(id);
         VideoResponseVo videoResponseVo = voService.convertToVideoResponseVo(video);
+
+        CurrentLoginUserModel currentLoginUserModel = authenticationService.getCurrentLoginUserModelFromRequest();
+        if(currentLoginUserModel != null) {
+            AliVideoInfoResponseVo aliVideoInfoResponseVo = voService.getAliVideoInfo(currentLoginUserModel.getUserId(), video.getAliVideoId());
+            videoResponseVo.setAliVideoInfo(aliVideoInfoResponseVo);
+        }
 
         return new Result<VideoResponseVo>(ResultCode.Success, videoResponseVo, ResultMessage.Success);
     }

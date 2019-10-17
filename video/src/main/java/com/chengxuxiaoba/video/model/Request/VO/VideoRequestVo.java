@@ -21,4 +21,5 @@ public class VideoRequestVo {
     private Integer viewCount;
     private Integer praiseCount;
     private Integer status;
+    private String aliVideoId;
 }

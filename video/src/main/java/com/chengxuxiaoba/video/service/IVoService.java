@@ -85,4 +85,6 @@ public interface IVoService {
     MaterialResponseVo convertToMaterialResponseVo(Material material, UploadFile materialFile);
 
     List<MaterialResponseVo> convertToMaterialResponseVo(List<Material> materialList);
+
+    AliVideoInfoResponseVo getAliVideoInfo(Integer userId, String aliVideoId);
 }
