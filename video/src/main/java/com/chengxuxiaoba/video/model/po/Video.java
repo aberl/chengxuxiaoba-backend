@@ -13,7 +13,6 @@ import java.util.Date;
 public class Video {
     private Integer id;
     private Integer courseModuleId;
-    private String file;
     private String name;
     private String attachments;
     private String duration;
