@@ -94,7 +94,6 @@ public class VideoController extends BaseController {
     }
 
     @GetMapping("/videos/{id}")
-    @AuthorizationValidation()
     public Result<VideoResponseVo> getVideo(@PathVariable("id") Integer id) {
         Video video = videoService.getSingle(id);
         VideoResponseVo videoResponseVo = voService.convertToVideoResponseVo(video);

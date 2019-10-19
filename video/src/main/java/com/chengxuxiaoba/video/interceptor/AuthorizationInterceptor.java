@@ -21,13 +21,11 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        authenticationService.setCurrentLoginUserModelInRequest(request);
 
         AuthorizationValidation authorizationValidation = hasAuthorizationValidation(handler);
         if (authorizationValidation != null) {
             RoleConstant role = authorizationValidation.role();
-
-            authenticationService.setCurrentLoginUserModelInRequest(request);
-
             validateAuthorization(role);
         }
 
