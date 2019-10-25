@@ -111,11 +111,40 @@
             resultType="com.chengxuxiaoba.video.model.po.Video">
         SELECT * from Video
         <where>
-                id IN
-                <foreach collection="videoIdList" index="index" item="videoId" open="("
-                         separator="," close=")">
-                    #{videoId}
-                </foreach>
+            id IN
+            <foreach collection="videoIdList" index="index" item="videoId" open="("
+                     separator="," close=")">
+                #{videoId}
+            </foreach>
         </where>
+    </select>
+
+    <insert id="insertVideoUserWatchSummary" parameterType="com.chengxuxiaoba.video.model.po.VideoUserWatchSummary">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO videouserwatchsummary(accountId, watchVideoCount, updateDateTime)
+        VALUES(#{accountId},#{watchVideoCount},#{updateDateTime})
+    </insert>
+
+    <update id="addOneTimeVideoUserWatchSummary">
+    UPDATE videouserwatchsummary
+    SET watchVideoCount=watchVideoCount+1
+    WHERE TIMESTAMPDIFF(DAY,updateDateTime,NOW()) =0 AND accountId=#{accountId}
+    </update>
+
+    <select id="getVideoUserWatchSummaryList"
+            resultType="com.chengxuxiaoba.video.model.po.VideoUserWatchSummary"
+            parameterType="com.chengxuxiaoba.video.model.query.VideoUserWatchSummaryQuery">
+            SELECT * FROM videouserwatchsummary WITH(NOLOCK)
+            <where>
+              <if test="accountId != null">
+                  AND accountId=#{accountId}
+              </if>>
+                <if test="watchDate != null">
+                    AND TIMESTAMPDIFF(DAY,#{watchDate},NOW()) =0
+                </if>
+
+            </where>
     </select>
 </mapper>

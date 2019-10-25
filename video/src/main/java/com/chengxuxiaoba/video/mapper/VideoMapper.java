@@ -1,9 +1,7 @@
 package com.chengxuxiaoba.video.mapper;
 
-import com.chengxuxiaoba.video.model.po.Video;
-import com.chengxuxiaoba.video.model.po.VideoSummary;
-import com.chengxuxiaoba.video.model.po.VideoWatchRecord;
-import com.chengxuxiaoba.video.model.po.VideoWatchRecordCourseModuleStatistic;
+import com.chengxuxiaoba.video.model.po.*;
+import com.chengxuxiaoba.video.model.query.VideoUserWatchSummaryQuery;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Param;
 
@@ -38,4 +36,25 @@ public interface VideoMapper extends BaseMapper<Video> {
 
 
     List<Video> getVideoList(@Param("videoIdList") List<Integer> videoIdList);
+
+    /**
+     * insert one video user Watch summary record
+     * @param videoUserWatchSummary
+     * @return
+     */
+    Integer insertVideoUserWatchSummary(VideoUserWatchSummary videoUserWatchSummary);
+
+    /**
+     *
+     * @param accountId
+     * @return
+     */
+    Integer addOneTimeVideoUserWatchSummary(Integer accountId);
+
+    /**
+     *
+     * @param videoUserWatchSummaryQuery
+     * @return
+     */
+    List<VideoUserWatchSummary> getVideoUserWatchSummaryList(VideoUserWatchSummaryQuery videoUserWatchSummaryQuery);
 }
