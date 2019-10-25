@@ -96,15 +96,20 @@ public class VideoController extends BaseController {
     @GetMapping("/videos/{id}")
     public Result<VideoResponseVo> getVideo(@PathVariable("id") Integer id) {
         Video video = videoService.getSingle(id);
+
         VideoResponseVo videoResponseVo = voService.convertToVideoResponseVo(video);
 
-        CurrentLoginUserModel currentLoginUserModel = authenticationService.getCurrentLoginUserModelFromRequest();
-        if(currentLoginUserModel != null) {
-            AliVideoInfoResponseVo aliVideoInfoResponseVo = voService.getAliVideoInfo(currentLoginUserModel.getUserId(), video.getAliVideoId());
-            videoResponseVo.setAliVideoInfo(aliVideoInfoResponseVo);
-        }
-
         return new Result<VideoResponseVo>(ResultCode.Success, videoResponseVo, ResultMessage.Success);
+    }
+
+    @GetMapping("/videos/ali/{alivid}")
+    @AuthorizationValidation()
+    public Result<AliVideoInfoResponseVo> getAliVideo(@PathVariable("alivid") String alivid) {
+        CurrentLoginUserModel currentLoginUserModel = authenticationService.getCurrentLoginUserModelFromRequest();
+
+        AliVideoInfoResponseVo aliVideoInfoResponseVo = voService.getAliVideoInfo(currentLoginUserModel.getUserId(), alivid);
+
+        return new Result<AliVideoInfoResponseVo>(ResultCode.Success, aliVideoInfoResponseVo, ResultMessage.Success);
     }
 
     @GetMapping("/courses/{courseModuleId}/videos")

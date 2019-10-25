@@ -6,10 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class VideoPlayInfo {
+public class VideoPlayInfo extends VideoBasePlayInfo {
     private String playURL;
-    private String baseTitle;
+
+    @Builder
+    private VideoPlayInfo(String videoId, String duration,String cover,String title,String playURL)
+    {
+        super(videoId, duration,cover,title);
+        this.playURL=playURL;
+    }
 }

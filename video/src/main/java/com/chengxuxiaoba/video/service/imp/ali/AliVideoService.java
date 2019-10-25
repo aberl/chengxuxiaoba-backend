@@ -55,8 +55,11 @@ public class AliVideoService {
             GetPlayInfoResponse.PlayInfo playInfo = playInfoList.get(0);
 
             VideoPlayInfo videoPlayInfo = VideoPlayInfo.builder()
-                    .baseTitle(response.getVideoBase().getTitle())
                     .playURL(playInfo.getPlayURL())
+                    .videoId(videoId)
+                    .duration(response.getVideoBase().getDuration())
+                    .cover(response.getVideoBase().getCoverURL())
+                    .title(response.getVideoBase().getTitle())
                     .build();
 
             return videoPlayInfo;
@@ -77,9 +80,11 @@ public class AliVideoService {
             GetVideoPlayAuthResponse response = getVideoPlayAuth(client, videoId);
 
             VideoPlayAuth videoPlayAuth = VideoPlayAuth.builder()
-                    .videoId(videoId)
-                    .metaTitle(response.getVideoMeta().getTitle())
                     .playAuth(response.getPlayAuth())
+                    .videoId(videoId)
+                    .duration(String.format("%s", response.getVideoMeta().getDuration()))
+                    .title(response.getVideoMeta().getTitle())
+                    .cover(response.getVideoMeta().getCoverURL())
                     .build();
 
             return videoPlayAuth;

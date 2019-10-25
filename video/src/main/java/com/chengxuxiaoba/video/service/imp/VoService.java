@@ -769,23 +769,21 @@ public class VoService implements IVoService {
         {
             return null;
         }
-        AliVideoInfoResponseVo aliVideoInfoResponseVo=AliVideoInfoResponseVo.builder()
-                .videoId(aliVideoId).build();
+        AliVideoInfoResponseVo aliVideoInfoResponseVo=AliVideoInfoResponseVo
+                .builder()
+                .videoId(aliVideoId)
+                .build();
 
         String userIdStr = "userId_"+userId;
         VideoPlayAuth videoPlayAuth = aliVideoService.getVideoPlayAuth(userIdStr, aliVideoId);
-        VideoPlayInfo videoPlayInfo = aliVideoService.getVideoPlayInfo(userIdStr, aliVideoId);
+        //VideoPlayInfo videoPlayInfo = aliVideoService.getVideoPlayInfo(userIdStr, aliVideoId);
 
         if(videoPlayAuth != null)
         {
-            aliVideoInfoResponseVo.setMetaTitle(videoPlayAuth.getMetaTitle());
+            aliVideoInfoResponseVo.setTitle(videoPlayAuth.getTitle());
             aliVideoInfoResponseVo.setPlayAuth(videoPlayAuth.getPlayAuth());
-        }
-
-        if(videoPlayInfo != null)
-        {
-            aliVideoInfoResponseVo.setBaseTitle(videoPlayInfo.getBaseTitle());
-            aliVideoInfoResponseVo.setPlayURL(videoPlayInfo.getPlayURL());
+            aliVideoInfoResponseVo.setDuration(videoPlayAuth.getDuration());
+            aliVideoInfoResponseVo.setCover(videoPlayAuth.getCover());
         }
 
         return aliVideoInfoResponseVo;

@@ -5,12 +5,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ *
+ */
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class VideoPlayAuth {
-    private String videoId;
+public class VideoPlayAuth extends VideoBasePlayInfo{
     private String playAuth;
-    private String metaTitle;
+
+    @Builder
+    private VideoPlayAuth(String videoId, String duration,String cover,String title,String playAuth)
+    {
+        super(videoId, duration,cover,title);
+        this.playAuth=playAuth;
+    }
 }

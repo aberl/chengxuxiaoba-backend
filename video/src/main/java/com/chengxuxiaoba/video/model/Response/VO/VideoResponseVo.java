@@ -30,6 +30,5 @@ public class VideoResponseVo {
     private Date createDateTime;
     private String statusDesc;
     private String aliVideoId;
-    private AliVideoInfoResponseVo aliVideoInfo;
 
 }
