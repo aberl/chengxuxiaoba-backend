@@ -1,4 +1,4 @@
-package com.chengxuxiaoba.video.model.po;
+package com.chengxuxiaoba.video.model.query;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,9 +11,9 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class VideoUserWatchSummary {
-    private Integer Id;
+public class VideoWatchRecordHistoryQuery {
+    private Integer courseModuleId;
+    private Integer videoId;
     private Integer accountId;
-    private Integer watchVideoCount;
-    private Date updateDateTime;
+    private Date watchDay;
 }

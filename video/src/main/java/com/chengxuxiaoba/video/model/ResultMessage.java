@@ -30,4 +30,5 @@ public class ResultMessage {
     public static String MESSAGEIDLISTCANNOTBENULL = "消息id集合不能为空";
     public static String ACCOUNTIDCANNOTBENULL = "用户id不能为空";
     public static String NOAUTHORIZATION = "沒有权限";
+    public static String VIDEOWATCHINGCOUNTSURPASS = "您今天观看的视频已超过，请明天再试，或升级VIP会员享受无限视频播放特权";
 }

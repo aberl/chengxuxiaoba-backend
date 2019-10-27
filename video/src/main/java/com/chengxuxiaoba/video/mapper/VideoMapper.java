@@ -1,8 +1,7 @@
 package com.chengxuxiaoba.video.mapper;
 
 import com.chengxuxiaoba.video.model.po.*;
-import com.chengxuxiaoba.video.model.query.VideoUserWatchSummaryQuery;
-import com.github.pagehelper.Page;
+import com.chengxuxiaoba.video.model.query.VideoWatchRecordHistoryQuery;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -22,39 +21,19 @@ public interface VideoMapper extends BaseMapper<Video> {
 
     Integer insertWatchRecord(VideoWatchRecord videoWatchRecord);
 
+    Integer insertWatchRecordHistory(VideoWatchRecord videoWatchRecord);
+
     Integer updateWatchRecordTime(@Param("accountId") Integer accountId,@Param("videoId")  Integer videoId);
 
     VideoWatchRecord getVideoWatchRecord(@Param("accountId") Integer accountId, @Param("videoId") Integer videoId);
 
-    List<VideoWatchRecord> getVideoWatchRecordList(Integer accountId, Integer courseModuleId);
+    List<VideoWatchRecord> getVideoWatchRecordHistoryList(VideoWatchRecordHistoryQuery videoWatchRecordHistoryQuery);
 
-    List<VideoWatchRecord> getVideoWatchRecordListByAccountId(Integer accountId);
+    Integer getVideoWatchCount(VideoWatchRecordHistoryQuery videoWatchRecordHistoryQuery);
 
     List<VideoWatchRecordCourseModuleStatistic> getVideoWatchRecordCourseModuleStatistic(Integer accountId);
 
     List<Video> getVideoListHasBeenWatch(@Param("accountId") Integer accountId, @Param("courseModuleId") Integer courseModuleId);
 
-
     List<Video> getVideoList(@Param("videoIdList") List<Integer> videoIdList);
-
-    /**
-     * insert one video user Watch summary record
-     * @param videoUserWatchSummary
-     * @return
-     */
-    Integer insertVideoUserWatchSummary(VideoUserWatchSummary videoUserWatchSummary);
-
-    /**
-     *
-     * @param accountId
-     * @return
-     */
-    Integer addOneTimeVideoUserWatchSummary(Integer accountId);
-
-    /**
-     *
-     * @param videoUserWatchSummaryQuery
-     * @return
-     */
-    List<VideoUserWatchSummary> getVideoUserWatchSummaryList(VideoUserWatchSummaryQuery videoUserWatchSummaryQuery);
 }

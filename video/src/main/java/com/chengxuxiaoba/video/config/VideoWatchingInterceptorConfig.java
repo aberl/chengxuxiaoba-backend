@@ -8,35 +8,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
-import java.util.List;
-
-@Configuration
-@ConfigurationProperties(prefix = "authorization")
-public class InterceptorConfig extends WebMvcConfigurationSupport {
-
-    private List<String> excludeurls;
-
-    public List<String> getExcludeurls() {
-        return excludeurls;
-    }
-
-    public void setExcludeurls(List<String> excludeurls) {
-        this.excludeurls = excludeurls;
-    }
-
+public class VideoWatchingInterceptorConfig  extends WebMvcConfigurationSupport {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(authenticationInterceptor())
-                .addPathPatterns("/**")
-                .excludePathPatterns(excludeurls);
-
         registry.addInterceptor(videoWatchingInterceptor())
                 .addPathPatterns("/**");
-    }
-
-    @Bean
-    public AuthorizationInterceptor authenticationInterceptor() {
-        return new AuthorizationInterceptor();
     }
 
     @Bean

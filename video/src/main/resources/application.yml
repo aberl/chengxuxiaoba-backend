@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 9080
   servlet:
     context-path: /api
 
@@ -79,6 +79,7 @@ authorization:
     - /users/token
     - /users/password
     - /users/account
+  videowatchinglimit: 3
 
 jwtToken:
     token-expire-time: 1800000

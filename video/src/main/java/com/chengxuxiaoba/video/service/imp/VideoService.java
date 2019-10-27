@@ -8,6 +8,7 @@ import com.chengxuxiaoba.video.model.po.VideoSummary;
 import com.chengxuxiaoba.video.model.po.VideoWatchRecord;
 import com.chengxuxiaoba.video.model.po.VideoWatchRecordCourseModuleStatistic;
 import com.chengxuxiaoba.video.model.query.VideoQuery;
+import com.chengxuxiaoba.video.model.query.VideoWatchRecordHistoryQuery;
 import com.chengxuxiaoba.video.service.IBaseService;
 import com.chengxuxiaoba.video.service.IVideoService;
 import com.chengxuxiaoba.video.util.ListUtil;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -102,31 +104,24 @@ public class VideoService extends IBaseService<Video> implements IVideoService {
     }
 
     @Override
-    public Boolean recordVideoWatching(Integer accountId, Integer videoId) {
-        VideoWatchRecord existVideoWatchRecord = videoMapper.getVideoWatchRecord(accountId, videoId);
-        if (existVideoWatchRecord != null)
-            videoMapper.updateWatchRecordTime(accountId, videoId);
-        else {
-            Video video = getSingle(videoId);
-            if (video == null)
-                return false;
-
-            return recordVideoWatching(accountId,video.getCourseModuleId(),videoId);
-        }
-        return false;
-    }
-
-    @Override
     public Boolean recordVideoWatching(Integer accountId,Integer courseModuleId, Integer videoId) {
-        VideoWatchRecord existVideoWatchRecord = videoMapper.getVideoWatchRecord(accountId, videoId);
-        if (existVideoWatchRecord != null)
+        VideoWatchRecord videoWatchRecord=VideoWatchRecord.builder()
+                .videoId(videoId)
+                .accountId(accountId)
+                .courseModuleId(courseModuleId)
+                .build();
+
+        videoMapper.insertWatchRecordHistory(videoWatchRecord);
+
+        videoWatchRecord = videoMapper.getVideoWatchRecord(accountId, videoId);
+        if (videoWatchRecord != null)
             videoMapper.updateWatchRecordTime(accountId, videoId);
         else {
-            existVideoWatchRecord = new VideoWatchRecord();
-            existVideoWatchRecord.setAccountId(accountId);
-            existVideoWatchRecord.setVideoId(videoId);
-            existVideoWatchRecord.setCourseModuleId(courseModuleId);
-            Integer _primaryKey = videoMapper.insertWatchRecord(existVideoWatchRecord);
+            videoWatchRecord = new VideoWatchRecord();
+            videoWatchRecord.setAccountId(accountId);
+            videoWatchRecord.setVideoId(videoId);
+            videoWatchRecord.setCourseModuleId(courseModuleId);
+            Integer _primaryKey = videoMapper.insertWatchRecord(videoWatchRecord);
 
             return _primaryKey > 0;
         }
@@ -134,8 +129,14 @@ public class VideoService extends IBaseService<Video> implements IVideoService {
     }
 
     @Override
-    public List<VideoWatchRecord> getVideoWatchRecordList(Integer accountId,Integer courseModuleId) {
-        return videoMapper.getVideoWatchRecordList(accountId,courseModuleId);
+    public Integer getVideoWatchCountInOneDay(Integer accountId, Date watchDay) {
+        VideoWatchRecordHistoryQuery videoWatchRecordHistoryQuery=VideoWatchRecordHistoryQuery.builder()
+                .accountId(accountId)
+                .watchDay(watchDay == null?(new Date()):watchDay)
+                .build();
+
+        Integer count = videoMapper.getVideoWatchCount(videoWatchRecordHistoryQuery);
+        return count;
     }
 
     @Override

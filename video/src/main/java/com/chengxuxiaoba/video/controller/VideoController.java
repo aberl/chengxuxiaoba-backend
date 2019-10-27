@@ -1,6 +1,7 @@
 package com.chengxuxiaoba.video.controller;
 
 import com.chengxuxiaoba.video.annotation.AuthorizationValidation;
+import com.chengxuxiaoba.video.annotation.VideoWatchingPermissionValidation;
 import com.chengxuxiaoba.video.handler.Handler;
 import com.chengxuxiaoba.video.model.*;
 import com.chengxuxiaoba.video.model.Request.VO.VideoRequestVo;
@@ -94,6 +95,7 @@ public class VideoController extends BaseController {
     }
 
     @GetMapping("/videos/{id}")
+    @VideoWatchingPermissionValidation()
     public Result<VideoResponseVo> getVideo(@PathVariable("id") Integer id) {
         Video video = videoService.getSingle(id);
 
@@ -104,6 +106,7 @@ public class VideoController extends BaseController {
 
     @GetMapping("/videos/ali/{alivid}")
     @AuthorizationValidation()
+    @VideoWatchingPermissionValidation()
     public Result<AliVideoInfoResponseVo> getAliVideo(@PathVariable("alivid") String alivid) {
         CurrentLoginUserModel currentLoginUserModel = authenticationService.getCurrentLoginUserModelFromRequest();
 

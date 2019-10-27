@@ -73,6 +73,14 @@
         VALUES(#{courseModuleId},#{videoId},#{accountId})
     </insert>
 
+    <insert id="insertWatchRecordHistory" parameterType="com.chengxuxiaoba.video.model.po.VideoWatchRecord">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO videowatchrecordhistory(courseModuleId, videoId, accountId)
+        VALUES(#{courseModuleId},#{videoId},#{accountId})
+    </insert>
+
     <update id="updateWatchRecordTime">
         UPDATE videoWatchRecord
         SET lastWatchTime = now()
@@ -82,11 +90,6 @@
     <select id="getVideoWatchRecord" resultType="com.chengxuxiaoba.video.model.po.VideoWatchRecord">
         SELECT * from videoWatchRecord
         WHERE accountId=#{accountId} and videoId=#{videoId}
-    </select>
-
-    <select id="getVideoWatchRecordList" resultType="com.chengxuxiaoba.video.model.po.VideoWatchRecord">
-        SELECT * from videoWatchRecord
-        WHERE accountId=#{accountId} and courseModuleId=#{courseModuleId}
     </select>
 
     <select id="getVideoWatchRecordListByAccountId" resultType="com.chengxuxiaoba.video.model.po.VideoWatchRecord">
@@ -118,33 +121,41 @@
             </foreach>
         </where>
     </select>
+    <select id="getVideoWatchCount" resultType="int">
+        select count(1) from videowatchrecordhistory
+        <where>
+            <if test="courseModuleId != null">
+                AND courseModuleId=#{courseModuleId}
+            </if>
+            <if test="videoId != null">
+                AND videoId=#{videoId}
+            </if>
+            <if test="accountId != null">
+                AND accountId=#{accountId}
+            </if>
+            <if test="watchDay != null">
+                AND TIMESTAMPDIFF(DAY,lastWatchTime,#{watchDay}) =0
+            </if>
+        </where>
+    </select>
 
-    <insert id="insertVideoUserWatchSummary" parameterType="com.chengxuxiaoba.video.model.po.VideoUserWatchSummary">
-        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        INSERT INTO videouserwatchsummary(accountId, watchVideoCount, updateDateTime)
-        VALUES(#{accountId},#{watchVideoCount},#{updateDateTime})
-    </insert>
-
-    <update id="addOneTimeVideoUserWatchSummary">
-    UPDATE videouserwatchsummary
-    SET watchVideoCount=watchVideoCount+1
-    WHERE TIMESTAMPDIFF(DAY,updateDateTime,NOW()) =0 AND accountId=#{accountId}
-    </update>
-
-    <select id="getVideoUserWatchSummaryList"
-            resultType="com.chengxuxiaoba.video.model.po.VideoUserWatchSummary"
-            parameterType="com.chengxuxiaoba.video.model.query.VideoUserWatchSummaryQuery">
-            SELECT * FROM videouserwatchsummary WITH(NOLOCK)
+    <select id="getVideoWatchRecordHistoryList"
+            resultType="com.chengxuxiaoba.video.model.po.VideoWatchRecord"
+            parameterType="com.chengxuxiaoba.video.model.query.VideoWatchRecordHistoryQuery">
+            SELECT * FROM VideoWatchRecordHistory WITH(NOLOCK)
             <where>
-              <if test="accountId != null">
-                  AND accountId=#{accountId}
-              </if>>
-                <if test="watchDate != null">
-                    AND TIMESTAMPDIFF(DAY,#{watchDate},NOW()) =0
+              <if test="courseModuleId != null">
+                  AND courseModuleId=#{courseModuleId}
+              </if>
+                <if test="videoId != null">
+                    AND videoId=#{videoId}
                 </if>
-
+                <if test="accountId != null">
+                    AND accountId=#{accountId}
+                </if>
+                <if test="watchDay != null">
+                    AND TIMESTAMPDIFF(DAY,lastWatchTime,#{watchDay}) =0
+                </if>
             </where>
     </select>
 </mapper>

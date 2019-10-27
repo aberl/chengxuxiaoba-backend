@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 public interface IVideoService {
@@ -38,11 +39,9 @@ public interface IVideoService {
 
     List<VideoSummary> getVideoSummary(List<Integer> courseModuleIdList);
 
-    Boolean recordVideoWatching(Integer accountId, Integer videoId);
-
     Boolean recordVideoWatching(Integer accountId, Integer courseModuleId, Integer videoId);
 
-    List<VideoWatchRecord> getVideoWatchRecordList(Integer accountId,Integer courseModuleId);
+    Integer getVideoWatchCountInOneDay(Integer accountId, Date watchDay);
 
     List<VideoWatchRecordCourseModuleStatistic> getVideoWatchRecordCourseModuleStatistic(Integer accountId);
 

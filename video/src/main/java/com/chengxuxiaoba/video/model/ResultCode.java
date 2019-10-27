@@ -5,4 +5,5 @@ public class ResultCode {
     public static Integer Error = 1;
     public static Integer Exception = -1;
     public static Integer NoAuthotization = -2;
+    public static Integer VideoWatchingCountSurpass = -3;
 }
