@@ -1,6 +1,7 @@
 package com.chengxuxiaoba.video.exception.handler;
 
 import com.chengxuxiaoba.video.exception.AuthorizationValidationException;
+import com.chengxuxiaoba.video.exception.VideoWatchingCountSurpassException;
 import com.chengxuxiaoba.video.model.Result;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,6 +16,16 @@ public class ExceptionUnifyHandler {
 
     @ExceptionHandler(AuthorizationValidationException.class)
     public Result<Object> authorizationExceptionHandler(AuthorizationValidationException exception)
+    {
+        return Result.builder()
+                .code(exception.getCode())
+                .data(null)
+                .message(exception.getMessage())
+                .build();
+    }
+
+    @ExceptionHandler(VideoWatchingCountSurpassException.class)
+    public Result<Object> videoWatchingCountSurpassExceptionHandler(VideoWatchingCountSurpassException exception)
     {
         return Result.builder()
                 .code(exception.getCode())

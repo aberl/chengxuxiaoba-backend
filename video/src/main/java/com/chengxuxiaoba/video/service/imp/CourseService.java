@@ -18,8 +18,6 @@ public class CourseService implements ICourseService {
     @Autowired
     private CourseMapper courseMapper;
 
-    private VideoMapper videoMapper;
-
     @Override
     public List<Course> getEffectiveCourse() {
         List<Course> allCourse= courseMapper.getAllCourseList();

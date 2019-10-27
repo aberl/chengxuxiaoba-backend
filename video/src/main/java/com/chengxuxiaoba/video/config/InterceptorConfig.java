@@ -31,7 +31,7 @@ public class InterceptorConfig extends WebMvcConfigurationSupport {
                 .excludePathPatterns(excludeurls);
 
         registry.addInterceptor(videoWatchingInterceptor())
-                .addPathPatterns("/**");
+                .addPathPatterns("/videos/**");
     }
 
     @Bean

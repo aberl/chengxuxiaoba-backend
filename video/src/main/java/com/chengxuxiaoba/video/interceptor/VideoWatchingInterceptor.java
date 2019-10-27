@@ -7,6 +7,7 @@ import com.chengxuxiaoba.video.model.CurrentLoginUserModel;
 import com.chengxuxiaoba.video.service.IVideoService;
 import com.chengxuxiaoba.video.service.imp.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -16,11 +17,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.Map;
 
-@ConfigurationProperties(prefix = "authorization")
 public class VideoWatchingInterceptor implements HandlerInterceptor {
     @Autowired
     private AuthenticationService authenticationService;
 
+    @Value("${authorization.videowatchinglimit}")
     private String videowatchinglimit;
 
     @Autowired
@@ -31,23 +32,33 @@ public class VideoWatchingInterceptor implements HandlerInterceptor {
         VideoWatchingPermissionValidation videoWatchingPermissionValidation = hasVideoWatchingPermissionValidation(handler);
 
         if (videoWatchingPermissionValidation != null) {
+            Integer videoWatchCount = 0;
             try {
                 CurrentLoginUserModel currentLoginUserModel = authenticationService.getCurrentLoginUserModelFromRequest();
 
+                if (currentLoginUserModel == null) {
+                    return true;
+                }
+
                 Map<String, Boolean> permissionMap = currentLoginUserModel.getPermissions();
+
+                if (permissionMap == null) {
+                    return true;
+                }
 
                 Boolean videoWatchingLimitFlag = permissionMap.containsKey(PERMISSION.WATCHINGLIMITEDPERDAY) ?
                         permissionMap.get(PERMISSION.WATCHINGLIMITEDPERDAY) : false;
 
-                Integer videoWatchCount = videoService.getVideoWatchCountInOneDay(currentLoginUserModel.getUserId(), new Date());
-
-                if (videoWatchingLimitFlag && videoWatchCount >= Integer.valueOf(videowatchinglimit)) {
-                    throw new VideoWatchingCountSurpassException();
+                if (!videoWatchingLimitFlag) {
+                    return true;
                 }
+
+                videoWatchCount = videoService.getVideoWatchCountInOneDay(currentLoginUserModel.getUserId(), new Date());
+            } catch (Exception ex) {
+
             }
-            catch (Exception ex)
-            {
-                return true;
+            if (videoWatchCount > Integer.valueOf(videowatchinglimit)) {
+                throw new VideoWatchingCountSurpassException();
             }
         }
         return true;
