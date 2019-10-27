@@ -91,11 +91,12 @@ public class VideoService extends IBaseService<Video> implements IVideoService {
     public VideoSummary getVideoSummary(Integer courseModuleId) {
         List<VideoSummary> videoSummaryList = getVideoSummary(new ArrayList<>(courseModuleId));
 
-        return ListUtil.isNullOrEmpty(videoSummaryList)?null:videoSummaryList.get(0);
+        return ListUtil.isNullOrEmpty(videoSummaryList) ? null : videoSummaryList.get(0);
     }
+
     @Override
     public List<VideoSummary> getVideoSummary(List<Integer> courseModuleIdList) {
-        if(ListUtil.isNullOrEmpty(courseModuleIdList))
+        if (ListUtil.isNullOrEmpty(courseModuleIdList))
             return null;
 
         List<VideoSummary> videoSummaryList = videoMapper.getVideoSummary(courseModuleIdList);
@@ -104,8 +105,8 @@ public class VideoService extends IBaseService<Video> implements IVideoService {
     }
 
     @Override
-    public Boolean recordVideoWatching(Integer accountId,Integer courseModuleId, Integer videoId) {
-        VideoWatchRecord videoWatchRecord=VideoWatchRecord.builder()
+    public Boolean recordVideoWatching(Integer accountId, Integer courseModuleId, Integer videoId) {
+        VideoWatchRecord videoWatchRecord = VideoWatchRecord.builder()
                 .videoId(videoId)
                 .accountId(accountId)
                 .courseModuleId(courseModuleId)
@@ -130,9 +131,9 @@ public class VideoService extends IBaseService<Video> implements IVideoService {
 
     @Override
     public Integer getVideoWatchCountInOneDay(Integer accountId, Date watchDay) {
-        VideoWatchRecordHistoryQuery videoWatchRecordHistoryQuery=VideoWatchRecordHistoryQuery.builder()
+        VideoWatchRecordHistoryQuery videoWatchRecordHistoryQuery = VideoWatchRecordHistoryQuery.builder()
                 .accountId(accountId)
-                .watchDay(watchDay == null?(new Date()):watchDay)
+                .watchDay(watchDay == null ? (new Date()) : watchDay)
                 .build();
 
         Integer count = videoMapper.getVideoWatchCount(videoWatchRecordHistoryQuery);
@@ -145,18 +146,51 @@ public class VideoService extends IBaseService<Video> implements IVideoService {
     }
 
     @Override
-    public List<Video> getVideoListHasBeenWatch(Integer accountId,Integer courseModuleId)
-    {
-        return videoMapper.getVideoListHasBeenWatch(accountId,courseModuleId);
+    public List<Video> getVideoListHasBeenWatch(Integer accountId, Integer courseModuleId) {
+        return videoMapper.getVideoListHasBeenWatch(accountId, courseModuleId);
     }
 
 
     @Override
-    public List<Video> getVideoList(List<Integer> videoIdList)
-    {
-        if(ListUtil.isNullOrEmpty(videoIdList))
+    public List<Video> getVideoList(List<Integer> videoIdList) {
+        if (ListUtil.isNullOrEmpty(videoIdList))
             return null;
 
         return videoMapper.getVideoList(videoIdList);
+    }
+
+    @Override
+    public List<Video> getPreviousAndNextVideos(Integer videoId) {
+        if (videoId == null || videoId == 0) {
+            return null;
+        }
+
+        List<Video> videoList = videoMapper.getPreviousAndNextVideos(videoId);
+
+        if(ListUtil.isNullOrEmpty(videoList))
+        {
+            return videoList;
+        }
+
+
+        if(videoList.size() == 1)
+        {
+            List<Video> resultList=new ArrayList<>();
+            Video videoTemplate=videoList.get(0);
+
+            if(videoTemplate.getId() > videoId)
+            {
+                resultList.add(null);
+                resultList.add(videoTemplate);
+            }
+            else
+            {
+                resultList.add(videoTemplate);
+                resultList.add(null);
+            }
+            return resultList;
+        }
+
+        return videoList;
     }
 }

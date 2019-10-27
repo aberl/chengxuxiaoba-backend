@@ -48,4 +48,11 @@ public interface IVideoService {
     List<Video> getVideoListHasBeenWatch(Integer accountId,Integer courseModuleId);
 
     List<Video> getVideoList(List<Integer> videoIdList);
+
+    /**
+     * get previous one and next one, the result has 2 items, even contain null item if pre or next one is not exist
+     * @param videoId
+     * @return
+     */
+    List<Video> getPreviousAndNextVideos(Integer videoId);
 }

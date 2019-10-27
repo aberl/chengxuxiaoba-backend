@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -161,5 +162,23 @@ public class VideoController extends BaseController {
         List<VideoResponseVo> videoResponseVoList = voService.convertToVideoResponseVo(recordList, false);
 
         return new Result<List<VideoResponseVo>>(ResultCode.Success, videoResponseVoList, ResultMessage.Success);
+    }
+
+    @GetMapping("/videos/{id}/preandnext")
+    public Result<List<VideoResponseVo>> getPreAndNextVideoList(@PathVariable("id") Integer id) {
+        List<Video> videoList = videoService.getPreviousAndNextVideos(id);
+
+        List<VideoResponseVo> responseVoList = null;
+
+        if (ListUtil.isNotNullOrEmpty(videoList)) {
+            responseVoList = new ArrayList<>();
+            Video previousOne = videoList.get(0);
+            Video nextOne = videoList.get(1);
+
+            responseVoList.add(voService.convertToVideoResponseVo(previousOne));
+            responseVoList.add(voService.convertToVideoResponseVo(nextOne));
+        }
+
+        return new Result<List<VideoResponseVo>>(ResultCode.Success, responseVoList, ResultMessage.Success);
     }
 }

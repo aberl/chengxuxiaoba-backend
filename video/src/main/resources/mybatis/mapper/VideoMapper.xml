@@ -142,20 +142,31 @@
     <select id="getVideoWatchRecordHistoryList"
             resultType="com.chengxuxiaoba.video.model.po.VideoWatchRecord"
             parameterType="com.chengxuxiaoba.video.model.query.VideoWatchRecordHistoryQuery">
-            SELECT * FROM VideoWatchRecordHistory WITH(NOLOCK)
-            <where>
-              <if test="courseModuleId != null">
-                  AND courseModuleId=#{courseModuleId}
-              </if>
-                <if test="videoId != null">
-                    AND videoId=#{videoId}
-                </if>
-                <if test="accountId != null">
-                    AND accountId=#{accountId}
-                </if>
-                <if test="watchDay != null">
-                    AND TIMESTAMPDIFF(DAY,lastWatchTime,#{watchDay}) =0
-                </if>
-            </where>
+        SELECT * FROM VideoWatchRecordHistory WITH(NOLOCK)
+        <where>
+            <if test="courseModuleId != null">
+                AND courseModuleId=#{courseModuleId}
+            </if>
+            <if test="videoId != null">
+                AND videoId=#{videoId}
+            </if>
+            <if test="accountId != null">
+                AND accountId=#{accountId}
+            </if>
+            <if test="watchDay != null">
+                AND TIMESTAMPDIFF(DAY,lastWatchTime,#{watchDay}) =0
+            </if>
+        </where>
+    </select>
+
+
+    <select id="getPreviousAndNextVideos" resultType="com.chengxuxiaoba.video.model.po.Video">
+        SELECT * FROM (SELECT * FROM video
+        WHERE id &lt; #{videoId} AND courseModuleId=1
+        ORDER BY id DESC LIMIT 1 ) preone
+        UNION ALL
+        SELECT * FROM (SELECT * FROM video
+        WHERE id &gt; #{videoId} AND courseModuleId=1
+        ORDER BY id ASC LIMIT 1 ) nextone
     </select>
 </mapper>
