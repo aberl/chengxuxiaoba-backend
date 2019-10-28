@@ -165,7 +165,15 @@ public class VideoService extends IBaseService<Video> implements IVideoService {
             return null;
         }
 
-        List<Video> videoList = videoMapper.getPreviousAndNextVideos(videoId);
+        Video currentVideo = getSingle(videoId);
+
+        if(currentVideo == null)
+        {
+            return null;
+        }
+
+
+        List<Video> videoList = videoMapper.getPreviousAndNextVideos(videoId,currentVideo.getCourseModuleId());
 
         if(ListUtil.isNullOrEmpty(videoList))
         {

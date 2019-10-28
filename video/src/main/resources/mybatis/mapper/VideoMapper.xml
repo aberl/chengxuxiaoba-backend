@@ -162,11 +162,11 @@
 
     <select id="getPreviousAndNextVideos" resultType="com.chengxuxiaoba.video.model.po.Video">
         SELECT * FROM (SELECT * FROM video
-        WHERE id &lt; #{videoId} AND courseModuleId=1
+        WHERE id &lt; #{videoId} AND courseModuleId=#{courseModuleId}
         ORDER BY id DESC LIMIT 1 ) preone
         UNION ALL
         SELECT * FROM (SELECT * FROM video
-        WHERE id &gt; #{videoId} AND courseModuleId=1
+        WHERE id &gt; #{videoId} AND courseModuleId=#{courseModuleId}
         ORDER BY id ASC LIMIT 1 ) nextone
     </select>
 </mapper>
