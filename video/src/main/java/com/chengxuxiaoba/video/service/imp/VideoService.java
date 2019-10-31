@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -89,7 +90,7 @@ public class VideoService extends IBaseService<Video> implements IVideoService {
 
     @Override
     public VideoSummary getVideoSummary(Integer courseModuleId) {
-        List<VideoSummary> videoSummaryList = getVideoSummary(new ArrayList<>(courseModuleId));
+        List<VideoSummary> videoSummaryList = getVideoSummary(new ArrayList<>(Arrays.asList(courseModuleId)));
 
         return ListUtil.isNullOrEmpty(videoSummaryList) ? null : videoSummaryList.get(0);
     }

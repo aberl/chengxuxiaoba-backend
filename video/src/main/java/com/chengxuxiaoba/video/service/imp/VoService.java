@@ -162,6 +162,12 @@ public class VoService implements IVoService {
         BeanUtils.copyProperties(course, courseResponseVo);
         courseResponseVo.setStatusDesc(CommonStatus.getEnum(courseResponseVo.getStatus()).toString());
 
+        if(StringUtil.isNotNullOrEmpty(course.getAliImgUrls()))
+        {
+            List<String> aliImageUrls=new ArrayList<>(Arrays.asList(course.getAliImgUrls().split(";")));
+            courseResponseVo.setAliImageUrls(aliImageUrls);
+        }
+
         List<String> imageNameList = JSONUtil.convertToList(course.getImages());
         if (ListUtil.isNullOrEmpty(imageNameList))
             return courseResponseVo;
@@ -197,8 +203,19 @@ public class VoService implements IVoService {
         if (courseModule == null)
             return null;
 
-        CourseModuleResponseVo courseModuleResponseVo = new CourseModuleResponseVo();
+        CourseModuleResponseVo courseModuleResponseVo = CourseModuleResponseVo.builder()
+                .videoCount(0)
+                .totalPraiseCount(0)
+                .totalViewCount(0)
+                .build();
+
         BeanUtils.copyProperties(courseModule, courseModuleResponseVo);
+
+        if(StringUtil.isNotNullOrEmpty(courseModule.getAliImgUrls()))
+        {
+            List<String> aliImageUrls=new ArrayList<>(Arrays.asList(courseModule.getAliImgUrls().split(";")));
+            courseModuleResponseVo.setAliImageUrls(aliImageUrls);
+        }
 
         courseModuleResponseVo.setStatusDesc(CommonStatus.getEnum(courseModuleResponseVo.getStatus()).toString());
 
@@ -229,11 +246,11 @@ public class VoService implements IVoService {
             return null;
 
         List<CourseModuleResponseVo> responseVoList = new ArrayList<>();
-        CourseModuleResponseVo ourseModuleResponseVo;
+        CourseModuleResponseVo courseModuleResponseVo;
         for (CourseModule courseModule : courseModuleList) {
-            ourseModuleResponseVo = convertToCourseModuleResponseVo(courseModule);
-            if (ourseModuleResponseVo != null)
-                responseVoList.add(ourseModuleResponseVo);
+            courseModuleResponseVo = convertToCourseModuleResponseVo(courseModule);
+            if (courseModuleResponseVo != null)
+                responseVoList.add(courseModuleResponseVo);
         }
         return responseVoList;
     }

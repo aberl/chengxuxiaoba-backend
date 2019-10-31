@@ -7,8 +7,8 @@
         <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
             SELECT LAST_INSERT_ID()
         </selectKey>
-        INSERT INTO Course(name, description, images,status)
-        VALUES(#{name},#{description},#{images},#{status})
+        INSERT INTO Course(name, description,aliImgUrls,images,status)
+        VALUES(#{name},#{description},#{aliImgUrls},#{images},#{status})
     </insert>
 
     <update id="updateCourse">
@@ -16,6 +16,7 @@
         <trim prefix="set" suffixOverrides=",">
             <if test="name != null">name=#{name},</if>
             <if test="description != null">description=#{description},</if>
+            <if test="aliImgUrls != null">aliImgUrls=#{aliImgUrls},</if>
             <if test="images != null">images=#{images},</if>
             <if test="status != null">status=#{status},</if>
         </trim>
@@ -29,6 +30,7 @@
             <if test="courseName != null">courseName=#{courseName},</if>
             <if test="name != null">name=#{name},</if>
             <if test="description != null">description=#{description},</if>
+            <if test="aliImgUrls != null">aliImgUrls=#{aliImgUrls},</if>
             <if test="images != null">images=#{images},</if>
             <if test="status != null">status=#{status},</if>
         </trim>
@@ -40,8 +42,8 @@
         <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
             SELECT LAST_INSERT_ID()
         </selectKey>
-        INSERT INTO coursemodule(courseId, name,courseName, description, images, status)
-        VALUES(#{courseId},#{name},#{courseName},#{description},#{images},#{status})
+        INSERT INTO coursemodule(courseId, name,courseName, description,aliImgUrls,images, status)
+        VALUES(#{courseId},#{name},#{courseName},#{description},#{aliImgUrls},#{images},#{status})
     </insert>
 
     <select id="getAllCourseList" resultType="com.chengxuxiaoba.video.model.po.Course">
