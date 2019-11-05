@@ -91,3 +91,6 @@ ali:
       accesskeyid: LTAI4FwSm1WwZ4ZoHca2BcAB
       AccessKeySecret: fe8ZZgw03v0YLZ1iddsHkY05jaf3Tw
       normalRoleArn: acs:ram::1165752204112719:role/chengxuxiaoba-user
+  video:
+    encryptionTemplateId: 1a4d2c29f76f55670dd6f7a6d3b24cce
+    nontranscodeTemplateId: c15faeca43f1688b5ac249976f7c25b7
