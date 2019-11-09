@@ -29,6 +29,11 @@ public class AliCredentialService {
             "      \"Action\": \"vod:*\",\n" +
             "      \"Resource\": \"*\",\n" +
             "      \"Effect\": \"Allow\"\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"Action\": \"kms:*\",\n" +
+            "      \"Resource\": [\"*\"],\n" +
+            "      \"Effect\": \"Allow\"\n" +
             "    }\n" +
             "  ]\n" +
             "}";

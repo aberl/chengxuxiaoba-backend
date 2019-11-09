@@ -2,6 +2,7 @@ package com.chengxuxiaoba.video.util;
 
 import java.io.IOException;
 
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,6 +13,11 @@ import java.util.List;
 public class JSONUtil {
 
 	private static ObjectMapper objectMapper = new ObjectMapper();
+
+	public static String serialize(Object obj)
+	{
+		return JSON.toJSONString(obj);
+	}
 
 	/**
 	 * deserialize JSON String to be the specify genre

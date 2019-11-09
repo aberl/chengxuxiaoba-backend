@@ -3,6 +3,7 @@ package com.chengxuxiaoba.video.service.imp.ali;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.profile.DefaultProfile;
+import com.chengxuxiaoba.video.model.ali.Credential;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,20 @@ public class AliClientService {
         String regionId = "cn-shanghai";  // 点播服务接入区域
         DefaultProfile profile = DefaultProfile.getProfile(regionId, accessKeyId, accessKeySecret, securityToken);
         DefaultAcsClient client = new DefaultAcsClient(profile);
+        return client;
+    }
+
+    /**
+     * initialize client by uniqueKey
+     * @param uniqueKey
+     * @return
+     */
+    public DefaultAcsClient initVodClient(String uniqueKey) throws ClientException {
+        Credential credential = credentialService.generateCredential(uniqueKey);
+        DefaultAcsClient client = initVodClient(credential.getAccessKeyId(),
+                credential.getAssessKeySecret(),
+                credential.getSecrurityToken());
+
         return client;
     }
 }
