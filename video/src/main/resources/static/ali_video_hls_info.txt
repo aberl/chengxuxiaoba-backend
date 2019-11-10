@@ -1,0 +1,8 @@
+videoId:37d21693e35a4c05873d25c230b14d4a
+
+generateDataKeyResponseJson:
+{"ciphertextBlob":"NTkxMGFiMzQtYzcxYi00Zjg4LWIyNDUtYzQyMjcxOThlMWIxOXlXTDkvUktOWEFVeWdob1hTYmEyZnN4aER2cUs3d1RBQUFBQUFBQUFBQzQycEtUZjZrV25MQjlpWU5JeTBoZ3k0QUhTMUhidWtNZlFvVEJxRDd0UkxvRE15Rms5Y09W","keyId":"cf1521c1-f1d5-48b8-b8ed-47114de24a8d","keyVersionId":"5910ab34-c71b-4f88-b245-c4227198e1b1","plaintext":"Y0Turi4f9040jmfxiWVeRA==","requestId":"48982fc0-52f7-4469-b2ff-403a729b24a8"}
+
+
+submitTranscodeJobsResponseJson:
+{"requestId":"77ADDCB0-E97C-4ABC-BEA9-25B159F8E17F","transcodeJobs":[{"jobId":"47f932f3ac8b464c99aff9d24b290b2a"}],"transcodeTaskId":"4f968f60c5880d4c725de2ed161c9f78"}

@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class MediaServiceTest {
-    private String videoId = "322721094fb44052914fa7a5bc163b31";
+    private String videoId = "37d21693e35a4c05873d25c230b14d4a";
 
     @Autowired
     private MediaService mediaService;

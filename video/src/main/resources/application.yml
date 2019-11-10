@@ -97,4 +97,4 @@ ali:
   kms:
     serviceKey: cf1521c1-f1d5-48b8-b8ed-47114de24a8d
   hls:
-    decryptUrl: http://localhost:9080/hls/decrypt
+    decryptUrl: http://localhost:9080/api/hls/decrypt
