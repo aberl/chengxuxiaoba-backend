@@ -16,7 +16,7 @@ public class VideoServiceTest {
     @Autowired
     private AliVideoService videoService;
 
-    private String videoId="b6f0f5b2f66b4076bfb30978d8ae075c";
+    private String videoId="322721094fb44052914fa7a5bc163b31";
 
     private String userId="userId_6";
 
