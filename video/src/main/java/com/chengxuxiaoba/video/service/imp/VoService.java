@@ -796,7 +796,12 @@ public class VoService implements IVoService {
 
         String userIdStr = "userId_"+userId;
         VideoPlayAuth videoPlayAuth = aliVideoService.getVideoPlayAuth(userIdStr, aliVideoId);
-        //VideoPlayInfo videoPlayInfo = aliVideoService.getVideoPlayInfo(userIdStr, aliVideoId);
+        VideoPlayInfo videoPlayInfo = aliVideoService.getVideoPlayInfo(userIdStr, aliVideoId);
+
+        if(videoPlayInfo != null)
+        {
+            aliVideoInfoResponseVo.setPlayUrl(videoPlayInfo.getPlayURL());
+        }
 
         if(videoPlayAuth != null)
         {
