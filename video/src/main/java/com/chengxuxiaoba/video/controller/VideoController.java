@@ -1,5 +1,8 @@
 package com.chengxuxiaoba.video.controller;
 
+import com.aliyuncs.exceptions.ClientException;
+import com.aliyuncs.kms.model.v20160120.GenerateDataKeyResponse;
+import com.aliyuncs.vod.model.v20170321.SubmitTranscodeJobsResponse;
 import com.chengxuxiaoba.video.annotation.AuthorizationValidation;
 import com.chengxuxiaoba.video.annotation.VideoWatchingPermissionValidation;
 import com.chengxuxiaoba.video.handler.Handler;
@@ -14,6 +17,8 @@ import com.chengxuxiaoba.video.model.po.VideoWatchRecordCourseModuleStatistic;
 import com.chengxuxiaoba.video.service.IAuthenticationService;
 import com.chengxuxiaoba.video.service.IVideoService;
 import com.chengxuxiaoba.video.service.IVoService;
+import com.chengxuxiaoba.video.service.imp.ali.MediaService;
+import com.chengxuxiaoba.video.util.JSONUtil;
 import com.chengxuxiaoba.video.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -34,9 +39,12 @@ public class VideoController extends BaseController {
     @Autowired
     private IAuthenticationService authenticationService;
 
+    @Autowired
+    private MediaService mediaService;
+
     @PostMapping("/videos")
     @AuthorizationValidation()
-    public Result<Boolean> createVideo(@RequestBody VideoRequestVo requestBody) throws IOException {
+    public Result<Boolean> createVideo(@RequestBody VideoRequestVo requestBody) throws Exception {
         if (videoService.getSingle(requestBody.getCourseModuleId(), requestBody.getName()) != null)
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.SameVideoNameInCurrentCourseModule);
 
@@ -46,6 +54,14 @@ public class VideoController extends BaseController {
 
         if (!flag)
             return new Result<Boolean>(ResultCode.Error, flag, ResultMessage.Fail);
+
+        GenerateDataKeyResponse generateDataKeyResponse = mediaService.generateDataKey(null);
+        String generateDataKeyResponseJson = JSONUtil.serialize(generateDataKeyResponse);
+        System.out.println(generateDataKeyResponseJson);
+
+        SubmitTranscodeJobsResponse submitTranscodeJobsResponse = mediaService.submitTranscodeJobs(video.getAliVideoId(), generateDataKeyResponse.getCiphertextBlob());
+        String submitTranscodeJobsResponseJson = JSONUtil.serialize(submitTranscodeJobsResponse);
+        System.out.println(submitTranscodeJobsResponseJson);
 
         return new Result<Boolean>(ResultCode.Success, flag, ResultMessage.Success);
     }
