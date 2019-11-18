@@ -25,7 +25,7 @@
         <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
             SELECT LAST_INSERT_ID()
         </selectKey>
-        INSERT INTO Message(name, content, category)
+        INSERT INTO message(name, content, category)
         VALUES(#{name},#{content},#{category})
     </insert>
 
@@ -39,7 +39,7 @@
 
     <select id="getListWithPage" parameterType="com.chengxuxiaoba.video.model.query.MessageQuery"
             resultType="com.chengxuxiaoba.video.model.po.Message">
-        SELECT * from Message
+        SELECT * from message
         <where>
             <if test="status != null">
                 status=#{status}
@@ -48,12 +48,12 @@
     </select>
 
     <select id="getMessage" parameterType="int" resultType="com.chengxuxiaoba.video.model.po.Message">
-        SELECT * from Message
+        SELECT * from message
         where id=#{id} limit 1
     </select>
 
     <select id="getMessageByContent" parameterType="string" resultType="com.chengxuxiaoba.video.model.po.Message">
-        SELECT * from Message
+        SELECT * from message
         where content=#{content} limit 1
     </select>
 
@@ -97,7 +97,7 @@
     </select>
 
     <update id="updateMessage">
-        UPDATE Message
+        UPDATE message
         <trim prefix="set" suffixOverrides=",">
             <if test="name != null">name=#{name},</if>
             <if test="content != null">content=#{content},</if>

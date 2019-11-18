@@ -7,7 +7,7 @@
         <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
             SELECT LAST_INSERT_ID()
         </selectKey>
-        INSERT INTO validationCode(category, mobilePhoneNo, validationCode, expireTime, createTime)
+        INSERT INTO validationcode(category, mobilePhoneNo, validationCode, expireTime, createTime)
         VALUES(#{category}, #{mobilePhoneNo}, #{validationCode}, #{expireTime}, #{createTime})
     </insert>
 

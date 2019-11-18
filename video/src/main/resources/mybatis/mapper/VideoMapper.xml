@@ -7,35 +7,35 @@
         <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
             SELECT LAST_INSERT_ID()
         </selectKey>
-        INSERT INTO Video(courseModuleId, aliVideoId, name,attachments, duration, description, images, status)
+        INSERT INTO video(courseModuleId, aliVideoId, name,attachments, duration, description, images, status)
         VALUES(#{courseModuleId},#{aliVideoId},#{name},#{attachments}, #{duration}, #{description}, #{images},#{status})
     </insert>
 
     <select id="getListWithPage" parameterType="com.chengxuxiaoba.video.model.query.VideoQuery"
             resultType="com.chengxuxiaoba.video.model.po.Video">
-        SELECT * from Video
+        SELECT * from video
         where courseModuleId=#{courseModuleId}
     </select>
 
     <select id="getVideo" parameterType="int" resultType="com.chengxuxiaoba.video.model.po.Video">
-        SELECT * from Video
+        SELECT * from video
         where id=#{id} limit 1
     </select>
 
     <select id="getVideoByCourseModuleId" resultType="com.chengxuxiaoba.video.model.po.Video">
-        SELECT * from Video
+        SELECT * from video
         where courseModuleId = #{courseModuleId}
     </select>
 
     <select id="getVideoByVideoName" resultType="com.chengxuxiaoba.video.model.po.Video">
-        SELECT * from Video
+        SELECT * from video
         where courseModuleId = #{courseModuleId} and name=#{name} limit 1
     </select>
 
     <select id="getVideoSummary" parameterType="java.util.List"
             resultType="com.chengxuxiaoba.video.model.po.VideoSummary">
         SELECT courseModuleId,count(1) as videoCount,sum(viewCount) as totalViewCount,sum(praiseCount) as
-        totalPraiseCount from Video
+        totalPraiseCount from video
         <where>
             <if test="courseModuleIdList !=null and courseModuleIdList.size() != 0">
                 courseModuleId IN
@@ -49,7 +49,7 @@
     </select>
 
     <update id="updateVideo">
-        UPDATE Video
+        UPDATE video
         <trim prefix="set" suffixOverrides=",">
             <if test="courseModuleId != null">courseModuleId=#{courseModuleId},</if>
             <if test="name != null">name=#{name},</if>
@@ -69,7 +69,7 @@
         <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
             SELECT LAST_INSERT_ID()
         </selectKey>
-        INSERT INTO videoWatchRecord(courseModuleId, videoId, accountId)
+        INSERT INTO videowatchrecord(courseModuleId, videoId, accountId)
         VALUES(#{courseModuleId},#{videoId},#{accountId})
     </insert>
 
@@ -82,37 +82,37 @@
     </insert>
 
     <update id="updateWatchRecordTime">
-        UPDATE videoWatchRecord
+        UPDATE videowatchrecord
         SET lastWatchTime = now()
         WHERE accountId=#{accountId} and videoId=#{videoId}
     </update>
 
     <select id="getVideoWatchRecord" resultType="com.chengxuxiaoba.video.model.po.VideoWatchRecord">
-        SELECT * from videoWatchRecord
+        SELECT * from videowatchrecord
         WHERE accountId=#{accountId} and videoId=#{videoId}
     </select>
 
     <select id="getVideoWatchRecordListByAccountId" resultType="com.chengxuxiaoba.video.model.po.VideoWatchRecord">
-        SELECT * from videoWatchRecord
+        SELECT * from videowatchrecord
         WHERE accountId=#{accountId}
     </select>
 
     <select id="getVideoWatchRecordCourseModuleStatistic"
             resultType="com.chengxuxiaoba.video.model.po.VideoWatchRecordCourseModuleStatistic">
-        SELECT courseModuleId, count(1) videoStatisticCount from videoWatchRecord
+        SELECT courseModuleId, count(1) videoStatisticCount from videowatchrecord
         WHERE accountId=#{accountId}
         group by courseModuleId
     </select>
 
     <select id="getVideoListHasBeenWatch" resultType="com.chengxuxiaoba.video.model.po.Video">
         SELECT video.* from video
-        inner JOIN videoWatchRecord on video.id=videoWatchRecord.videoId
-        WHERE accountId=#{accountId} and videoWatchRecord.courseModuleId=#{courseModuleId}
+        inner JOIN videowatchrecord on video.id=videowatchrecord.videoId
+        WHERE accountId=#{accountId} and videowatchrecord.courseModuleId=#{courseModuleId}
     </select>
 
     <select id="getVideoList" parameterType="java.util.List"
             resultType="com.chengxuxiaoba.video.model.po.Video">
-        SELECT * from Video
+        SELECT * from video
         <where>
             id IN
             <foreach collection="videoIdList" index="index" item="videoId" open="("
@@ -142,7 +142,7 @@
     <select id="getVideoWatchRecordHistoryList"
             resultType="com.chengxuxiaoba.video.model.po.VideoWatchRecord"
             parameterType="com.chengxuxiaoba.video.model.query.VideoWatchRecordHistoryQuery">
-        SELECT * FROM VideoWatchRecordHistory WITH(NOLOCK)
+        SELECT * FROM videowatchrecordhistory WITH(NOLOCK)
         <where>
             <if test="courseModuleId != null">
                 AND courseModuleId=#{courseModuleId}

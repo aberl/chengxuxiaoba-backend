@@ -60,7 +60,7 @@ public class UserService extends IBaseService<Account> implements IUserService {
                     roleList.add(role.getValue());
             }
         } else {
-            roleList.add(RoleConstant.VISTOR.getValue());
+            roleList.add(RoleConstant.VIPMEMBER.getValue());
         }
         accountMapper.buildAccountRoleRelationship(accountId, roleList);
         return accountId > 0;

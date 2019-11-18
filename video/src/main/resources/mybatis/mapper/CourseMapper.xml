@@ -7,12 +7,12 @@
         <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
             SELECT LAST_INSERT_ID()
         </selectKey>
-        INSERT INTO Course(name, description,aliImgUrls,images,status)
+        INSERT INTO course(name, description,aliImgUrls,images,status)
         VALUES(#{name},#{description},#{aliImgUrls},#{images},#{status})
     </insert>
 
     <update id="updateCourse">
-        UPDATE Course
+        UPDATE course
         <trim prefix="set" suffixOverrides=",">
             <if test="name != null">name=#{name},</if>
             <if test="description != null">description=#{description},</if>
@@ -24,7 +24,7 @@
     </update>
 
     <update id="updateCourseModule">
-        UPDATE CourseModule
+        UPDATE courseModule
         <trim prefix="set" suffixOverrides=",">
             <if test="courseId != null">courseId=#{courseId},</if>
             <if test="courseName != null">courseName=#{courseName},</if>
@@ -47,21 +47,21 @@
     </insert>
 
     <select id="getAllCourseList" resultType="com.chengxuxiaoba.video.model.po.Course">
-        SELECT * from Course
+        SELECT * from course
     </select>
 
     <select id="getEffectiveCourseList" resultType="com.chengxuxiaoba.video.model.po.Course">
-        SELECT * from Course
+        SELECT * from course
         where status=1
     </select>
 
     <select id="getCourse" parameterType="int" resultType="com.chengxuxiaoba.video.model.po.Course">
-       SELECT * from Course
+       SELECT * from course
         where id=#{courseId}
     </select>
 
     <select id="getAllCourseModuleList" resultType="com.chengxuxiaoba.video.model.po.CourseModule">
-        SELECT * from CourseModule
+        SELECT * from coursemodule
         <where>
             <if test="courseId != -1">courseId=#{courseId}</if>
         </where>
@@ -69,11 +69,11 @@
     </select>
 
     <select id="getCourseModule" parameterType="int" resultType="com.chengxuxiaoba.video.model.po.CourseModule">
-        SELECT * from CourseModule where id=#{courseModuleId} limit 1
+        SELECT * from coursemodule where id=#{courseModuleId} limit 1
     </select>
 
     <select id="getCourseModuleList" parameterType="java.util.List" resultType="com.chengxuxiaoba.video.model.po.CourseModule">
-        SELECT * from CourseModule
+        SELECT * from coursemodule
         <where>
             <if test="courseModuleIdList !=null and courseModuleIdList.size() != 0">
                 id IN
