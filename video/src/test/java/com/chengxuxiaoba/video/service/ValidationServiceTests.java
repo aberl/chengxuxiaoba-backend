@@ -18,15 +18,7 @@ public class ValidationServiceTests {
 
     @Test
     public void generateValidationCode() {
-        String registerCode = validationService.generateValidationCode(ValidationCodeCategory.register);
-        System.out.println(registerCode);
-        assertTrue(registerCode.length() == 4);
-        String loginCode = validationService.generateValidationCode(ValidationCodeCategory.login);
-        System.out.println(loginCode);
-        assertTrue(loginCode.length() == 4);
+
     }
-    @Test
-    public void testBaseClass(){
-        assertTrue("".equals("com.yubai.Test.App"));
-    }
+
 }
