@@ -49,18 +49,18 @@ pagehelper:
   reasonable: false
 
 video:
-  savepath: D:/peoject/chengxuxiaoba/videos/
+  savepath: /usr/doc/chengxuxiaoba/videos/
   suffexnamelimitation: mp4,rmvb,AVI
   size: 10M
 
 image:
-  savepath: D:/peoject/chengxuxiaoba/images/
+  savepath: /usr/doc/chengxuxiaoba/images/
   suffexnamelimitation: jpg,png
   size: 10M
   accesshostname: http://localhost:9080
 
 uploadfile:
-  savepath: D:/peoject/chengxuxiaoba/files
+  savepath: /usr/doc/chengxuxiaoba/files/
   size: 10M
   accesshostname: http://localhost:7080/chengxuxiaoba
 
