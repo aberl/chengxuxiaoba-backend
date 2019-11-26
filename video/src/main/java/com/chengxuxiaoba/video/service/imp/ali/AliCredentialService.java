@@ -34,6 +34,11 @@ public class AliCredentialService {
             "      \"Action\": \"kms:*\",\n" +
             "      \"Resource\": [\"*\"],\n" +
             "      \"Effect\": \"Allow\"\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"Action\": \"dysms:*\",\n" +
+            "      \"Resource\": \"*\",\n" +
+            "      \"Effect\": \"Allow\"\n" +
             "    }\n" +
             "  ]\n" +
             "}";
