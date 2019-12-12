@@ -7,6 +7,7 @@ import com.chengxuxiaoba.video.model.ResultMessage;
 import com.chengxuxiaoba.video.model.po.ValidationCode;
 import com.chengxuxiaoba.video.service.IUserService;
 import com.chengxuxiaoba.video.service.IValidationService;
+import com.chengxuxiaoba.video.service.imp.ali.AliSMSService;
 import com.chengxuxiaoba.video.util.DateUtil;
 import com.chengxuxiaoba.video.util.RegexUtil;
 import com.chengxuxiaoba.video.util.StringUtil;
@@ -27,6 +28,9 @@ public class ValidationService implements IValidationService {
 
     @Autowired
     ValidationCodeMapper validationCodeMapper;
+
+    @Autowired
+    AliSMSService aliSMSService;
 
     @Override
     public String generateValidationCode(ValidationCodeCategory category) {
@@ -58,19 +62,17 @@ public class ValidationService implements IValidationService {
     }
 
     @Override
-    public KeyValuePair<Boolean, String> isMatchSendCodeCondition(ValidationCodeCategory category, String mobilePhoneNo)
-    {
+    public KeyValuePair<Boolean, String> isMatchSendCodeCondition(ValidationCodeCategory category, String mobilePhoneNo) {
         if (!RegexUtil.isMatchMobilePhoneNo(mobilePhoneNo))
             return new KeyValuePair<Boolean, String>(false, ResultMessage.MobilePhoneNoIsUnIllegal);
 
-        if(category == ValidationCodeCategory.register)
-    {
-        if(userService.isMobilePhoneExist(mobilePhoneNo))
-            return new KeyValuePair<Boolean, String>(false, ResultMessage.MobilePhoneNoIsExist);
-    }
-        if(category == ValidationCodeCategory.forgetPassword)
-        {
-            if(!userService.isMobilePhoneExist(mobilePhoneNo))
+        if (category == ValidationCodeCategory.register) {
+            if (userService.isMobilePhoneExist(mobilePhoneNo))
+                return new KeyValuePair<Boolean, String>(false, ResultMessage.MobilePhoneNoIsExist);
+        }
+
+        if (category == ValidationCodeCategory.forgetPassword) {
+            if (!userService.isMobilePhoneExist(mobilePhoneNo))
                 return new KeyValuePair<Boolean, String>(false, ResultMessage.MobilePhoneNoIsNotExist);
         }
 
@@ -81,25 +83,22 @@ public class ValidationService implements IValidationService {
     public Boolean sendValidationCode(ValidationCodeCategory category, String mobilePhoneNo) {
         ValidationCode codeModel = validationCodeMapper.getEffectiveCode(mobilePhoneNo, category.toString());
 
-        if (codeModel != null) {
-            //TODO send code to mobile phone
-            return true;
+        if (codeModel == null) {
+            String code = generateValidationCode(category);
+            codeModel = new ValidationCode();
+            codeModel.setCategory(category.toString());
+            codeModel.setActive(Boolean.TRUE);
+            codeModel.setCreateTime(new Date());
+            codeModel.setExpireTime(DateUtil.addSECOND(codeModel.getCreateTime(), expireTime));
+            codeModel.setMobilePhoneNo(mobilePhoneNo);
+            codeModel.setValidationCode(code);
+            validationCodeMapper.insert(codeModel);
         }
 
-        String code = generateValidationCode(category);
-        codeModel = new ValidationCode();
-        codeModel.setCategory(category.toString());
-        codeModel.setActive(Boolean.TRUE);
-        codeModel.setCreateTime(new Date());
-        codeModel.setExpireTime(DateUtil.addSECOND(codeModel.getCreateTime(), expireTime));
-        codeModel.setMobilePhoneNo(mobilePhoneNo);
-        codeModel.setValidationCode(code);
-        validationCodeMapper.insert(codeModel);
+        String[] phoneNumbers = {mobilePhoneNo};
+        Boolean sendFlag= aliSMSService.sendSMSValidationCodeMessage(phoneNumbers, category, codeModel.getValidationCode());
 
-        System.out.println(codeModel.getCreateTime());
-
-        //TODO send code to mobile phone
-        return true;
+        return sendFlag;
     }
 
     @Override

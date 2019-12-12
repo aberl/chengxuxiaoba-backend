@@ -22,7 +22,7 @@ public class SMSServiceTest {
         String[] mb={"15001112627"};
         String templateParam ="{\"code\":\"1111\"}";
         try {
-            String str = smsService.sendSMSMessage(mb, signName, templateCode,templateParam );
+            String str = smsService.sendSMSMessage(mb, templateCode,templateParam );
             System.out.println(str);
         } catch (ClientException e) {
             e.printStackTrace();
