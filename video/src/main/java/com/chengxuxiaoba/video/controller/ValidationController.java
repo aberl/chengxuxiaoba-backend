@@ -25,12 +25,12 @@ public class ValidationController {
             return new Result<Boolean>(ResultCode.Error, false, ResultMessage.ParameterError);
         }
 
-        String captchaStr = validationCode.getCaptcha();
-
-        VerifyResult verifyResult = luoSiMaoService.verifyCaptcha(captchaStr);
-        if (!verifyResult.isSuccess()) {
-            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.CAPTCHAERROR);
-        }
+//        String captchaStr = validationCode.getCaptcha();
+//
+//        VerifyResult verifyResult = luoSiMaoService.verifyCaptcha(captchaStr);
+//        if (!verifyResult.isSuccess()) {
+//            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.CAPTCHAERROR);
+//        }
 
         String mobilePhone = validationCode.getMobilePhoneNo();
         String codeCategory = validationCode.getCategory().toString();

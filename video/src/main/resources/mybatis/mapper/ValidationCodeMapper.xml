@@ -24,4 +24,9 @@
         set isActive=0
         where mobilePhoneNo=#{mobilePhoneNo} and category=#{codeCategory} and validationCode=#{code}
     </update>
+
+    <select id="getSendMsgCountToday" parameterType="string" resultType="int">
+            select count(1) from validationcode
+            where mobilePhoneNo = #{mobilePhoneNo} and datediff(NOW(),createTime) = 0
+    </select>
 </mapper>

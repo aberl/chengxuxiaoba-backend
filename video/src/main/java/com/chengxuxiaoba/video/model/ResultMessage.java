@@ -33,4 +33,5 @@ public class ResultMessage {
     public static String VIDEOWATCHINGCOUNTSURPASS = "您今天观看的视频已超过，请明天再试，或升级VIP会员享受无限视频播放特权";
     public static String CAPTCHAERROR = "验证失败";
     public static String SMSSENDFAIL = "短信发送失败，请稍后再试";
+    public static String CURRENTMOBILESURPASSSENDLIMITCOUNT = "该手机号已经超出当天发送短信的条数限制，请明天再试";
 }

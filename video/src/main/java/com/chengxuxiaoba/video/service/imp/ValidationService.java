@@ -26,6 +26,9 @@ public class ValidationService implements IValidationService {
     @Value("${validationcode.expiretime}")
     private Integer expireTime;
 
+    @Value("${validationcode.sms.limitCountPerday}")
+    private Integer limitCountPerday;
+
     @Autowired
     ValidationCodeMapper validationCodeMapper;
 
@@ -65,6 +68,12 @@ public class ValidationService implements IValidationService {
     public KeyValuePair<Boolean, String> isMatchSendCodeCondition(ValidationCodeCategory category, String mobilePhoneNo) {
         if (!RegexUtil.isMatchMobilePhoneNo(mobilePhoneNo))
             return new KeyValuePair<Boolean, String>(false, ResultMessage.MobilePhoneNoIsUnIllegal);
+
+        Integer sendCountToday=validationCodeMapper.getSendMsgCountToday(mobilePhoneNo);
+        if(sendCountToday>limitCountPerday)
+        {
+            return new KeyValuePair<Boolean, String>(false, ResultMessage.CURRENTMOBILESURPASSSENDLIMITCOUNT);
+        }
 
         if (category == ValidationCodeCategory.register) {
             if (userService.isMobilePhoneExist(mobilePhoneNo))

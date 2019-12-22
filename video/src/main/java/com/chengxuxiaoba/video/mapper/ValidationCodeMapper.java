@@ -9,4 +9,6 @@ public interface ValidationCodeMapper {
    public ValidationCode getEffectiveCode(@Param("mobilePhoneNo") String mobilePhoneNo, @Param("codeCategory") String codeCategory);
 
    public Integer invalidateCode(@Param("mobilePhoneNo") String mobilePhoneNo, @Param("codeCategory") String codeCategory, @Param("code") String code);
+
+   Integer getSendMsgCountToday(@Param("mobilePhoneNo") String mobilePhoneNo);
 }
