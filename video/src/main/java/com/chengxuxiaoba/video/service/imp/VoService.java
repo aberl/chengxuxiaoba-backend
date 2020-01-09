@@ -281,7 +281,7 @@ public class VoService implements IVoService {
 
         BeanUtils.copyProperties(video, videoResponseVo);
 
-        String aliVId=String.format("%s.%s",UUID.randomUUID(), videoResponseVo.getAliVideoId());
+        String aliVId=videoResponseVo.getAliVideoId();//String.format("%s.%s",UUID.randomUUID(), videoResponseVo.getAliVideoId());
         videoResponseVo.setAliVideoId(aliVId);
 
         if (isLoadExtentProperties != null && !isLoadExtentProperties)

@@ -91,24 +91,30 @@ public class VideoController extends BaseController {
 
     @PostMapping("/videos/ali/encode")
 //    @AuthorizationValidation()
-    public Result<Boolean> encodeVideo(@RequestBody VideoRequestVo requestBody) throws Exception {
+    public Result<Boolean> encodeVideo(@RequestBody VideoRequestVo requestBody) {
         if (StringUtil.isNullOrEmpty(requestBody.getAliVideoId()))
             return new Result<>(ResultCode.Error, false, ResultMessage.ParameterError);
 
-        GenerateDataKeyResponse generateDataKeyResponse = mediaService.generateDataKey(null);
-        String generateDataKeyResponseJson = JSONUtil.serialize(generateDataKeyResponse);
-        System.out.println(generateDataKeyResponseJson);
+        try {
+            GenerateDataKeyResponse generateDataKeyResponse = mediaService.generateDataKey(null);
+            String generateDataKeyResponseJson = JSONUtil.serialize(generateDataKeyResponse);
+            System.out.println(generateDataKeyResponseJson);
 
-        SubmitTranscodeJobsResponse submitTranscodeJobsResponse = mediaService.submitTranscodeJobs(requestBody.getAliVideoId(),
-                generateDataKeyResponse.getCiphertextBlob());
+            SubmitTranscodeJobsResponse submitTranscodeJobsResponse = mediaService.submitTranscodeJobs(requestBody.getAliVideoId(),
+                    generateDataKeyResponse.getCiphertextBlob());
 
-        String submitTranscodeJobsResponseJson = JSONUtil.serialize(submitTranscodeJobsResponse);
+            String submitTranscodeJobsResponseJson = JSONUtil.serialize(submitTranscodeJobsResponse);
 
-        log.info("encode Video finished, and ali video id is {}, response data is {}",
-                requestBody.getAliVideoId(), submitTranscodeJobsResponseJson);
+            log.info("encode Video finished, and ali video id is {}, response data is {}",
+                    requestBody.getAliVideoId(), submitTranscodeJobsResponseJson);
 
-        return new Result<>(ResultCode.Success, true, ResultMessage.Success);
+            return new Result<>(ResultCode.Success, true, ResultMessage.Success);
+        } catch (Exception ex) {
+            log.error("encode ali video occur exception, ali video id is {}, and exception is {}",requestBody.getAliVideoId(),ex);
+            return new Result<>(ResultCode.Error, false, ResultMessage.Fail);
+        }
     }
+
     @PutMapping("/videos")
     @AuthorizationValidation()
     public Result<Boolean> updateVideo(@RequestBody VideoRequestVo requestBody) throws IOException {
