@@ -20,6 +20,8 @@ import com.chengxuxiaoba.video.service.IVoService;
 import com.chengxuxiaoba.video.service.imp.ali.MediaService;
 import com.chengxuxiaoba.video.util.JSONUtil;
 import com.chengxuxiaoba.video.util.ListUtil;
+import com.chengxuxiaoba.video.util.StringUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +29,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RestController
 public class VideoController extends BaseController {
 
@@ -46,24 +49,16 @@ public class VideoController extends BaseController {
     @AuthorizationValidation()
     public Result<Boolean> createVideo(@RequestBody VideoRequestVo requestBody) throws Exception {
         if (videoService.getSingle(requestBody.getCourseModuleId(), requestBody.getName()) != null)
-            return new Result<Boolean>(ResultCode.Error, false, ResultMessage.SameVideoNameInCurrentCourseModule);
+            return new Result<>(ResultCode.Error, false, ResultMessage.SameVideoNameInCurrentCourseModule);
 
         Video video = voService.convertToVideo(requestBody);
 
         Boolean flag = videoService.createNewVideo(video);
 
         if (!flag)
-            return new Result<Boolean>(ResultCode.Error, flag, ResultMessage.Fail);
+            return new Result<>(ResultCode.Error, flag, ResultMessage.Fail);
 
-        GenerateDataKeyResponse generateDataKeyResponse = mediaService.generateDataKey(null);
-        String generateDataKeyResponseJson = JSONUtil.serialize(generateDataKeyResponse);
-        System.out.println(generateDataKeyResponseJson);
-
-        SubmitTranscodeJobsResponse submitTranscodeJobsResponse = mediaService.submitTranscodeJobs(video.getAliVideoId(), generateDataKeyResponse.getCiphertextBlob());
-        String submitTranscodeJobsResponseJson = JSONUtil.serialize(submitTranscodeJobsResponse);
-        System.out.println(submitTranscodeJobsResponseJson);
-
-        return new Result<Boolean>(ResultCode.Success, flag, ResultMessage.Success);
+        return new Result<>(ResultCode.Success, flag, ResultMessage.Success);
     }
 
     @PostMapping("/videos/record")
@@ -89,11 +84,31 @@ public class VideoController extends BaseController {
         Boolean flag = videoService.uploadVideo(video);
 
         if (!flag)
-            return new Result<Boolean>(ResultCode.Error, flag, ResultMessage.Fail);
+            return new Result<>(ResultCode.Error, flag, ResultMessage.Fail);
 
-        return new Result<Boolean>(ResultCode.Success, flag, ResultMessage.Success);
+        return new Result<>(ResultCode.Success, flag, ResultMessage.Success);
     }
 
+    @PostMapping("/videos/ali/encode")
+//    @AuthorizationValidation()
+    public Result<Boolean> encodeVideo(@RequestBody VideoRequestVo requestBody) throws Exception {
+        if (StringUtil.isNullOrEmpty(requestBody.getAliVideoId()))
+            return new Result<>(ResultCode.Error, false, ResultMessage.ParameterError);
+
+        GenerateDataKeyResponse generateDataKeyResponse = mediaService.generateDataKey(null);
+        String generateDataKeyResponseJson = JSONUtil.serialize(generateDataKeyResponse);
+        System.out.println(generateDataKeyResponseJson);
+
+        SubmitTranscodeJobsResponse submitTranscodeJobsResponse = mediaService.submitTranscodeJobs(requestBody.getAliVideoId(),
+                generateDataKeyResponse.getCiphertextBlob());
+
+        String submitTranscodeJobsResponseJson = JSONUtil.serialize(submitTranscodeJobsResponse);
+
+        log.info("encode Video finished, and ali video id is {}, response data is {}",
+                requestBody.getAliVideoId(), submitTranscodeJobsResponseJson);
+
+        return new Result<>(ResultCode.Success, true, ResultMessage.Success);
+    }
     @PutMapping("/videos")
     @AuthorizationValidation()
     public Result<Boolean> updateVideo(@RequestBody VideoRequestVo requestBody) throws IOException {
@@ -128,7 +143,7 @@ public class VideoController extends BaseController {
 
         AliVideoInfoResponseVo aliVideoInfoResponseVo = voService.getAliVideoInfo(currentLoginUserModel.getUserId(), alivid);
 
-        return new Result<AliVideoInfoResponseVo>(ResultCode.Success, aliVideoInfoResponseVo, ResultMessage.Success);
+        return new Result<>(ResultCode.Success, aliVideoInfoResponseVo, ResultMessage.Success);
     }
 
     @GetMapping("/courses/{courseModuleId}/videos")
@@ -137,7 +152,7 @@ public class VideoController extends BaseController {
                                                                             @RequestParam(name = "pagesize", required = false) Integer pageSize,
                                                                             @RequestParam(name = "sort", required = false) String sort) {
         if (courseModuleId == null || courseModuleId == 0)
-            return new Result<PageResult<VideoResponseVo>>(ResultCode.Error, null, ResultMessage.ParameterError);
+            return new Result<>(ResultCode.Error, null, ResultMessage.ParameterError);
 
         PageInfo pageInfo = super.generatePageInfo(pageNum, pageSize, sort);
 
@@ -147,7 +162,7 @@ public class VideoController extends BaseController {
 
         PageResult<VideoResponseVo> result = new PageResult<VideoResponseVo>(pageData.getCurrentNum(), pageData.getTotalCount(), resultList);
 
-        return new Result<PageResult<VideoResponseVo>>(ResultCode.Success, result, ResultMessage.Success);
+        return new Result<>(ResultCode.Success, result, ResultMessage.Success);
     }
 
     @GetMapping("/videos/recordstatistic")
@@ -161,7 +176,7 @@ public class VideoController extends BaseController {
 
         List<VideoWatchRecordCourseModuleStatisticResponseVo> responseVoResult = voService.convertToVideoWatchRecordCourseModuleStatisticResponseVo(recordStatisticList);
 
-        return new Result<List<VideoWatchRecordCourseModuleStatisticResponseVo>>(ResultCode.Success, responseVoResult, ResultMessage.Success);
+        return new Result<>(ResultCode.Success, responseVoResult, ResultMessage.Success);
     }
 
     @GetMapping("/videos/record/{coursemoduleid}")

@@ -64,7 +64,7 @@ image:
 uploadfile:
   savepath: /usr/doc/chengxuxiaoba/files/
   size: 10M
-  accesshostname: http://localhost:7080/chengxuxiaoba
+  accesshostname: /resource
 
 #消息
 message:
