@@ -90,7 +90,7 @@ public class VideoController extends BaseController {
     }
 
     @PostMapping("/videos/ali/encode")
-//    @AuthorizationValidation()
+    @AuthorizationValidation()
     public Result<Boolean> encodeVideo(@RequestBody VideoRequestVo requestBody) {
         if (StringUtil.isNullOrEmpty(requestBody.getAliVideoId()))
             return new Result<>(ResultCode.Error, false, ResultMessage.ParameterError);
