@@ -120,6 +120,11 @@ public class AuthenticationService implements IAuthenticationService {
 
         String authorizationToken = request.getHeader("AuthorizationToken");
 
+        if(StringUtil.isNullOrEmpty(authorizationToken))
+        {
+            authorizationToken=request.getParameter("AuthorizationToken");
+        }
+
         if (!StringUtil.isNullOrEmpty(authorizationToken)) {
             CurrentLoginUserModel loginUserModel = validateToken(authorizationToken);
 

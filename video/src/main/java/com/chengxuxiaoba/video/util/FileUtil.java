@@ -5,6 +5,7 @@ import org.apache.tomcat.util.http.fileupload.FileItem;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 
 public class FileUtil {
@@ -95,6 +96,7 @@ public class FileUtil {
 
     /**
      * get directory path from file name
+     *
      * @param fileName
      * @return
      */
@@ -115,5 +117,50 @@ public class FileUtil {
 
         }
         return null;
+    }
+
+    public static void download(String path, HttpServletResponse response) {
+        if (response == null) {
+            return;
+        }
+
+        InputStream fis = null;
+        OutputStream toClient = null;
+        try {
+            File file = new File(path);
+
+            String filename = file.getName();
+
+            String ext = filename.substring(filename.lastIndexOf(".") + 1).toUpperCase();
+
+            fis = new BufferedInputStream(new FileInputStream(path));
+            byte[] buffer = new byte[fis.available()];
+            fis.read(buffer);
+            response.reset();
+            response.addHeader("Content-Disposition", "attachment;filename=" + new String(filename.getBytes()));
+            response.addHeader("Content-Length", "" + file.length());
+            toClient = new BufferedOutputStream(response.getOutputStream());
+            response.setContentType("application/octet-stream");
+            toClient.write(buffer);
+            toClient.flush();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (toClient != null) {
+                try {
+                    toClient.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }
