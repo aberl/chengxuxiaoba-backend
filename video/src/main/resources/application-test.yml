@@ -10,12 +10,12 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
   datasource:
-    url: jdbc:mysql://47.92.170.231:3306/chengxuxiaoba?serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost:3306/chengxuxiaoba?serverTimezone=Asia/Shanghai
     username: root
-    password: ENC(QD9CX7jfjusr3KqZnDHOO79XpWkqeC6o)
+    password: ENC(RcoqoPLPdQwesBHSK6eWlSVGwTefXByb)
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
-      #   数据源其他配置
+    #   数据源其他配置
     initialSize: 5
     minIdle: 5
     maxActive: 20
