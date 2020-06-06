@@ -1,58 +1,80 @@
-server:
-  port: 9080
-  servlet:
-    context-path: /api
-
 spring:
   profiles:
-    active: prod
+    active: test
   servlet:
     multipart:
       enabled: true
       max-file-size: 10MB
       max-request-size: 10MB
-  datasource:
-    url: jdbc:mysql://localhost:3306/chengxuxiaoba?serverTimezone=Asia/Shanghai
-    username: root
-    password: 1qaz@WSX
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    type: com.alibaba.druid.pool.DruidDataSource
-      #   数据源其他配置
-    initialSize: 5
-    minIdle: 5
-    maxActive: 20
-    maxWait: 60000
-    timeBetweenEvictionRunsMillis: 60000
-    minEvictableIdleTimeMillis: 300000
-    validationQuery: SELECT 1 FROM DUAL
-    testWhileIdle: true
-    testOnBorrow: false
-    testOnReturn: false
-    poolPreparedStatements: true
-    #   配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
-    filters: stat,wall,log4j
-    maxPoolPreparedStatementPerConnectionSize: 20
-    useGlobalDataSourceStat: true
-    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+
+validationcode:
+  sms:
+    limitCountPerday: 5
+  expiretime: 1800 #60 seconds
+
+pageinfo.pageSize : 5
+
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+pagehelper:
+  helper-dialect: mysql
+  offset-as-page-num: true
+  row-bounds-with-count: true
+  reasonable: false
+
+video:
+  savepath: /Users/qianwe/Work/Project/chengxuxiaoba/videos/
+  suffexnamelimitation: mp4,rmvb,AVI
+  size: 10M
+
+image:
+  savepath: /Users/qianwe/Work/Project/chengxuxiaoba/images/
+  suffexnamelimitation: jpg,png
+  size: 10M
+  accesshostname: http://localhost:9080
 
 uploadfile:
-  savepath: D:/peoject/chengxuxiaoba/files
+  savepath: /Users/qianwe/Work/Project/chengxuxiaoba/files/
   size: 10M
-  accesshostname: http://localhost:7080/chengxuxiaoba
+  accesshostname: /resource
+
+#消息
+message:
+  template:
+    newvideo: 尊敬的会员, %s课程%s模块有了新的学习视频--%s视频，有兴趣及时观看哦，祝您学习愉快
+    newcourse: 尊敬的会员, 本站新增新的学习课程--%s，有兴趣及时查看哦，祝您学习愉快
+    answerissue: 尊敬的会员, 关于您的%s视频的学习问题已有老师回复，请及时查阅，祝您学习愉快
+    register: 尊敬的会员, 欢迎您成为程序小巴会员大家庭一员，具体会员信息以及福利请查看会员手册，祝您学习愉快
+    upgradememberlevel: 尊敬的会员, 恭喜你升级为%s会员，会员有效期至时间%s, 会员期间您可享受全站所有课程免费学习，所有资料免费下载等福利，具体会员信息以及福利请查看会员手册，祝您学习愉快
+    vipmemberexpire: 尊敬的%s会员, 您的%s会员将于%s到期，到期后您将不再享受%s会员的福利，您可以选择延期，具体福利请查看会员手册， 祝您学习愉快
+
+authorization:
+  excludeurls:
+  - /users/token
+  - /users/password
+  - /users/account
+  videowatchinglimit: 10000
+
+jwtToken:
+  token-expire-time: 1800000
+  encrypt-key: chengxuxiaoba-jwt-key
+
 
 ali:
   accessKey:
     RAM:
-      accesskeyid: LTAI4FwSm1WwZ4ZoHca2BcAB
-      AccessKeySecret: fe8ZZgw03v0YLZ1iddsHkY05jaf3Tw
+      accesskeyid: ENC(GXemWg1IvQPQmdlCbwAEPZWeaRd0556/IXi2w8aBeDdD/oLcAc5KnA==)
+      AccessKeySecret: ENC(+JQ8CHBkFAc0kmQxHqLAjReTVDd+OV9CRiq8EqMBhAsXwY4qgHzRHQ==)
       normalRoleArn: acs:ram::1165752204112719:role/chengxuxiaoba-user
   video:
-    encryptionTemplateId: 1a4d2c29f76f55670dd6f7a6d3b24cce
+    encryptionTemplateId: 42b9a04f978e14f3acde5ac7dc5ebdf6
     nontranscodeTemplateId: VOD_NO_TRANSCODE
   kms:
     serviceKey: cf1521c1-f1d5-48b8-b8ed-47114de24a8d
   hls:
-    decryptUrl: http://localhost:9080/api/hls/decrypt
+    decryptUrl: https://chengxuxiaoba.com/ali/hls/decrypt
   sms:
     signName: 程序小巴
     templatecode:
@@ -63,3 +85,7 @@ captcha:
   luosimao:
     verifyurl: https://captcha.luosimao.com/api/site_verify
     apikey: ef9fdceb01f252fe420a2195399420b0
+
+jasypt:
+  encryptor:
+    password: 36de2926-87e2-4b39-a3d5-0f244ea8c77f

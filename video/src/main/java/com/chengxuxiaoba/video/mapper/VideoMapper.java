@@ -9,11 +9,11 @@ import java.util.List;
 public interface VideoMapper extends BaseMapper<Video> {
     Integer insert(Video video);
 
-    List<Video> getVideoByCourseModuleId(Integer courseModuleId);
+    List<Video> getVideoByCourseModuleId(@Param("courseModuleId") Integer courseModuleId);
 
     Video getVideo(Integer id);
 
-    Video getVideoByVideoName(Integer courseModuleId, String name);
+    Video getVideoByVideoName(@Param("courseModuleId") Integer courseModuleId,@Param("name")  String name);
 
     Integer updateVideo(Video video);
 
